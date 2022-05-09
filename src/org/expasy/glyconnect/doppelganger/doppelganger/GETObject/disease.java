@@ -16,6 +16,7 @@ public class disease {
      */
     public disease(JsonArray diseaseJson) {
         this.diseaseJson = diseaseJson;
+
         for (JsonElement je : diseaseJson) {
             this.setId(je.getAsJsonObject().get("id").getAsString());
             if ( je.getAsJsonObject().get("do_id") != null)

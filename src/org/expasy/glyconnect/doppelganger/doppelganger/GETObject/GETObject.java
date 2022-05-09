@@ -15,11 +15,13 @@ public class GETObject {
     private final List<disease> diseases = new ArrayList<>();
     private final List<peptide> peptides = new ArrayList<>();
     private  List<protein> proteins;
-    private  List<reference> references;
-    private  List<site> sites;
+    private final List<reference> references = new ArrayList<>();
+    private final List<site> sites = new ArrayList<>();
     private  List<source> sources;
-    private  List<structure> structures;
-    private  List<taxonomy> taxonomies;
+    private final List<structure> structures = new ArrayList<>();
+    private final List<taxonomy> taxonomies = new ArrayList<>();
+
+    public int doiless;
 
     /**
      *  Main constructor
@@ -32,6 +34,9 @@ public class GETObject {
 
         int count = 0;
         for (JsonElement jsonElement : GETSection) {
+            JsonArray emptyArray = JsonParser.parseString("[]").getAsJsonArray();
+            JsonObject emptyObject = JsonParser.parseString("{}").getAsJsonObject();
+
             JsonObject jsonObject = jsonElement.getAsJsonObject();
 
             JsonObject compositionJson = jsonObject.get("composition").getAsJsonObject();
@@ -39,21 +44,45 @@ public class GETObject {
             this.compositions.add(composition);
             //System.out.println("Composition condensed: "+composition.getCondensedFormat());
 
-            JsonArray emptyArray = JsonParser.parseString("[]").getAsJsonArray();
-
             JsonArray diseaseJson = emptyArray;
             if ( jsonObject.get("diseases") != null )
                 diseaseJson = jsonObject.get("diseases").getAsJsonArray();
             disease disease = new disease(diseaseJson);
             this.diseases.add(disease);
-            //System.out.println("Disease id: "+disease.getDiseaseJson());
+            //System.out.println("Disease : "+disease.getDiseaseJson());
 
             JsonArray peptideJson = emptyArray;
             if ( jsonObject.get("peptides") != null )
                 peptideJson = jsonObject.get("peptides").getAsJsonArray();
             peptide peptide = new peptide(peptideJson);
             this.peptides.add(peptide);
-            //System.out.println("Peptide id: "+peptide.getId());
+            //System.out.println("Peptide : "+peptide.getPeptideJson());
+
+            JsonArray referenceJson = jsonObject.get("references").getAsJsonArray();
+            reference reference = new reference(referenceJson);
+            this.references.add(reference);
+            doiless += reference.doiless;
+            //System.out.println("Reference: "+reference.getReferenceJson());
+
+            JsonObject siteJson = emptyObject;
+            if ( jsonObject.get("site") != null )
+                siteJson = jsonObject.get("site").getAsJsonObject();
+            site site = new site(siteJson);
+            this.sites.add(site);
+            //System.out.println("Site: "+site.getSiteJson());
+
+            JsonObject sourceJson = jsonObject.get("source").getAsJsonObject();
+            System.out.println(sourceJson);
+
+            JsonObject structureJson = jsonObject.get("structure").getAsJsonObject();
+            structure structure = new structure(structureJson);
+            this.structures.add(structure);
+            //System.out.println("Structure: "+structure.getStructureJson());
+
+            JsonObject taxonomyJson = jsonObject.get("taxonomy").getAsJsonObject();
+            taxonomy taxonomy = new taxonomy(taxonomyJson);
+            this.taxonomies.add(taxonomy);
+            //System.out.println("Taxonomy: "+taxonomy.getSpecies());
         }
 
         /* Maybe set up a method printCompositions() to print the array?

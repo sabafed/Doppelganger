@@ -16,12 +16,18 @@ public class reader {
         File directory = new File("/home/federico/Documenti/Thesis/Doppelganger/referenceDB/N-Linked");
         File[] files = directory.listFiles();
 
+        int totalDoiless = 0;
+
         for (File file : files){
             Path doiJson = Path.of(String.valueOf(file));
             doppelganger doppel = new doppelganger(doiJson);
             gangers.add(doppel);
+
+            totalDoiless += doppel.doiless;
         }
 
+
+        //System.out.println("Total amount of doiless: "+totalDoiless);
         //Path doiJson = Path.of("/home/federico/Documenti/Thesis/Doppelganger/referenceDB/N-Linked/10.1016_j.talanta.2020.121495");
 
     }

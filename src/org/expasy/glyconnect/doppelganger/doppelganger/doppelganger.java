@@ -18,6 +18,7 @@ public class doppelganger {
     private final GETObject GETSection;
     private final POSTObject POSTSection;
 
+    public int doiless;
     /**
      * Main constructor
      *
@@ -35,7 +36,10 @@ public class doppelganger {
         JsonObject POSTSection = jsonObject.getAsJsonObject("POSTRequest");
 
         this.GETSection = new GETObject(GETSection, this.glycanType);
+        this.doiless = this.GETSection.doiless;
         this.POSTSection = new POSTObject(POSTSection);
+
+
     }
 
     public void setGlycanType(Path doiJson) {
