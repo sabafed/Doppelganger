@@ -13,7 +13,7 @@ public class reader {
     public static void main(String[] args) throws Exception {
         List<doppelganger> gangers = new ArrayList<>();
 
-        File directory = new File("/home/federico/Documenti/Thesis/Doppelganger/referenceDB/N-Linked");
+        File directory = new File("/home/federico/Documenti/Thesis/Doppelganger/referenceDB/O-Linked");
         File[] files = directory.listFiles();
 
         int totalDoiless = 0;

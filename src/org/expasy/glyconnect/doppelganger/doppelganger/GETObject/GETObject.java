@@ -14,7 +14,7 @@ public class GETObject {
     private final List<composition> compositions = new ArrayList<>();
     private final List<disease> diseases = new ArrayList<>();
     private final List<peptide> peptides = new ArrayList<>();
-    private  List<protein> proteins;
+    private  List<protein> proteins = new ArrayList<>();
     private final List<reference> references = new ArrayList<>();
     private final List<site> sites = new ArrayList<>();
     private  List<source> sources;
@@ -58,6 +58,11 @@ public class GETObject {
             this.peptides.add(peptide);
             //System.out.println("Peptide : "+peptide.getPeptideJson());
 
+            JsonObject proteinJson = jsonObject.get("protein").getAsJsonObject();
+            protein protein = new protein(proteinJson);
+            System.out.println("Protein: "+protein.getId());
+
+
             JsonArray referenceJson = jsonObject.get("references").getAsJsonArray();
             reference reference = new reference(referenceJson);
             this.references.add(reference);
@@ -72,7 +77,7 @@ public class GETObject {
             //System.out.println("Site: "+site.getSiteJson());
 
             JsonObject sourceJson = jsonObject.get("source").getAsJsonObject();
-            System.out.println(sourceJson);
+            //System.out.println(sourceJson);
 
             JsonObject structureJson = jsonObject.get("structure").getAsJsonObject();
             structure structure = new structure(structureJson);
