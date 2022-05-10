@@ -12,6 +12,11 @@ public class structure {
     private boolean isUndefined;
     private boolean reviewed;
 
+    /**
+     * Main constructor
+     *
+     * @param structureJson Structore information in json format.
+     */
     public structure(JsonObject structureJson) {
         this.structureJson = structureJson;
         this.setId(this.structureJson.get("id").getAsString());

@@ -1,6 +1,5 @@
 package org.expasy.glyconnect.doppelganger.doppelganger.GETObject;
 
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 public class site {
@@ -8,6 +7,11 @@ public class site {
     private String glycoSite;
     private String location;
 
+    /**
+     * Main constructor
+     *
+     * @param siteJson Site information in json format.
+     */
     public site(JsonObject siteJson) {
         this.siteJson = siteJson;
 

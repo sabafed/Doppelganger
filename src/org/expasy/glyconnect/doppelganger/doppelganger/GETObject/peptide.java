@@ -1,24 +1,27 @@
 package org.expasy.glyconnect.doppelganger.doppelganger.GETObject;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 
 public class peptide {
-    private final JsonArray peptideJson;
+    private final JsonObject peptideJson;
     private String id;
     private String length;
     private String sequence;
 
-    public peptide(JsonArray peptideJson) {
+    /**
+     * Main constructor
+     *
+     * @param peptideJson Peptide information in json format.
+     */
+    public peptide(JsonObject peptideJson) {
         this.peptideJson = peptideJson;
-        for (JsonElement je : peptideJson) {
-            this.setId(je.getAsJsonObject().get("id").getAsString());
-            this.setLength(je.getAsJsonObject().get("length").getAsString());
-            this.setSequence(je.getAsJsonObject().get("sequence").getAsString());
-        }
+
+        this.setId(this.peptideJson.get("id").getAsString());
+        this.setLength(this.peptideJson.get("length").getAsString());
+        this.setSequence(this.peptideJson.get("sequence").getAsString());
     }
 
-    public JsonArray getPeptideJson() {
+    public JsonObject getPeptideJson() {
         return peptideJson;
     }
 
@@ -44,5 +47,10 @@ public class peptide {
 
     public void setSequence(String sequence) {
         this.sequence = sequence;
+    }
+
+    @Override
+    public String toString() {
+        return sequence;
     }
 }

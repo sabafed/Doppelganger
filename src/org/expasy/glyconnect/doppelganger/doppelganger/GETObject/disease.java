@@ -1,10 +1,9 @@
 package org.expasy.glyconnect.doppelganger.doppelganger.GETObject;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 
 public class disease {
-    private final JsonArray diseaseJson;
+    private final JsonObject diseaseJson;
     private String id;
     private String doId;
     private String name;
@@ -14,15 +13,16 @@ public class disease {
      *
      * @param diseaseJson Disease information in json format.
      */
-    public disease(JsonArray diseaseJson) {
+    public disease(JsonObject diseaseJson) {
         this.diseaseJson = diseaseJson;
 
-        for (JsonElement je : diseaseJson) {
-            this.setId(je.getAsJsonObject().get("id").getAsString());
-            if ( je.getAsJsonObject().get("do_id") != null)
-                this.setDoId(je.getAsJsonObject().get("do_id").getAsString());
-            this.setName(je.getAsJsonObject().get("name").getAsString());
-        }
+        //System.out.println(diseaseJson.size());
+
+        this.setId(this.diseaseJson.get("id").getAsString());
+
+        if ( this.diseaseJson.get("do_id") != null)
+            this.setDoId(this.diseaseJson.get("do_id").getAsString());
+        this.setName(this.diseaseJson.get("name").getAsString());
     }
 
     public String getId() {
@@ -49,7 +49,12 @@ public class disease {
         this.name = name;
     }
 
-    public JsonArray getDiseaseJson() {
+    public JsonObject getDiseaseJson() {
         return diseaseJson;
+    }
+
+    @Override
+    public String toString() {
+        return this.name;
     }
 }

@@ -10,6 +10,7 @@ import java.util.List;
 
 // from this class, call all the other subclasses and make a single object.
 public class GETObject {
+    private final JsonArray GETSection;
     private final String glycanType;
     private final List<composition> compositions = new ArrayList<>();
     private final List<disease> diseases = new ArrayList<>();
@@ -17,19 +18,22 @@ public class GETObject {
     private  List<protein> proteins = new ArrayList<>();
     private final List<reference> references = new ArrayList<>();
     private final List<site> sites = new ArrayList<>();
-    private  List<source> sources;
+    private  List<source> sources = new ArrayList<>();
     private final List<structure> structures = new ArrayList<>();
     private final List<taxonomy> taxonomies = new ArrayList<>();
 
     public int doiless;
 
-    /**
+    /**     A WAY TO AVOID OBJECT REPETITIONS WILL HAVE TO BE IMPLEMENTED
+     *      https://stackoverflow.com/questions/369512/how-to-compare-objects-by-multiple-fields/20093642#20093642
+     *      AN OVERRIDE TO PRINT PROTEINS IS ALSO NEEDED.
      *  Main constructor
      *
      * @param GETSection The GET response in json format.
      * @param glycanType N-Linked or O-Linked, inherited from class doppelganger.
      */
     public GETObject(JsonArray GETSection, String glycanType) {
+        this.GETSection = GETSection;
         this.glycanType = glycanType;
 
         int count = 0;
@@ -42,35 +46,34 @@ public class GETObject {
             JsonObject compositionJson = jsonObject.get("composition").getAsJsonObject();
             composition composition = new composition(compositionJson);
             this.compositions.add(composition);
-            //System.out.println("Composition condensed: "+composition.getCondensedFormat());
 
-            JsonArray diseaseJson = emptyArray;
             if ( jsonObject.get("diseases") != null ) {
-                diseaseJson = jsonObject.get("diseases").getAsJsonArray();
-                disease disease = new disease(diseaseJson);
-                this.diseases.add(disease);
+                JsonArray diseaseJson = jsonObject.get("diseases").getAsJsonArray();
+                for (JsonElement je : diseaseJson) {
+                    disease disease = new disease(je.getAsJsonObject());
+                    this.diseases.add(disease);
+                }
             }
-            //System.out.println("Disease : "+disease.getDiseaseJson());
 
-            JsonArray peptideJson = emptyArray;
             if ( jsonObject.get("peptides") != null ) {
-                peptideJson = jsonObject.get("peptides").getAsJsonArray();
-                peptide peptide = new peptide(peptideJson);
-                this.peptides.add(peptide);
+                JsonArray peptideJson = jsonObject.get("peptides").getAsJsonArray();
+                for (JsonElement je : peptideJson) {
+                    peptide peptide = new peptide(je.getAsJsonObject());
+                    this.peptides.add(peptide);
+                }
             }
-            //System.out.println("Peptide : "+peptide.getPeptideJson());
 
             JsonObject proteinJson = jsonObject.get("protein").getAsJsonObject();
             protein protein = new protein(proteinJson);
             this.proteins.add(protein);
-            //System.out.println("Protein: "+protein.getName());
-
 
             JsonArray referenceJson = jsonObject.get("references").getAsJsonArray();
-            reference reference = new reference(referenceJson);
-            this.references.add(reference);
-            doiless += reference.doiless;
-            //System.out.println("Reference: "+reference.getReferenceJson());
+            for ( JsonElement je : referenceJson ) {
+                reference reference = new reference(je.getAsJsonObject());
+                this.references.add(reference);
+
+                doiless += reference.doiless;
+            }
 
             JsonObject siteJson = emptyObject;
             if ( jsonObject.get("site") != null ) {
@@ -78,28 +81,19 @@ public class GETObject {
                 site site = new site(siteJson);
                 this.sites.add(site);
             }
-            //System.out.println("Site: "+site.getSiteJson());
 
             JsonObject sourceJson = jsonObject.get("source").getAsJsonObject();
-            //System.out.println(sourceJson);
+            source source = new source(sourceJson);
+            this.sources.add(source);
 
             JsonObject structureJson = jsonObject.get("structure").getAsJsonObject();
             structure structure = new structure(structureJson);
             this.structures.add(structure);
-            //System.out.println("Structure: "+structure.getStructureJson());
 
             JsonObject taxonomyJson = jsonObject.get("taxonomy").getAsJsonObject();
             taxonomy taxonomy = new taxonomy(taxonomyJson);
             this.taxonomies.add(taxonomy);
-            //System.out.println("Taxonomy: "+taxonomy.getSpecies());
         }
-
-        /* Maybe set up a method printCompositions() to print the array?
-        System.out.print("[");
-        for (composition compo : this.compositions) System.out.print(compo.toString()+", ");
-        System.out.println("]");
-        */
-        System.out.println(this.references);
     }
     public String getGlycanType() {
         return glycanType;
@@ -139,5 +133,10 @@ public class GETObject {
 
     public List<taxonomy> getTaxonomies() {
         return taxonomies;
+    }
+
+    @Override
+    public String toString() {
+        return this.GETSection.getAsString();
     }
 }

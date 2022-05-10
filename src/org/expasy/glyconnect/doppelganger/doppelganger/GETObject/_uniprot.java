@@ -1,34 +1,37 @@
 package org.expasy.glyconnect.doppelganger.doppelganger.GETObject;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 
-public class uniprot {
-    private JsonArray uniprotJson;
+public class _uniprot {
+    private JsonObject uniprotJson;
     private String uniprotAcc;
     private String uniprotId;
     private String nextprot;
     private String genecards;
     private String glygen;
 
-    public uniprot(JsonArray uniprotJson) {
+    /**
+     * Main constructor
+     *
+     * @param uniprotJson Uniprot identifiers in json format.
+     */
+    public _uniprot(JsonObject uniprotJson) {
         this.uniprotJson = uniprotJson;
-        for (JsonElement je : uniprotJson) {
-            this.setUniprotAcc(je.getAsJsonObject().get("uniprot_acc").getAsString());
-            this.setUniprotId(je.getAsJsonObject().get("uniprot_id").getAsString());
 
-            if ( je.getAsJsonObject().get("nextprot") != null )
-                this.setNextprot(je.getAsJsonObject().get("nextprot").getAsString());
+        this.setUniprotAcc(this.uniprotJson.get("uniprot_acc").getAsString());
+        this.setUniprotId(this.uniprotJson.get("uniprot_id").getAsString());
 
-            if ( je.getAsJsonObject().get("genecards") != null )
-                this.setGenecards(je.getAsJsonObject().get("genecards").getAsString());
+        if ( this.uniprotJson.get("nextprot") != null )
+            this.setNextprot(this.uniprotJson.get("nextprot").getAsString());
 
-            if ( je.getAsJsonObject().get("glygen") != null )
-                this.setGlygen(je.getAsJsonObject().get("glygen").getAsString());
-        }
+        if ( this.uniprotJson.get("genecards") != null )
+            this.setGenecards(this.uniprotJson.get("genecards").getAsString());
+
+        if ( this.uniprotJson.get("glygen") != null )
+            this.setGlygen(this.uniprotJson.get("glygen").getAsString());
     }
 
-    public JsonArray getUniprotJson() {
+    public JsonObject getUniprotJson() {
         return uniprotJson;
     }
 

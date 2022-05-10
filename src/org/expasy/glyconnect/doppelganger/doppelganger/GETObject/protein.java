@@ -1,18 +1,24 @@
 package org.expasy.glyconnect.doppelganger.doppelganger.GETObject;
 
-import com.google.gson.*;
-import com.google.gson.reflect.TypeToken;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class protein {
-    private JsonObject proteinJson;
+    private final JsonObject proteinJson;
     private String id;
     private String name;
     private boolean reviewed;
-    private List<uniprot> uniprots = new ArrayList<>();
+    private final List<_uniprot> uniprots = new ArrayList<>();
 
+    /**
+     * Main constructor
+     *
+     * @param proteinJson Proteins information in json format.
+     */
     public protein(JsonObject proteinJson) {
         this.proteinJson = proteinJson;
         this.setId();
@@ -51,46 +57,18 @@ public class protein {
             this.reviewed = this.proteinJson.get("reviewed").getAsBoolean();
     }
 
-    public List<uniprot> getUniprots() {
+    public List<_uniprot> getUniprots() {
         return uniprots;
     }
 
     public void setUniprots() {
-        uniprot uniprot =
-                new uniprot(JsonParser.parseString("[]").getAsJsonArray());
-
         if ( this.proteinJson.get("uniprots") != null ) {
-            uniprot = new uniprot(this.proteinJson.get("uniprots").getAsJsonArray());
-            //this.uniprots.add(uniprot);
-        }
-        this.uniprots.add(uniprot);
-    }
-
-/*
-    @Override
-    public String toString() {
-        List<String> uniprotList = new ArrayList<>();
-        for (uniprot uniprot : uniprots) {
-            if ( !uniprotList.contains(uniprot.getUniprotAcc()))
-                uniprotList.add(uniprot.getUniprotAcc());
-        }
-
-        System.out.println(uniprotList.size());
-
-        Gson gson = new Gson();
-        JsonElement element =
-                gson.toJsonTree(uniprotList,
-                        new TypeToken<List<String>>(){}.getType());
-
-        if ( element.isJsonArray() && !element.isJsonNull()) {
-            JsonArray uniprotArray = uniprotArray = element.getAsJsonArray();
-            if ( !uniprotArray.isJsonNull() && uniprotArray != null ) {
-                //System.out.println(uniprotArray);
-                return uniprotArray.getAsString();
+            JsonArray uniprotArray = this.proteinJson.get("uniprots").getAsJsonArray();
+            for (JsonElement je : uniprotArray) {
+                _uniprot uniprot = new _uniprot(je.getAsJsonObject());
+                this.uniprots.add(uniprot);
             }
         }
-
-        return "[]";
     }
-*/
+
 }

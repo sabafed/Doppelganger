@@ -36,9 +36,9 @@ public class doppelganger {
         JsonObject POSTSection = jsonObject.getAsJsonObject("POSTRequest");
 
         this.GETSection = new GETObject(GETSection, this.glycanType);
+
         this.doiless = this.GETSection.doiless;
         this.POSTSection = new POSTObject(POSTSection);
-
 
     }
 

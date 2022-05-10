@@ -9,6 +9,11 @@ public class taxonomy {
     private String taxonomyId;
     private String species;
 
+    /**
+     * Main constructor
+     *
+     * @param taxonomyJson Taxonomy information in json format.
+     */
     public taxonomy(JsonObject taxonomyJson) {
         this.taxonomyJson = taxonomyJson;
         if ( this.taxonomyJson.get("common_name") != null )

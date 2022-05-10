@@ -1,10 +1,9 @@
 package org.expasy.glyconnect.doppelganger.doppelganger.GETObject;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 
 public class reference {
-    private final JsonArray referenceJson;
+    private final JsonObject referenceJson;
     private String doi;
     private String id;
     private String pmid;
@@ -14,26 +13,23 @@ public class reference {
 
     public int doiless;
 
-    public reference(JsonArray referenceJson) {
+    public reference(JsonObject referenceJson) {
         this.referenceJson = referenceJson;
 
-        for (JsonElement je : referenceJson) {
-            if ( je.getAsJsonObject().get("doi") != null ) {
-                this.setDoi(je.getAsJsonObject().get("doi").getAsString());
-            } else {
-                doiless++;
-            }
-            this.setId(je.getAsJsonObject().get("id").getAsString());
+        if ( this.referenceJson.get("doi") != null ) {
+            this.setDoi(this.referenceJson.get("doi").getAsString());
+        } else { doiless++; }
 
-            if ( je.getAsJsonObject().get("pmid") != null )
-                this.setPmid(je.getAsJsonObject().get("pmid").getAsString());
+        this.setId(this.referenceJson.get("id").getAsString());
 
-            this.setTitle(je.getAsJsonObject().get("title").getAsString());
-            this.setAuthors(je.getAsJsonObject().get("authors").getAsString());
-            this.setYear(je.getAsJsonObject().get("year").getAsString());
-        }
+        if ( this.referenceJson.get("pmid") != null )
+            this.setPmid(this.referenceJson.get("pmid").getAsString());
+
+        this.setTitle(this.referenceJson.get("title").getAsString());
+        this.setAuthors(this.referenceJson.get("authors").getAsString());
+        this.setYear(this.referenceJson.get("year").getAsString());
     }
-    public JsonArray getReferenceJson() {
+    public JsonObject getReferenceJson() {
         return referenceJson;
     }
 
@@ -87,7 +83,6 @@ public class reference {
 
     @Override
     public String toString() {
-        if (this.doi != null) return this.doi;
-        return null;
+        return this.doi;
     }
 }
