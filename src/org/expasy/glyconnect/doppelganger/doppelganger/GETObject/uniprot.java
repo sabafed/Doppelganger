@@ -1,6 +1,7 @@
 package org.expasy.glyconnect.doppelganger.doppelganger.GETObject;
 
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 
 public class uniprot {
     private JsonArray uniprotJson;
@@ -12,6 +13,19 @@ public class uniprot {
 
     public uniprot(JsonArray uniprotJson) {
         this.uniprotJson = uniprotJson;
+        for (JsonElement je : uniprotJson) {
+            this.setUniprotAcc(je.getAsJsonObject().get("uniprot_acc").getAsString());
+            this.setUniprotId(je.getAsJsonObject().get("uniprot_id").getAsString());
+
+            if ( je.getAsJsonObject().get("nextprot") != null )
+                this.setNextprot(je.getAsJsonObject().get("nextprot").getAsString());
+
+            if ( je.getAsJsonObject().get("genecards") != null )
+                this.setGenecards(je.getAsJsonObject().get("genecards").getAsString());
+
+            if ( je.getAsJsonObject().get("glygen") != null )
+                this.setGlygen(je.getAsJsonObject().get("glygen").getAsString());
+        }
     }
 
     public JsonArray getUniprotJson() {
@@ -22,7 +36,7 @@ public class uniprot {
         return uniprotAcc;
     }
 
-    public void setUniprotAcc(String uniprotAcc) {
+    private void setUniprotAcc(String uniprotAcc) {
         this.uniprotAcc = uniprotAcc;
     }
 
@@ -30,7 +44,7 @@ public class uniprot {
         return uniprotId;
     }
 
-    public void setUniprotId(String uniprotId) {
+    private void setUniprotId(String uniprotId) {
         this.uniprotId = uniprotId;
     }
 
@@ -38,7 +52,7 @@ public class uniprot {
         return nextprot;
     }
 
-    public void setNextprot(String nextprot) {
+    private void setNextprot(String nextprot) {
         this.nextprot = nextprot;
     }
 
@@ -46,7 +60,7 @@ public class uniprot {
         return genecards;
     }
 
-    public void setGenecards(String genecards) {
+    private void setGenecards(String genecards) {
         this.genecards = genecards;
     }
 
@@ -54,7 +68,12 @@ public class uniprot {
         return glygen;
     }
 
-    public void setGlygen(String glygen) {
+    private void setGlygen(String glygen) {
         this.glygen = glygen;
+    }
+
+    @Override
+    public String toString(){
+        return this.uniprotAcc;
     }
 }

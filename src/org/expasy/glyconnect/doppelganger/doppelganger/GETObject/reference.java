@@ -84,4 +84,10 @@ public class reference {
     public void setYear(String year) {
         this.year = year;
     }
+
+    @Override
+    public String toString() {
+        if (this.doi != null) return this.doi;
+        return null;
+    }
 }

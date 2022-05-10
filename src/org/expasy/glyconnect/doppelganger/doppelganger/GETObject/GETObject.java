@@ -45,22 +45,25 @@ public class GETObject {
             //System.out.println("Composition condensed: "+composition.getCondensedFormat());
 
             JsonArray diseaseJson = emptyArray;
-            if ( jsonObject.get("diseases") != null )
+            if ( jsonObject.get("diseases") != null ) {
                 diseaseJson = jsonObject.get("diseases").getAsJsonArray();
-            disease disease = new disease(diseaseJson);
-            this.diseases.add(disease);
+                disease disease = new disease(diseaseJson);
+                this.diseases.add(disease);
+            }
             //System.out.println("Disease : "+disease.getDiseaseJson());
 
             JsonArray peptideJson = emptyArray;
-            if ( jsonObject.get("peptides") != null )
+            if ( jsonObject.get("peptides") != null ) {
                 peptideJson = jsonObject.get("peptides").getAsJsonArray();
-            peptide peptide = new peptide(peptideJson);
-            this.peptides.add(peptide);
+                peptide peptide = new peptide(peptideJson);
+                this.peptides.add(peptide);
+            }
             //System.out.println("Peptide : "+peptide.getPeptideJson());
 
             JsonObject proteinJson = jsonObject.get("protein").getAsJsonObject();
             protein protein = new protein(proteinJson);
-            System.out.println("Protein: "+protein.getId());
+            this.proteins.add(protein);
+            //System.out.println("Protein: "+protein.getName());
 
 
             JsonArray referenceJson = jsonObject.get("references").getAsJsonArray();
@@ -70,10 +73,11 @@ public class GETObject {
             //System.out.println("Reference: "+reference.getReferenceJson());
 
             JsonObject siteJson = emptyObject;
-            if ( jsonObject.get("site") != null )
+            if ( jsonObject.get("site") != null ) {
                 siteJson = jsonObject.get("site").getAsJsonObject();
-            site site = new site(siteJson);
-            this.sites.add(site);
+                site site = new site(siteJson);
+                this.sites.add(site);
+            }
             //System.out.println("Site: "+site.getSiteJson());
 
             JsonObject sourceJson = jsonObject.get("source").getAsJsonObject();
@@ -95,6 +99,7 @@ public class GETObject {
         for (composition compo : this.compositions) System.out.print(compo.toString()+", ");
         System.out.println("]");
         */
+        System.out.println(this.references);
     }
     public String getGlycanType() {
         return glycanType;
