@@ -14,10 +14,10 @@ public class GETObject {
     private final List<composition> compositions = new ArrayList<>();
     private final List<disease> diseases = new ArrayList<>();
     private final List<peptide> peptides = new ArrayList<>();
-    private  List<protein> proteins = new ArrayList<>();
+    private final List<protein> proteins = new ArrayList<>();
     private final List<reference> references = new ArrayList<>();
     private final List<site> sites = new ArrayList<>();
-    private  List<source> sources = new ArrayList<>();
+    private final List<source> sources = new ArrayList<>();
     private final List<structure> structures = new ArrayList<>();
     private final List<taxonomy> taxonomies = new ArrayList<>();
 
@@ -35,7 +35,6 @@ public class GETObject {
         this.GETSection = GETSection;
         this.glycanType = glycanType;
 
-        int count = 0;
         for (JsonElement jsonElement : GETSection) {
             JsonObject jsonObject = jsonElement.getAsJsonObject();
 

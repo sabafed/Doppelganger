@@ -9,8 +9,8 @@ import java.util.List;
 
 public class POSTObject {
     private final JsonObject POSTSection;
-    private List<node> nodes = new ArrayList<>();
-    private List<link> links = new ArrayList<>();
+    private final List<node> nodes = new ArrayList<>();
+    private final List<link> links = new ArrayList<>();
 
     /**
      * Main constructor
@@ -20,19 +20,36 @@ public class POSTObject {
     public POSTObject(JsonObject POSTSection) {
         this.POSTSection = POSTSection;
 
-        JsonArray nodeArray = POSTSection.get("nodes").getAsJsonArray();
-        JsonArray linksArray = POSTSection.get("links").getAsJsonArray();
+        JsonArray nodeArray = this.POSTSection.get("nodes").getAsJsonArray();
+        JsonArray linksArray = this.POSTSection.get("links").getAsJsonArray();
 
         for (JsonElement na : nodeArray) {
             node node = new node(na.getAsJsonObject());
             this.nodes.add(node);
-            System.out.println(node);
+            //System.out.println(node);
         }
 
         for (JsonElement la : linksArray) {
             link link = new link(la.getAsJsonObject());
             this.links.add(link);
-            System.out.println(link);
+            //System.out.println(link);
         }
+    }
+
+    public JsonObject getPOSTSection() {
+        return POSTSection;
+    }
+
+    public List<node> getNodes() {
+        return nodes;
+    }
+
+    public List<link> getLinks() {
+        return links;
+    }
+
+    @Override
+    public String toString() {
+        return String.valueOf(this.POSTSection);
     }
 }

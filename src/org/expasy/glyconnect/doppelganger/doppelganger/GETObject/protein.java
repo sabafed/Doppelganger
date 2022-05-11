@@ -71,4 +71,8 @@ public class protein {
         }
     }
 
+    @Override
+    public String toString() {
+        return this.uniprots.toString();
+    }
 }
