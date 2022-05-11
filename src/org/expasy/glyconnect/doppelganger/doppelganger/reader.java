@@ -24,10 +24,12 @@ public class reader {
             gangers.add(doppel);
 
             totalDoiless += doppel.doiless;
+            System.out.println(doppel.getDoi()+"\n___________________________________________________________________");
         }
 
 
-        //System.out.println("Total amount of doiless: "+totalDoiless);
+
+        System.out.println("Total amount of doiless: "+totalDoiless);
         //Path doiJson = Path.of("/home/federico/Documenti/Thesis/Doppelganger/referenceDB/N-Linked/10.1016_j.talanta.2020.121495");
 
     }

@@ -3,7 +3,6 @@ package org.expasy.glyconnect.doppelganger.doppelganger.GETObject;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,9 +37,6 @@ public class GETObject {
 
         int count = 0;
         for (JsonElement jsonElement : GETSection) {
-            JsonArray emptyArray = JsonParser.parseString("[]").getAsJsonArray();
-            JsonObject emptyObject = JsonParser.parseString("{}").getAsJsonObject();
-
             JsonObject jsonObject = jsonElement.getAsJsonObject();
 
             JsonObject compositionJson = jsonObject.get("composition").getAsJsonObject();
@@ -75,9 +71,8 @@ public class GETObject {
                 doiless += reference.doiless;
             }
 
-            JsonObject siteJson = emptyObject;
             if ( jsonObject.get("site") != null ) {
-                siteJson = jsonObject.get("site").getAsJsonObject();
+                JsonObject siteJson = jsonObject.get("site").getAsJsonObject();
                 site site = new site(siteJson);
                 this.sites.add(site);
             }
