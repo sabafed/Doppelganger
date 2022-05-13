@@ -25,7 +25,6 @@ public class GETObject {
 
     /**     A WAY TO AVOID OBJECT REPETITIONS WILL HAVE TO BE IMPLEMENTED
      *      https://stackoverflow.com/questions/369512/how-to-compare-objects-by-multiple-fields/20093642#20093642
-     *      AN OVERRIDE TO PRINT PROTEINS IS ALSO NEEDED.
      *  Main constructor
      *
      * @param GETSection The GET response in json format.

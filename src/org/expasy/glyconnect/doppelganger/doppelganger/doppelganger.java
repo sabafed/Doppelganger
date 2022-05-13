@@ -20,6 +20,7 @@ public class doppelganger {
     private final POSTObject POSTObject;
 
     public int doiless;
+
     /**
      * Main constructor
      *

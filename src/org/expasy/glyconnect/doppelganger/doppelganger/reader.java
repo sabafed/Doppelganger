@@ -30,7 +30,7 @@ public class reader {
         }
 
         for (int i = 0; i < 10; i++) {
-            System.out.println(gangers.get(i).getPOSTObject());
+            System.out.println(gangers.get(i).getGETObject().getProteins());
         }
 
     }
