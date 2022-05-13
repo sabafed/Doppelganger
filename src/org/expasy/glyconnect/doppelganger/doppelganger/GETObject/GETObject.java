@@ -88,6 +88,11 @@ public class GETObject {
             this.taxonomies.add(taxonomy);
         }
     }
+
+    public JsonArray getGETSection() {
+        return GETSection;
+    }
+
     public String getGlycanType() {
         return glycanType;
     }
@@ -131,5 +136,10 @@ public class GETObject {
     @Override
     public String toString() {
         return this.GETSection.getAsString();
+    }
+
+    public boolean equals(GETObject getObject){
+        if (this.getGETSection().equals(getObject.getGETSection())) return true;
+        return false;
     }
 }

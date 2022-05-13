@@ -29,9 +29,17 @@ public class reader {
             //System.out.println(doppel.getDoi()+"\n___________________________________________________________________");
         }
 
+        doppelganger dpg1 = new doppelganger(Path.of(String.valueOf(files[0])));
+        doppelganger dpg2 = new doppelganger(Path.of(String.valueOf(files[0])));
+
+        if ( dpg1.getGETObject().equals(dpg2.getGETObject()) ) System.out.println("Equals!");
+        /*
         for (int i = 0; i < 10; i++) {
-            System.out.println(gangers.get(i).getGETObject().getProteins());
+            if ( gangers.get(i).getGETObject().equals(gangers.get(i).getGETObject()) )
+                System.out.println("Equals!");
         }
+
+         */
 
     }
 }
