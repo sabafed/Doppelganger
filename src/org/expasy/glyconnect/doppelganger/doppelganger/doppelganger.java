@@ -8,6 +8,7 @@ import org.expasy.glyconnect.doppelganger.doppelganger.POSTObject.POSTObject;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 
 // from this class, call all the others and make a single object.
 public class doppelganger {
@@ -65,5 +66,25 @@ public class doppelganger {
 
     public String getGlycanType() {
         return glycanType;
+    }
+
+    public boolean equals(doppelganger other) {
+        if ( this.doi.equals(other.doi) ) {
+            if ( this.glycanType.equals(other.glycanType) ) {
+                if ( this.getGETObject().equals(other.getGETObject()) ) {
+                    if ( this.getPOSTObject().equals(other.getPOSTObject()) ) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean isInside(List<doppelganger> list) {
+        for (doppelganger doppel : list) {
+            if ( this.equals(doppel) ) return true;
+        }
+        return false;
     }
 }

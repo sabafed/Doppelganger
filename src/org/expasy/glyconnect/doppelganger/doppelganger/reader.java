@@ -1,7 +1,5 @@
 package org.expasy.glyconnect.doppelganger.doppelganger;
 
-import org.expasy.glyconnect.doppelganger.doppelganger.GETObject.structure;
-
 import java.io.File;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -16,36 +14,31 @@ public class reader {
     public static void main(String[] args) throws Exception {
         List<doppelganger> gangers = new ArrayList<>(readfiles());
 
-
         for (int i = 0; i < 10; i++) {
-            for ( structure s :gangers.get(i).getGETObject().getStructures() )
-                System.out.println(s.getStructureJson());
+            for (int j = 1; j < 10; j++) {
+                if (i != j) {
+                    doppelganger dpg1 = gangers.get(i);
+                    doppelganger dpg2 = gangers.get(j);
+
+                    if ( dpg1.equals(dpg2) ) System.out.println(gangers.get(i).getDoi());
+                }
+            }
+
         }
-
-/*
-        doppelganger dpg1 = new doppelganger(Path.of(String.valueOf(files[0])));
-        doppelganger dpg2 = new doppelganger(Path.of(String.valueOf(files[0])));
-
-        if ( dpg1.getGETObject().equals(dpg2.getGETObject()) ) System.out.println("Equals!");
-
-
-         */
-
     }
 
     public static List<doppelganger> readfiles() throws Exception {
         List<doppelganger> gangers = new ArrayList<>();
-        File directory = new File("/home/federico/Documenti/Thesis/Doppelganger/referenceDB/N-Linked");
+        File directory = new File("/home/federico/Documenti/Thesis/Doppelganger/referenceDB/O-Linked");
         File[] files = directory.listFiles();
 
         int totalDoiless = 0;
 
-        assert files != null;
-        for (File file : files){
+        for (File file : files) {
             Path doiJson = Path.of(String.valueOf(file));
             doppelganger doppel = new doppelganger(doiJson);
-            gangers.add(doppel);
 
+            gangers.add(doppel);
             totalDoiless += doppel.doiless;
             //System.out.println(doppel.getDoi()+"\n___________________________________________________________________");
         }
