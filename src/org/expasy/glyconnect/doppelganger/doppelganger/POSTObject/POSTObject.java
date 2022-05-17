@@ -48,6 +48,10 @@ public class POSTObject {
         return links;
     }
 
+    public boolean equals(POSTObject other) {
+        return this.POSTSection.equals(other.getPOSTSection());
+    }
+
     @Override
     public String toString() {
         return String.valueOf(this.POSTSection);
