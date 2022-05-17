@@ -5,21 +5,24 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 
 // from this class, call all the other subclasses and make a single object.
 public class GETObject {
     private final JsonArray GETSection;
     private final String glycanType;
-    private final List<composition> compositions = new ArrayList<>();
-    private final List<disease> diseases = new ArrayList<>();
-    private final List<peptide> peptides = new ArrayList<>();
-    private final List<protein> proteins = new ArrayList<>();
-    private final List<reference> references = new ArrayList<>();
-    private final List<site> sites = new ArrayList<>();
-    private final List<source> sources = new ArrayList<>();
-    private final List<structure> structures = new ArrayList<>();
-    private final List<taxonomy> taxonomies = new ArrayList<>();
+    private final Map<Integer,composition> compositions = new HashMap<Integer, composition>();
+    private final Map<Integer, List<disease>> diseases = new HashMap<Integer, List<disease>>();
+    private final Map<Integer, List<peptide>> peptides = new HashMap<Integer, List<peptide>>();
+    private final Map<Integer,protein> proteins = new HashMap<Integer, protein>();
+    private final Map<Integer, List<reference>> references = new HashMap<Integer, List<reference>>();
+    private final Map<Integer,site> sites = new HashMap<Integer, site>();
+    private final Map<Integer,source> sources = new HashMap<Integer, source>();
+    private final Map<Integer,structure> structures = new HashMap<Integer, structure>();
+    private final Map<Integer,taxonomy> taxonomies = new HashMap<Integer, taxonomy>();
 
     public int doiless;
 
@@ -34,18 +37,21 @@ public class GETObject {
         this.GETSection = GETSection;
         this.glycanType = glycanType;
 
+        // I am using elementIndex to be able to derive the protein database (or other tabs) from the referenceDB
+        int elementIndex = 0;
         for (JsonElement jsonElement : GETSection) {
             JsonObject jsonObject = jsonElement.getAsJsonObject();
 
             JsonObject compositionJson = jsonObject.get("composition").getAsJsonObject();
             composition composition = new composition(compositionJson);
-            this.compositions.add(composition);
+            this.compositions.put(elementIndex, composition);
 
             if ( jsonObject.get("diseases") != null ) {
                 JsonArray diseaseJson = jsonObject.get("diseases").getAsJsonArray();
                 for (JsonElement je : diseaseJson) {
                     disease disease = new disease(je.getAsJsonObject());
-                    this.diseases.add(disease);
+                    this.diseases.computeIfAbsent(elementIndex, k -> new ArrayList<disease>());
+                    this.diseases.get(elementIndex).add(disease);
                 }
             }
 
@@ -53,18 +59,20 @@ public class GETObject {
                 JsonArray peptideJson = jsonObject.get("peptides").getAsJsonArray();
                 for (JsonElement je : peptideJson) {
                     peptide peptide = new peptide(je.getAsJsonObject());
-                    this.peptides.add(peptide);
+                    this.peptides.computeIfAbsent(elementIndex, k -> new ArrayList<peptide>());
+                    this.peptides.get(elementIndex).add(peptide);
                 }
             }
 
             JsonObject proteinJson = jsonObject.get("protein").getAsJsonObject();
             protein protein = new protein(proteinJson);
-            this.proteins.add(protein);
+            this.proteins.put(elementIndex, protein);
 
             JsonArray referenceJson = jsonObject.get("references").getAsJsonArray();
             for ( JsonElement je : referenceJson ) {
                 reference reference = new reference(je.getAsJsonObject());
-                this.references.add(reference);
+                this.references.computeIfAbsent(elementIndex, k -> new ArrayList<reference>());
+                this.references.get(elementIndex).add(reference);
 
                 doiless += reference.doiless;
             }
@@ -72,20 +80,22 @@ public class GETObject {
             if ( jsonObject.get("site") != null ) {
                 JsonObject siteJson = jsonObject.get("site").getAsJsonObject();
                 site site = new site(siteJson);
-                this.sites.add(site);
+                this.sites.put(elementIndex, site);
             }
 
             JsonObject sourceJson = jsonObject.get("source").getAsJsonObject();
             source source = new source(sourceJson);
-            this.sources.add(source);
+            this.sources.put(elementIndex, source);
 
             JsonObject structureJson = jsonObject.get("structure").getAsJsonObject();
             structure structure = new structure(structureJson);
-            this.structures.add(structure);
+            this.structures.put(elementIndex, structure);
 
             JsonObject taxonomyJson = jsonObject.get("taxonomy").getAsJsonObject();
             taxonomy taxonomy = new taxonomy(taxonomyJson);
-            this.taxonomies.add(taxonomy);
+            this.taxonomies.put(elementIndex, taxonomy);
+
+            elementIndex++;
         }
     }
 
@@ -97,49 +107,43 @@ public class GETObject {
         return glycanType;
     }
 
-    public List<composition> getCompositions() {
+    public Map<Integer, composition> getCompositions() {
         return compositions;
     }
 
-    public List<disease> getDiseases() {
+    public Map<Integer, List<disease>> getDiseases() {
         return diseases;
     }
 
-    public List<peptide> getPeptides() {
+    public Map<Integer, List<peptide>> getPeptides() {
         return peptides;
     }
 
-    public List<protein> getProteins() {
+    public Map<Integer, protein> getProteins() {
         return proteins;
     }
 
-    public List<reference> getReferences() {
+    public Map<Integer, List<reference>> getReferences() {
         return references;
     }
 
-    public List<site> getSites() {
+    public Map<Integer, site> getSites() {
         return sites;
     }
 
-    public List<source> getSources() {
+    public Map<Integer, source> getSources() {
         return sources;
     }
 
-    public List<structure> getStructures() {
+    public Map<Integer, structure> getStructures() {
         return structures;
     }
 
-    public List<taxonomy> getTaxonomies() {
+    public Map<Integer, taxonomy> getTaxonomies() {
         return taxonomies;
     }
 
-    @Override
-    public String toString() {
-        return this.GETSection.getAsString();
-    }
-
     public boolean equals(GETObject getObject){
-        if (this.getGETSection().equals(getObject.getGETSection())) return true;
-        return false;
+        return (this.getGETSection().equals(getObject.getGETSection()));
     }
 }
