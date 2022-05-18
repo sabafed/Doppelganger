@@ -60,6 +60,6 @@ public class link {
 
     @Override
     public String toString() {
-        return this.source+"-"+this.target;
+        return this.source+"~"+this.target;
     }
 }
