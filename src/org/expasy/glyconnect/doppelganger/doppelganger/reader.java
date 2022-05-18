@@ -12,24 +12,17 @@ import java.util.List;
  */
 public class reader {
     public static void main(String[] args) throws Exception {
-        List<doppelganger> gangers = new ArrayList<>(readfiles());
+        List<doppelganger> gangers = new ArrayList<>(readfiles("proteinsAll"));
 
-        for (int i = 0; i < 10; i++) {
-            for (int j = 1; j < 10; j++) {
-                if (i != j) {
-                    doppelganger dpg1 = gangers.get(i);
-                    doppelganger dpg2 = gangers.get(j);
-
-                    if ( dpg1.equals(dpg2) ) System.out.println(gangers.get(i).getDoi());
-                }
-            }
-
+        for (int i = 0; i < gangers.size(); i++) {
+            System.out.println( gangers.get(i).getIdentifier() );
+            gangers.get(i).getPOSTObject().attributesChecker();
         }
     }
 
-    public static List<doppelganger> readfiles() throws Exception {
+    public static List<doppelganger> readfiles(String sourceDirectory) throws Exception {
         List<doppelganger> gangers = new ArrayList<>();
-        File directory = new File("/home/federico/Documenti/Thesis/Doppelganger/referenceDB/O-Linked");
+        File directory = new File("/home/federico/Documenti/Thesis/Doppelganger/"+sourceDirectory+"/N-Linked");;
         File[] files = directory.listFiles();
 
         int totalDoiless = 0;
@@ -40,7 +33,7 @@ public class reader {
 
             gangers.add(doppel);
             totalDoiless += doppel.doiless;
-            //System.out.println(doppel.getDoi()+"\n___________________________________________________________________");
+            //System.out.println(doppel.getIdentifier()+"\n___________________________________________________________________");
         }
         return gangers;
     }

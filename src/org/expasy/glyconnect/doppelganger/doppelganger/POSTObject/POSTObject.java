@@ -4,13 +4,13 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public class POSTObject {
     private final JsonObject POSTSection;
-    private final List<node> nodes = new ArrayList<>();
-    private final List<link> links = new ArrayList<>();
+    private final Map<Integer, node> nodes = new HashMap<Integer, node>();
+    private final Map<Integer, link> links = new HashMap<Integer, link>();
 
     /**
      * Main constructor
@@ -21,17 +21,22 @@ public class POSTObject {
         this.POSTSection = POSTSection;
 
         JsonArray nodeArray = this.POSTSection.get("nodes").getAsJsonArray();
+        int nodeIndex = 0;
+
         JsonArray linksArray = this.POSTSection.get("links").getAsJsonArray();
+        int linkIndex = 0;
 
         for (JsonElement na : nodeArray) {
             node node = new node(na.getAsJsonObject());
-            this.nodes.add(node);
+            this.nodes.put(nodeIndex, node);
+            nodeIndex++;
             //System.out.println(node);
         }
 
         for (JsonElement la : linksArray) {
             link link = new link(la.getAsJsonObject());
-            this.links.add(link);
+            this.links.put(linkIndex, link);
+            linkIndex++;
             //System.out.println(link);
         }
     }
@@ -40,16 +45,22 @@ public class POSTObject {
         return POSTSection;
     }
 
-    public List<node> getNodes() {
+    public Map<Integer, node> getNodes() {
         return nodes;
     }
 
-    public List<link> getLinks() {
+    public Map<Integer, link> getLinks() {
         return links;
     }
 
     public boolean equals(POSTObject other) {
         return this.POSTSection.equals(other.getPOSTSection());
+    }
+
+    public void attributesChecker() {
+        System.out.println(
+                "Nodes: "+this.getNodes()+"\n"+
+                "Links: "+this.getLinks()+"\n" );
     }
 
     @Override

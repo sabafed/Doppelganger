@@ -146,4 +146,17 @@ public class GETObject {
     public boolean equals(GETObject getObject){
         return (this.getGETSection().equals(getObject.getGETSection()));
     }
+
+    public void attributesChecker() {
+        System.out.println(
+                "Compositions: " + this.getCompositions()+"\n"+
+                "Diseases:     "+this.getDiseases()+"\n"+
+                "Peptides:     "+this.getPeptides()+"\n"+
+                "Proteins:     "+this.getProteins()+"\n"+
+                "References:   "+this.getReferences()+"\n"+
+                "Sites:        "+this.getSites()+"\n"+
+                "Sources:      "+this.getSources()+"\n"+
+                "Structures:   "+this.getStructures()+"\n"+
+                "Taxonomies:   "+this.getTaxonomies()+"\n");
+    }
 }
