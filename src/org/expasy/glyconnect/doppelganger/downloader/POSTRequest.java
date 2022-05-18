@@ -1,20 +1,23 @@
 package org.expasy.glyconnect.doppelganger.downloader;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-
 import java.net.HttpURLConnection;
 import java.net.URL;
-
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
 public class POSTRequest {
     private String url;
     private String GETBody;
     private String POSTBody;
     private String doi;
+    private String identifier;
+    private String taxonomy;
+    private String protein;
     private String glycanType;
 
     /**
@@ -24,7 +27,12 @@ public class POSTRequest {
         this.url = GETReq.getUrl();
         this.setGETBody(GETReq);
         this.setPOSTBody(GETReq);
-        this.setDoi();
+        if ( this.url.contains("reference=") ) this.setDoi();
+        if ( this.url.contains("taxonomy=") ) this.setTaxonomy();
+        if ( this.url.contains("protein=") ) {
+            this.setProtein();
+            this.setIdentifier();
+        }
         this.setGlycanType();
     }
 
@@ -73,13 +81,6 @@ public class POSTRequest {
         return response.toString();
     }
 
-    public void setPOSTBody(GETRequest GETReq) throws Exception {
-        String POSTResponse = sendPOST(GETReq);
-        String POSTBody = "{\"POSTRequest\":"+POSTResponse+"}";
-
-        this.POSTBody = POSTBody;
-    }
-
     public void setGETBody(GETRequest GETReq) {
         String GETBody = GETReq.getResponse();
 
@@ -88,8 +89,14 @@ public class POSTRequest {
             int endIndex   = GETBody.indexOf("}]}]");
             GETBody = "{\"GETRequest\":"+GETBody.substring(startIndex,endIndex)+"}]}]}";
         }
-
         this.GETBody = GETBody;
+    }
+
+    public void setPOSTBody(GETRequest GETReq) throws Exception {
+        String POSTResponse = sendPOST(GETReq);
+        String POSTBody = "{\"POSTRequest\":"+POSTResponse+"}";
+
+        this.POSTBody = POSTBody;
     }
 
     public void setDoi() {
@@ -98,6 +105,58 @@ public class POSTRequest {
         this.doi = doi[0];
     }
 
+    public String getIdentifier() {
+        return identifier;
+    }
+
+    public void setIdentifier() {
+        JsonObject jsonObject = JsonParser.parseString(this.GETBody).getAsJsonObject();
+
+        JsonArray jsonArray = jsonObject.get("GETRequest").getAsJsonArray();
+
+        for (int i = 0; i < 1; i++) {
+            JsonObject jo = jsonArray.get(i).getAsJsonObject();
+
+            if ( jo.get("protein") != null ) {
+                JsonObject protein = jo.get("protein").getAsJsonObject();
+
+                if ( protein.get("id") != null ) {
+                    String id = protein.get("id").getAsString();
+
+                    if ( protein.get("uniprots") != null ) {
+                        JsonArray uniprots = protein.get("uniprots").getAsJsonArray();
+
+                        for (int j = 0; j < 1; j++) {
+                            if ( uniprots.get(i).getAsJsonObject().get("uniprot_acc") != null) {
+                                String uniprotAcc = uniprots.get(i).getAsJsonObject().get("uniprot_acc").getAsString();
+                                this.identifier = id+";"+uniprotAcc;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public String getTaxonomy() {
+        return taxonomy;
+    }
+
+    public void setTaxonomy() {
+        String[] taxonomy = this.url.split("taxonomy=");
+        taxonomy = taxonomy[1].split("&");
+        this.taxonomy = taxonomy[0];
+    }
+
+    public String getProtein() {
+        return protein;
+    }
+
+    public void setProtein() {
+        String[] protein = this.url.split("protein=");
+        protein = protein[1].split("&");
+        this.protein = protein[0];
+    }
     public void setGlycanType() {
         if (this.url.contains("N-Linked")) this.glycanType = "N-Linked";
         else if (this.url.contains("O-Linked")) this.glycanType = "O-Linked";
