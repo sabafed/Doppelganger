@@ -8,10 +8,10 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 
-public class downloader {
+public class referencesAll {
     public static void main(String[] args) throws Exception {
         //String url = "https://glyconnect.expasy.org/api/glycosylations?reference=10.1016/j.talanta.2020.121495&glycan_type=N-Linked";
-        referenceDBdownloader();
+        //referenceDBdownloader();
     }
 
     public static void referenceDBdownloader() throws Exception {
@@ -60,5 +60,6 @@ public class downloader {
         System.setOut(outFile);
         System.out.println(output);
         System.setOut(console);
+        System.out.println("    File '"+outFileName+"' created!");
     }
 }

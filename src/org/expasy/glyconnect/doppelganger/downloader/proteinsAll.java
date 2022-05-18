@@ -56,17 +56,6 @@ public class proteinsAll {
 
         String output = GETBody+","+POSTBody;
 
-   /*
-        File nFolder = new File("/home/federico/Documenti/Thesis/Doppelganger/proteinsAll/N-Linked");
-        File oFolder = new File("/home/federico/Documenti/Thesis/Doppelganger/proteinsAll/O-Linked");
-
-        File[] nFiles = nFolder.listFiles();
-        File[] oFiles = oFolder.listFiles();
-
-        if (postObj.getGlycanType() == "N-Linked" && )
-
-    */
-
         if ( postObj.getIdentifier() != null ) {
             String outFileName = "/home/federico/Documenti/Thesis/Doppelganger/proteinsAll/" +
                     postObj.getGlycanType() + "/" +

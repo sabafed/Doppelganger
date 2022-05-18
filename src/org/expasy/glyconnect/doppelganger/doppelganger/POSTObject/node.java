@@ -28,6 +28,8 @@ public class node {
     private final List<String> structures = new ArrayList<>();
     private final List<String> references = new ArrayList<>();
 
+    //private HashMap<String, Integer> propertyCounts = new HashMap<String, Integer>();
+
     /**
      * Main constructor
      *
