@@ -57,4 +57,9 @@ public class taxonomy {
     public void setSpecies(String species) {
         this.species = species;
     }
+
+    @Override
+    public String toString() {
+        return this.id+";"+this.species;
+    }
 }

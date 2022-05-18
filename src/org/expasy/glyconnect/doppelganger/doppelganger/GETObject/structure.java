@@ -87,4 +87,9 @@ public class structure {
     public void setReviewed(boolean reviewed) {
         this.reviewed = reviewed;
     }
+
+    @Override
+    public String toString() {
+        return this.glycanCore;
+    }
 }
