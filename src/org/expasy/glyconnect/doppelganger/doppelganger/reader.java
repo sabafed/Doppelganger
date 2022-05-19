@@ -3,7 +3,6 @@ package org.expasy.glyconnect.doppelganger.doppelganger;
 import java.io.File;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Main class.
@@ -12,7 +11,7 @@ import java.util.List;
  */
 public class reader {
     public static void main(String[] args) throws Exception {
-        List<doppelganger> gangers = new ArrayList<>(readfiles("proteinsAll"));
+        ArrayList<doppelganger> gangers = new ArrayList<>(readfiles("proteinsAll"));
 
         for (int i = 0; i < gangers.size(); i++) {
             System.out.println( gangers.get(i).getIdentifier() );
@@ -20,8 +19,8 @@ public class reader {
         }
     }
 
-    public static List<doppelganger> readfiles(String sourceDirectory) throws Exception {
-        List<doppelganger> gangers = new ArrayList<>();
+    public static ArrayList<doppelganger> readfiles(String sourceDirectory) throws Exception {
+        ArrayList<doppelganger> gangers = new ArrayList<>();
         File directory = new File("/home/federico/Documenti/Thesis/Doppelganger/"+sourceDirectory+"/N-Linked");;
         File[] files = directory.listFiles();
 

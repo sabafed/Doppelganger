@@ -5,6 +5,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class node {
@@ -28,7 +29,7 @@ public class node {
     private final List<String> structures = new ArrayList<>();
     private final List<String> references = new ArrayList<>();
 
-    //private HashMap<String, Integer> propertyCounts = new HashMap<String, Integer>();
+    private HashMap<String, Integer> propertyCounts = new HashMap<String, Integer>();
 
     /**
      * Main constructor
@@ -190,6 +191,29 @@ public class node {
     public void setReferences() {
         JsonArray referencesArray = this.nodesJson.get("references").getAsJsonArray();
         for (JsonElement ra : referencesArray) references.add(ra.getAsString());
+    }
+
+    public HashMap<String, Integer> getPropertyCounts() {
+        return propertyCounts;
+    }
+
+    public void setPropertyCounts() {
+        // taking the glyconnectFormat could simplify retrieval of properties
+        HashMap<String, Integer> propertyCounts = new HashMap<>();
+
+        String[] glyconnectFormat = this.glyconnectFormat.split(" ");
+
+        for (String residue : glyconnectFormat) {
+            if ( residue.contains("Hex") );
+            if ( residue.contains("HexNAc") );
+            if ( residue.contains("dHex") ) {
+                String[] residue;
+            }
+            if ( residue.contains("NeuAc") );
+            if ( residue.contains("NeuGc") );
+            if ( residue.contains("Su") );
+        }
+        this.propertyCounts = propertyCounts;
     }
 
     @Override

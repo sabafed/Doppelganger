@@ -3,8 +3,8 @@ package org.expasy.glyconnect.doppelganger.scorer;
 import java.util.ArrayList;
 import java.util.List;
 
-public class comparison {
-    public double cosineSimilarity(Double[] vectorA, Double[] vectorB) {
+public class compare {
+    public static double cosineSimilarity(double[] vectorA, double[] vectorB) {
         //for (int i = 0; i < vectorA.length; i++) System.out.print(vectorA[i]+" ");
         double dotProduct = 0.0;
         double normA      = 0.0;
@@ -18,7 +18,7 @@ public class comparison {
         return dotProduct / (Math.sqrt(normA) * Math.sqrt(normB));
     }
 
-    public double networkDensity(int nodesNumber, int linksNumber) {
+    public static double networkDensity(int nodesNumber, int linksNumber) {
         double nn = (double) nodesNumber;
         double ln = (double) linksNumber;
 
@@ -27,7 +27,7 @@ public class comparison {
         return density;
     }
 
-    public double densityDifference(double densityA, double densityB) {
+    public static double densityDifference(double densityA, double densityB) {
         return Math.abs(densityA - densityB);
     }
 

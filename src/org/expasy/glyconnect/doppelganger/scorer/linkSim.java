@@ -1,7 +1,6 @@
 package org.expasy.glyconnect.doppelganger.scorer;
 
 import org.expasy.glyconnect.doppelganger.doppelganger.POSTObject.link;
-import org.expasy.glyconnect.doppelganger.doppelganger.POSTObject.node;
 import org.expasy.glyconnect.doppelganger.doppelganger.doppelganger;
 
 import java.util.ArrayList;
@@ -12,7 +11,7 @@ import java.util.Map;
  * Link similarity class.
  * Extract the information on the networks (doppelganger objects),
  * computes calculation on the count of the 14 link types in the database,
- * is the subject of the comparison class.
+ * together with nodeSim, is the subject of the comparison class.
  */
 public class linkSim {
     private String identifier;
@@ -21,6 +20,10 @@ public class linkSim {
     private ArrayList<String> virtualNodes = new ArrayList<String>();
     private String linkStringVT; // String of all the links in the doppelganger object, virtuals included.
     private String linkStringVF; // String of all the links in the doppelganger object, virtuals excluded.
+
+    private double networkDensityVT;
+    private double networkDensityVF;
+
     private HashMap<Character, Integer> linkCountVT = new HashMap<Character, Integer>(); // Counts the occurrences of each link in the network, virtuals included.
     private HashMap<Character, Integer> linkCountVF = new HashMap<Character, Integer>(); // Counts the occurrences of each link in the network, virtuals excluded.
     private HashMap<Character, Double> linkFreqVT = new HashMap<Character, Double>(); // Link frequencies relative to the total number of links in the network, virtuals included;
@@ -35,8 +38,11 @@ public class linkSim {
         this.identifier = doppelganger.getIdentifier();
         this.doppelganger = doppelganger;
 
-        this.setNodesArrays();
-        this.setLinkStrings();
+        this.setNodesArrays(); // Sets both realNodes and virtualNodes arrays
+        this.setLinkStrings(); // Sets both linkStringVT and linkStringVF
+
+        this.setNetworkDensityVT();
+        this.setNetworkDensityVF();
 
         this.linkCountVT = countLinks(this.linkStringVT);
         this.linkCountVF = countLinks(this.linkStringVF);
@@ -63,19 +69,11 @@ public class linkSim {
 
     /* Fills realNodes and virtualNodes from doppelganger.POSTObject.nodes */
     public void setNodesArrays() {
-        Map<Integer, node> nodes = this.doppelganger.getPOSTObject().getNodes();
+        if ( this.doppelganger.getRealNodes().size() != 0 )
+            this.realNodes = this.doppelganger.getRealNodes();
 
-        ArrayList<String> real = new ArrayList<String>();
-        ArrayList<String> virtual = new ArrayList<String>();
-
-        for (Integer i : nodes.keySet()) {
-            if ( !(nodes.get(i).isVirtual()) && !(real.contains(nodes.get(i).toString())) )
-                real.add(nodes.get(i).toString());
-            else if ( nodes.get(i).isVirtual() && !(virtual.contains(nodes.get(i).toString())) )
-                virtual.add(nodes.get(i).toString());
-        }
-        if ( real.size()    != 0 ) this.realNodes = real;
-        if ( virtual.size() != 0 ) this.virtualNodes = virtual;
+        if ( this.doppelganger.getVirtualNodes().size() != 0 )
+            this.virtualNodes = this.doppelganger.getRealNodes();
     }
 
     public String getLinkStringVT() {
@@ -103,6 +101,22 @@ public class linkSim {
 
         this.linkStringVT = linksVT.toString();
         this.linkStringVF = linksVF.toString();
+    }
+
+    public double getNetworkDensityVT() {
+        return networkDensityVT;
+    }
+
+    public void setNetworkDensityVT() {
+        this.networkDensityVT = compare.networkDensity(this.nodesNumberVT(), this.linksNumberVT());
+    }
+
+    public double getNetworkDensityVF() {
+        return networkDensityVF;
+    }
+
+    public void setNetworkDensityVF() {
+        this.networkDensityVF = compare.networkDensity(this.realNodesNumber(), this.linksNumberVF());
     }
 
     public HashMap<Character, Integer> getLinkCountVT() {
@@ -183,11 +197,18 @@ public class linkSim {
         return this.virtualNodes.size();
     }
 
-    public int linkNumberVT() {
+    public int nodesNumberVT() {
+        return this.realNodesNumber()+this.virtualNodesNumber();
+    }
+
+    public int virtualLinksNumber() {
+        return this.linksNumberVT()-this.linksNumberVF();
+    }
+    public int linksNumberVT() {
         return linkStringVT.length();
     }
 
-    public int linkNumberVF() {
+    public int linksNumberVF() {
         return linkStringVF.length();
     }
 
@@ -195,4 +216,5 @@ public class linkSim {
     public String toString() {
         return this.identifier;
     }
+
 }

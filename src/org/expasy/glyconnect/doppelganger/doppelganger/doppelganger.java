@@ -5,10 +5,13 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import org.expasy.glyconnect.doppelganger.doppelganger.GETObject.GETObject;
 import org.expasy.glyconnect.doppelganger.doppelganger.POSTObject.POSTObject;
+import org.expasy.glyconnect.doppelganger.doppelganger.POSTObject.node;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 // from this class, call all the others and make a single object.
 public class doppelganger {
@@ -17,6 +20,10 @@ public class doppelganger {
     private String glycanType;
     private final GETObject GETObject;
     private final POSTObject POSTObject;
+
+    private ArrayList<String> realNodes = new ArrayList<String>();
+    private ArrayList<String> virtualNodes = new ArrayList<String>();
+
     public int doiless;
 
     /**
@@ -73,6 +80,31 @@ public class doppelganger {
 
     public String getGlycanType() {
         return glycanType;
+    }
+
+    public ArrayList<String> getRealNodes() {
+        return realNodes;
+    }
+
+    public ArrayList<String> getVirtualNodes() {
+        return virtualNodes;
+    }
+
+    /* Fills realNodes and virtualNodes from doppelganger.POSTObject.nodes */
+    public void setNodesArrays() {
+        Map<Integer, node> nodes = this.getPOSTObject().getNodes();
+
+        ArrayList<String> real = new ArrayList<String>();
+        ArrayList<String> virtual = new ArrayList<String>();
+
+        for (Integer i : nodes.keySet()) {
+            if ( !(nodes.get(i).isVirtual()) && !(real.contains(nodes.get(i).toString())) )
+                real.add(nodes.get(i).toString());
+            else if ( nodes.get(i).isVirtual() && !(virtual.contains(nodes.get(i).toString())) )
+                virtual.add(nodes.get(i).toString());
+        }
+        if ( real.size()    != 0 ) this.realNodes = real;
+        if ( virtual.size() != 0 ) this.virtualNodes = virtual;
     }
 
     public boolean equals(doppelganger other) {
