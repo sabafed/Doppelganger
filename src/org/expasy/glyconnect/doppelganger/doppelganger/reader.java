@@ -14,8 +14,8 @@ public class reader {
         ArrayList<doppelganger> gangers = new ArrayList<>(readfiles("proteinsAll"));
 
         for (int i = 0; i < gangers.size(); i++) {
-            System.out.println( gangers.get(i).getIdentifier() );
-            gangers.get(i).getPOSTObject().attributesChecker();
+            //System.out.println( gangers.get(i).getIdentifier() );
+            //gangers.get(i).getPOSTObject().attributesChecker();
         }
     }
 

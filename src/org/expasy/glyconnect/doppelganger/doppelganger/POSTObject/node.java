@@ -78,9 +78,9 @@ public class node {
 
         String[] glyconnectFormat = this.glyconnectFormat.split(" ");
 
-        int hex = 0;    // for oligomannose: node has number of hex >= 5
-        int hexNAc = 0; //                   node has number of hexNac <= 2
-        int dHex = 0;   //                   node has number of dHex <= 1
+        boolean hex = false;   // for oligomannose: node has number of hex >= 5
+        boolean hexNAc = true; //                   node has number of hexNac <= 2
+        boolean dHex = true;   //                   node has number of dHex <= 1
 
         for (String residue : glyconnectFormat) {
             if ( residue.contains("Su") && !properties.contains("Sulfated") )
@@ -89,45 +89,27 @@ public class node {
             if ( residue.contains("dHex") && !properties.contains("Fucosylated") ) {
                 properties.add("Fucosylated");
                 String[] fucose = residue.split(":");
-                dHex = Integer.parseInt(fucose[1]);
+                if ( Integer.parseInt(fucose[1]) > 1 ) dHex = false;
             }
 
             if ( residue.contains("Hex") ) {
                 String[] pentose = residue.split(":");
-                hex = Integer.parseInt(pentose[1]);
+                if ( Integer.parseInt(pentose[1]) > 4 ) hex = true;
             }
 
             if ( residue.contains("HexNAc") ) {
                 String[] hexosamine = residue.split(":");
-                hexNAc = Integer.parseInt(hexosamine[1]);
+                if ( Integer.parseInt(hexosamine[1]) > 2 ) hexNAc = false;
             }
 
             if ( (residue.contains("NeuAc")
                     || residue.contains("NeuGc"))
                     && !properties.contains("Sialylated") )
                 properties.add("Sialylated");
+        }
 
-            if ( hex >= 5 && !properties.contains("Oligomannose") ) {
-                // hex >= 5 and hexNAc == 0 and dHex == 0 -> Oligomannose
-                if ( hexNAc == 0 && dHex == 0
-                        && !properties.contains("Oligomannose") )
-                    properties.add("Oligomannose");
-
-                // hex >= 5 and hexNAc <= 2 and dHex == 0 -> Oligomannose
-                else if ( hexNAc <= 2 && dHex <= 1
-                        && !properties.contains("Oligomannose") )
-                    properties.add("Oligomannose");
-
-                // hex >= 5 and hexNAc <= 2 and dHex == 0 -> Oligomannose
-                else if ( hexNAc <= 2 && dHex == 0
-                        && !properties.contains("Oligomannose") )
-                    properties.add("Oligomannose");
-
-                // hex >= 5 and hexNAc <= 2 and dHex <= 1 -> Oligomannose
-                else if ( hexNAc == 0 && dHex <= 1
-                        && !properties.contains("Oligomannose") )
-                    properties.add("Oligomannose");
-            }
+        if ( hex && !properties.contains("Oligomannose") ) {
+            if ( hexNAc && dHex ) properties.add("Oligomannose");
         }
 
         if ( properties.contains("Fucosylated")
@@ -140,8 +122,6 @@ public class node {
                 && !properties.contains("Neutral") )
             properties.add("Neutral");
 
-
-        //System.out.println(this.glyconnectFormat+"\n"+properties);
         this.properties = properties;
     }
 
@@ -276,6 +256,16 @@ public class node {
     public void setReferences() {
         JsonArray referencesArray = this.nodesJson.get("references").getAsJsonArray();
         for (JsonElement ra : referencesArray) references.add(ra.getAsString());
+    }
+
+    public boolean equals(node other) {
+        if ( this.id != null && other.id != null && this.id.equals(other.id)){
+            if (this.condensedFormat != null && other.condensedFormat != null &&
+            this.condensedFormat.equals(other.condensedFormat)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override

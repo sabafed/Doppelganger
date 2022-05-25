@@ -1,7 +1,6 @@
 package org.expasy.glyconnect.doppelganger.scorer;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class compare {
     public static double cosineSimilarity(double[] vectorA, double[] vectorB) {
@@ -24,6 +23,7 @@ public class compare {
 
         double density = ( 2 * ln / (nn * (nn - 1)) ) * 100;
 
+        if ( Double.isNaN(density) ) return 0.0;
         return density;
     }
 
@@ -32,8 +32,8 @@ public class compare {
     }
 
     public double jaccardIndex(ArrayList<String> setA, ArrayList<String> setB) {
-        List<String> AintersectionB = new ArrayList<String>();
-        List<String> AunionB        = new ArrayList<String>();
+        ArrayList<String> AintersectionB = new ArrayList<String>();
+        ArrayList<String> AunionB        = new ArrayList<String>();
 
         for (int i = 0; i < setA.size(); i++) {
             for (int j = 0; j < setB.size(); j++) {
