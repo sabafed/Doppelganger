@@ -34,33 +34,33 @@ public class helper {
         return counts;
     }
 
-    private static HashMap<Character, Double> propFreqAdapter(HashMap<String, Integer> propertiesCount) {
-        HashMap <Character, Integer> counts = new HashMap<>();
+    private static HashMap<Character, Integer> propFreqAdapter(HashMap<String, Integer> propertiesCount) {
+        HashMap <Character, Integer> charCounts = new HashMap<>();
 
         for (String property : propertiesCount.keySet()) {
             if ( property.equals("Neutral") )
-                counts.put('N', propertiesCount.get(property));
+                charCounts.put('N', propertiesCount.get(property));
             else if ( property.equals("Fucosylated") )
-                counts.put('F', propertiesCount.get(property));
+                charCounts.put('F', propertiesCount.get(property));
             else if ( property.equals("Sialylated") )
-                counts.put('S', propertiesCount.get(property));
+                charCounts.put('S', propertiesCount.get(property));
             else if ( property.equals("Fuco-sialylated") )
-                counts.put('U', propertiesCount.get(property));
+                charCounts.put('U', propertiesCount.get(property));
             else if ( property.equals("Oligomannose") )
-                    counts.put('O', propertiesCount.get(property));
+                    charCounts.put('O', propertiesCount.get(property));
             else if ( property.equals("Sulfated") )
-                    counts.put('L', propertiesCount.get(property));
+                    charCounts.put('L', propertiesCount.get(property));
         }
-        return computeFrequencies(counts);
+        return charCounts;
     }
 
-    public static HashMap<String, Double> propertiesFrequencies(HashMap<String, Integer> propertiesCount) {
+    public static HashMap<String, Double> propertiesFrequencies(HashMap<String, Integer> propertiesCount, int nodesNumber) {
         HashMap <String, Double> propertiesFrequencies = new HashMap<>();
 
         for (String property : propertiesCount.keySet())
             propertiesFrequencies.put(property, 0.0);
 
-        HashMap<Character, Double> frequencies = propFreqAdapter(propertiesCount);
+        HashMap<Character, Double> frequencies = computeFrequencies( propFreqAdapter(propertiesCount) , nodesNumber);
         //System.out.println("\n"+frequencies);
 
         for (char prop : frequencies.keySet()) {
@@ -83,15 +83,21 @@ public class helper {
         return propertiesFrequencies;
     }
 
-    public static HashMap<Character, Double> linkFrequencies(HashMap<Character, Integer> linkCount) {
-        return computeFrequencies(linkCount);
+    public static HashMap<Character, Double> linkFrequencies(HashMap<Character, Integer> linkCount, int linksNumber) {
+        return computeFrequencies(linkCount, linksNumber);
     }
 
-    private static HashMap<Character, Double> computeFrequencies(HashMap<Character, Integer> count) {
+    private static HashMap<Character, Double> computeFrequencies(HashMap<Character, Integer> count, int denominator) {
         HashMap <Character, Double> frequencies = new HashMap<>();
 
-        double total = 0.0;
+        double total = (double) denominator; //0.0;
 
+        for ( Character residue : count.keySet()) {
+            if ( total != 0.0 ) frequencies.put(residue, Double.valueOf( count.get(residue) ) / total );
+            else frequencies.put(residue, 0.0);
+        }
+
+        /*
         for (Character residue : count.keySet()) {
             frequencies.put(residue, 0.0);
             total += Double.valueOf(count.get(residue));
@@ -101,15 +107,12 @@ public class helper {
             if ( total != 0.0 )
                 frequencies.replace(residue, Double.valueOf(count.get(residue))/ total);
         }
+        */
+
         return frequencies;
     }
-/*
-    public static double[] frequenciesAsDouble(HashMap<String, Integer> propertiesFrequencies) {
-        return frequenciesAsDouble(p);
-    }
-*/
 
-    /* This function is used to call comparison.cosineSimilarity() */
+    /* This function is used to call compare.cosineSimilarity() */
     public static double[] frequenciesAsDouble(HashMap<Character, Double> frequenciesMap) {
 
          /* Order in HashMap<Character, Double> linkFreq:

@@ -12,26 +12,8 @@ public class scorer {
         //toTable(glycanType,gangers);
 
         for (doppelganger doppel : gangers) {
+            doppel.attributesChecker();
 
-            System.out.println(doppel.getIdentifier());
-
-            System.out.println("Real nodes: "+ doppel.getRealNodes() +
-                    "\nVirtual nodes: "+ doppel.getVirtualNodes() +
-                    "\nReal nodes number: "+ doppel.realNodesNumber() +
-                    "\nVirtual nodes number: "+doppel.virtualNodesNumber() +
-                    "\nReal links: "+doppel.getLinkStringVT() +
-                    "\nVirtual links: "+doppel.getLinkStringVF() +
-                    "\nNetwork density VT: "+doppel.getNetworkDensityVT() +
-                    "\nNetwork density VF: "+doppel.getNetworkDensityVF()+
-                    "\n\nProperties count VT: "+doppel.getPropertiesCountVT()+
-                    "\nProperties count VF: "+doppel.getPropertiesCountVF()+
-                    "\nProperties frequencies VT: "+doppel.getPropertiesFreqVT() +
-                    "\nProperties frequencies VF: "+doppel.getPropertiesFreqVF() +
-                    "\n\nLink count VT: "+doppel.getLinkCountVT() +
-                    "\nLink count VF: "+doppel.getLinkCountVF() +
-                    "\nLink frequencies VT: "+doppel.getLinkFreqVT() +
-                    "\nLink frequencies VF: "+doppel.getLinkFreqVF() +
-                    "\n_________________________________________________________________________________________________________________________________");
         }
     }
 /*

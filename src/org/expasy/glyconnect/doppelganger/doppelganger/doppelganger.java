@@ -83,16 +83,16 @@ public class doppelganger {
         this.setPropertiesCount(true); // Sets propertiesCountVT
         this.setPropertiesCount(false); // Sets propertiesCountVF
 
-        this.propertiesFreqVT = helper.propertiesFrequencies(this.propertiesCountVT);
-        this.propertiesFreqVF = helper.propertiesFrequencies(this.propertiesCountVF);
+        this.propertiesFreqVT = helper.propertiesFrequencies(this.propertiesCountVT, this.nodesNumberVT());
+        this.propertiesFreqVF = helper.propertiesFrequencies(this.propertiesCountVF, this.nodesNumberVF());
         
         /* Set link similarity attributes */
         this.setLinkStrings(); // Sets both linkStringVT and linkStringVF
         this.linkCountVT = helper.countLinks(this.linkStringVT);
         this.linkCountVF = helper.countLinks(this.linkStringVF);
 
-        this.linkFreqVT = helper.linkFrequencies(this.linkCountVT);
-        this.linkFreqVF = helper.linkFrequencies(this.linkCountVF);
+        this.linkFreqVT = helper.linkFrequencies(this.linkCountVT, this.linksNumberVT());
+        this.linkFreqVF = helper.linkFrequencies(this.linkCountVF, this.linksNumberVF());
 
         /* Set others */
         this.setNetworkDensityVT();
@@ -239,6 +239,10 @@ public class doppelganger {
     public int nodesNumberVT() {
         return this.realNodesNumber()+this.virtualNodesNumber();
     }
+
+    public int nodesNumberVF() {
+        return this.realNodesNumber();
+    }
     
     /* Functions for link similarity */
     public void setLinkStrings() {
@@ -323,10 +327,26 @@ public class doppelganger {
     }
 
     public void attributesChecker() {
-        System.out.println(this.getDoi()+"\n"+
-                this.getIdentifier()+"\n"+
-                this.getGlycanType()+"\n"+
-                this.getGETObject()+"\n"+
-                this.getPOSTObject()+"\n");
+        System.out.println(this.getIdentifier());
+
+        System.out.println("Real nodes: "+ this.getRealNodes() +
+                "\nVirtual nodes: "+ this.getVirtualNodes() +
+                "\nReal nodes number: "+ this.realNodesNumber() +
+                "\nVirtual nodes number: "+this.virtualNodesNumber() +
+                "\nReal links: "+this.getLinkStringVT() +
+                "\nVirtual links: "+this.getLinkStringVF() +
+                "\nReal links number: "+this.linksNumberVF() +
+                "\nVirtual links number: "+this.virtualLinksNumber() +
+                "\nNetwork density VT: "+this.getNetworkDensityVT() +
+                "\nNetwork density VF: "+this.getNetworkDensityVF()+
+                "\n\nProperties count VT: "+this.getPropertiesCountVT()+
+                "\nProperties count VF: "+this.getPropertiesCountVF()+
+                "\nProperties frequencies VT: "+this.getPropertiesFreqVT() +
+                "\nProperties frequencies VF: "+this.getPropertiesFreqVF() +
+                "\n\nLink count VT: "+this.getLinkCountVT() +
+                "\nLink count VF: "+this.getLinkCountVF() +
+                "\nLink frequencies VT: "+this.getLinkFreqVT() +
+                "\nLink frequencies VF: "+this.getLinkFreqVF() +
+                "\n_________________________________________________________________________________________________________________________________");
     }
 }
