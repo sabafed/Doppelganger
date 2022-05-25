@@ -3,26 +3,33 @@ package org.expasy.glyconnect.doppelganger.scorer;
 import org.expasy.glyconnect.doppelganger.doppelganger.doppelganger;
 import org.expasy.glyconnect.doppelganger.doppelganger.reader;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintStream;
 import java.util.ArrayList;
 public class scorer {
     public static void main(String[] args) throws Exception {
-        ArrayList<doppelganger> gangers = reader.readfiles("proteinsAll");
-
         String glycanType = "N-Linked";
-        //toTable(glycanType,gangers);
 
+        ArrayList<doppelganger> gangers = reader.readfiles("proteinsAll", glycanType);
+
+
+        toTable(glycanType,gangers);
+/*
         for (doppelganger doppel : gangers) {
             doppel.attributesChecker();
 
         }
+  */
     }
-/*
+
     public static void toTable(String glycanType, ArrayList<doppelganger> networks) throws FileNotFoundException {
         double cosSimThreshold = 0.85;
         double densityDifferenceMax = 1.0;
+        int minNetworkSize = 5;
 
-        String fileName = "_CosSim"+cosSimThreshold+"_Density"+densityDifferenceMax;
-        PrintStream output = new PrintStream(new File("results/"+glycanType+fileName+"_TEST_"+".tsv"));
+        String fileName = glycanType+"_minSize"+minNetworkSize+"_CosSim"+cosSimThreshold+"_Density"+densityDifferenceMax;
+        PrintStream output = new PrintStream(new File("results/"+fileName+"_TEST_"+".tsv"));
         PrintStream console = System.out;
         System.setOut(output);
 
@@ -31,7 +38,8 @@ public class scorer {
 
                 "Link Cosine Similarity (virtual T)" + "\t" + "Link Cosine Similarity (virtual F)" + "\t" +
 
-                //"Profile Cosine Similarity (virtual T)"+"\t"+"Profile Cosine Similarity (virtual F)"+"\t"+
+                "Profile Cosine Similarity (virtual T)" + "\t" + "Profile Cosine Similarity (virtual F)" + "\t" +
+
                 "Nodes Number A (Virtual F)" + "\t" + "Nodes Number B (Virtual F)" + "\t" +
                 "Links Number A (Virtual F)" + "\t" + "Links Number B (Virtual F)" + "\t" +
 
@@ -45,7 +53,9 @@ public class scorer {
 
                 //"Virtual Nodes Overlap"+"\t"+"Virtual Nodes Jaccard Index"+"\t"+"Virtual Links Overlap"+"\t"+"Virtual Links Jaccard Index"+"\t"+
 
-                //"Composition A (virtual T)"+"\t"+ "Composition B (virtual T)"+"\t"+"Composition A (virtual F)"+"\t"+"Composition B (virtual F)"+"\t"+
+                "Composition A (virtual T)" + "\t" + "Composition B (virtual T)" + "\t" +
+                "Composition A (virtual F)" + "\t" + "Composition B (virtual F)" + "\t" +
+
                 "Link counts A (virtual T)" + "\t" + "Link counts B (virtual T)" + "\t" +
                 "Frequencies A (virtual T)" + "\t" + "Frequencies B (virtual T)" + "\t" +
 
@@ -60,21 +70,30 @@ public class scorer {
                     doppelganger network1 = networks.get(f);
                     doppelganger network2 = networks.get(s);
 
-                    // If the linkString that includes virtual and real link is 0 it means that the network is empty
-                    if (network1.getLinkStringVT().length() > 0 && network2.getLinkStringVT().length() > 0) {
+                    // Networks with less than 6 nodes are not considered
+                    if (network1.realNodesNumber() > minNetworkSize && network2.realNodesNumber() > minNetworkSize) {
                         double densityDiffVT = compare.densityDifference(network1.getNetworkDensityVT(), network2.getNetworkDensityVT());
                         double densityDiffVF = compare.densityDifference(network1.getNetworkDensityVF(), network2.getNetworkDensityVF());
 
                         if (densityDiffVT < densityDifferenceMax && densityDiffVF < densityDifferenceMax) {
-                            double linkCosSimVT = compare.cosineSimilarity( linkSim.frequenciesAsDouble(network1.getLinkFreqVT()),
-                                    linkSim.frequenciesAsDouble(network2.getLinkFreqVT()) );
+                            double linkCosSimVT = compare.cosineSimilarity( helper.frequenciesAsDouble(network1.getLinkFreqVT()),
+                                    helper.frequenciesAsDouble(network2.getLinkFreqVT()) );
 
-                            double linkCosSimVF = compare.cosineSimilarity(linkSim.frequenciesAsDouble(network1.getLinkFreqVF()),
-                                    linkSim.frequenciesAsDouble(network2.getLinkFreqVF()));
+                            double linkCosSimVF = compare.cosineSimilarity(helper.frequenciesAsDouble(network1.getLinkFreqVF()),
+                                    helper.frequenciesAsDouble(network2.getLinkFreqVF()));
 
-                            if (linkCosSimVT >= cosSimThreshold || linkCosSimVF >= cosSimThreshold) {
+                            double propCosSimVT = compare.cosineSimilarity( helper.frequenciesAsDouble( helper.freqsStringToChar(network1.getPropertiesFreqVT()) ),
+                                    helper.frequenciesAsDouble( helper.freqsStringToChar(network2.getPropertiesFreqVF()) ) );
+                            double propCosSimVF = compare.cosineSimilarity( helper.frequenciesAsDouble( helper.freqsStringToChar(network1.getPropertiesFreqVF()) ),
+                                    helper.frequenciesAsDouble( helper.freqsStringToChar(network2.getPropertiesFreqVF()) ) );
+
+                            if (linkCosSimVT >= cosSimThreshold || linkCosSimVF >= cosSimThreshold
+                                    || propCosSimVT >= cosSimThreshold || propCosSimVF >= cosSimThreshold ) {
+
                                 String body = network1.getIdentifier() + "\t" + network2.getIdentifier() + "\t" +
                                         linkCosSimVT + "\t" + linkCosSimVF + "\t" +
+                                        propCosSimVT + "\t" + propCosSimVF + "\t" +
+
                                         network1.realNodesNumber() + "\t" + network2.realNodesNumber() + "\t" +
                                         network1.linksNumberVF() + "\t" + network2.linksNumberVF() +"\t" +
 
@@ -85,6 +104,9 @@ public class scorer {
 
                                         network1.virtualNodesNumber() + "\t" + network2.virtualNodesNumber() + "\t" +
                                         network1.virtualLinksNumber() + "\t" + network2.virtualLinksNumber() + "\t" +
+
+                                        network1.getLinkStringVT() + "\t" + network2.getLinkStringVT() + "\t" +
+                                        network1.getLinkStringVF() + "\t" + network2.getLinkStringVF() + "\t" +
 
                                         network1.getLinkCountVT() + "\t" + network2.getLinkCountVT() + "\t" +
                                         network1.getLinkFreqVT() + "\t" + network2.getLinkFreqVT() + "\t" +
@@ -103,5 +125,4 @@ public class scorer {
         System.setOut(console);
         System.out.println("File '"+fileName+"' has been created!");
     }
-    */
 }

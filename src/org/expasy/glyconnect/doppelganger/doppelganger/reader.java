@@ -11,7 +11,8 @@ import java.util.ArrayList;
  */
 public class reader {
     public static void main(String[] args) throws Exception {
-        ArrayList<doppelganger> gangers = new ArrayList<>(readfiles("proteinsAll"));
+        String glycanType = "N-Linked";
+        ArrayList<doppelganger> gangers = new ArrayList<>(readfiles("proteinsAll", glycanType));
 
         for (int i = 0; i < gangers.size(); i++) {
             //System.out.println( gangers.get(i).getIdentifier() );
@@ -19,9 +20,9 @@ public class reader {
         }
     }
 
-    public static ArrayList<doppelganger> readfiles(String sourceDirectory) throws Exception {
+    public static ArrayList<doppelganger> readfiles(String sourceDirectory, String glycanType) throws Exception {
         ArrayList<doppelganger> gangers = new ArrayList<>();
-        File directory = new File("/home/federico/Documenti/Thesis/Doppelganger/"+sourceDirectory+"/N-Linked");;
+        File directory = new File("/home/federico/Documenti/Thesis/Doppelganger/"+sourceDirectory+"/"+glycanType);;
         File[] files = directory.listFiles();
 
         int totalDoiless = 0;

@@ -34,7 +34,7 @@ public class helper {
         return counts;
     }
 
-    private static HashMap<Character, Integer> propFreqAdapter(HashMap<String, Integer> propertiesCount) {
+    private static HashMap<Character, Integer> countsStringToChar(HashMap<String, Integer> propertiesCount) {
         HashMap <Character, Integer> charCounts = new HashMap<>();
 
         for (String property : propertiesCount.keySet()) {
@@ -54,13 +54,33 @@ public class helper {
         return charCounts;
     }
 
+    public static HashMap<Character, Double> freqsStringToChar(HashMap<String, Double> propertiesFrequencies) {
+        HashMap <Character, Double> charFreq = new HashMap<>();
+
+        for (String property : propertiesFrequencies.keySet()) {
+            if ( property.equals("Neutral") )
+                charFreq.put('N', propertiesFrequencies.get(property));
+            else if ( property.equals("Fucosylated") )
+                charFreq.put('F', propertiesFrequencies.get(property));
+            else if ( property.equals("Sialylated") )
+                charFreq.put('S', propertiesFrequencies.get(property));
+            else if ( property.equals("Fuco-sialylated") )
+                charFreq.put('U', propertiesFrequencies.get(property));
+            else if ( property.equals("Oligomannose") )
+                charFreq.put('O', propertiesFrequencies.get(property));
+            else if ( property.equals("Sulfated") )
+                charFreq.put('L', propertiesFrequencies.get(property));
+        }
+        return charFreq;
+    }
+
     public static HashMap<String, Double> propertiesFrequencies(HashMap<String, Integer> propertiesCount, int nodesNumber) {
         HashMap <String, Double> propertiesFrequencies = new HashMap<>();
 
         for (String property : propertiesCount.keySet())
             propertiesFrequencies.put(property, 0.0);
 
-        HashMap<Character, Double> frequencies = computeFrequencies( propFreqAdapter(propertiesCount) , nodesNumber);
+        HashMap<Character, Double> frequencies = computeFrequencies( countsStringToChar(propertiesCount) , nodesNumber);
         //System.out.println("\n"+frequencies);
 
         for (char prop : frequencies.keySet()) {
