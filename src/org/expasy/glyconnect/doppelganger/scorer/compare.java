@@ -32,24 +32,24 @@ public class compare {
     }
 
     public double jaccardIndex(ArrayList<String> setA, ArrayList<String> setB) {
-        ArrayList<String> AintersectionB = new ArrayList<String>();
-        ArrayList<String> AunionB        = new ArrayList<String>();
+        ArrayList<String> AintersectionB = new ArrayList<>();
+        ArrayList<String> AunionB        = new ArrayList<>();
 
-        for (int i = 0; i < setA.size(); i++) {
-            for (int j = 0; j < setB.size(); j++) {
-                String sA = setA.get(i);
-                String sB = setB.get(j);
+        for (int f = 0; f < setA.size(); f++) {
+            for (int s = 0; s < setB.size(); s++) {
+                String sA = setA.get(f);
+                String sB = setB.get(s);
 
                 // Union is the set including elements present in AT LEAST ONE of the original sets ( = the set of all the elements)
                 if ( !(sA.equals(sB)) ) {
-                    AunionB.add(sA);
-                    AunionB.add(sB);
+                    if ( !AunionB.contains(sA) ) AunionB.add(sA);
+                    if ( !AunionB.contains(sB) ) AunionB.add(sB);
                 }
 
                 // Intersection is the set including elements present on BOTH original sets
                 if(sA.equals(sB)) {
-                    AintersectionB.add(sA);
-                    AunionB.add(sA);
+                    if ( !AintersectionB.contains(sA) ) AintersectionB.add(sA);
+                    if ( !AunionB.contains(sA) )        AunionB.add(sA);
                 }
             }
         }
