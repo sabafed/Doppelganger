@@ -15,12 +15,45 @@ public class scorer {
         toTable(glycanType,gangers);
 /*
         int total = 0;
-        int zeroJI = 0;
+        int intersection = 0;
+        double cosSimThreshold = 0.85;
 
         for (int i = 0; i < gangers.size(); i++) {
             for (int j = 0; j < gangers.size(); j++) {
                 doppelganger test1 = gangers.get(i);
                 doppelganger test2 = gangers.get(j);
+
+                if ( test1.getRealNodes().size() > 5 && test2.getRealNodes().size() > 5 ){
+                    if ( compare.densityDifference(test1.getNetworkDensityVF(), test2.getNetworkDensityVF()) < 1 ) {
+                        double linkCosSimVT = compare.cosineSimilarity( helper.frequenciesAsDouble(test1.getLinkFreqVT()),
+                                helper.frequenciesAsDouble(test2.getLinkFreqVT()) );
+
+                        double linkCosSimVF = compare.cosineSimilarity(helper.frequenciesAsDouble(test1.getLinkFreqVF()),
+                                helper.frequenciesAsDouble(test2.getLinkFreqVF()));
+
+                        double propCosSimVT = compare.cosineSimilarity( helper.frequenciesAsDouble( helper.freqsStringToChar(test1.getPropertiesFreqVT()) ),
+                                helper.frequenciesAsDouble( helper.freqsStringToChar(test2.getPropertiesFreqVF()) ) );
+                        double propCosSimVF = compare.cosineSimilarity( helper.frequenciesAsDouble( helper.freqsStringToChar(test1.getPropertiesFreqVF()) ),
+                                helper.frequenciesAsDouble( helper.freqsStringToChar(test2.getPropertiesFreqVF()) ) );
+
+                        if (linkCosSimVT >= cosSimThreshold || linkCosSimVF >= cosSimThreshold
+                                || propCosSimVT >= cosSimThreshold || propCosSimVF >= cosSimThreshold ) {
+                            total++;
+
+                            if (compare.linkIntersection(test1.getRealLinks(), test2.getRealLinks()).size() > -1) {
+
+                                System.out.println();
+                                System.out.println(test1.getIdentifier() + " ~ " + test1.getRealLinks());
+                                System.out.println(test2.getIdentifier() + " ~ " + test2.getRealLinks());
+                                System.out.println("Link Intersection: " + compare.linkIntersection(test1.getRealLinks(), test2.getRealLinks()));
+                                System.out.println("Link Union: " + compare.linkUnion(test1.getRealLinks(), test2.getRealLinks()));
+
+
+                                intersection++;
+                            }
+                        }
+                    }
+                }
 
                 if ( !test1.equals(test2) && test1.getIdentifier().contains("Q14766") && test2.getIdentifier().contains("P00747") ) {
                     if ( test1.realNodesNumber() > 5 && test2.realNodesNumber() > 5 ){
@@ -31,10 +64,13 @@ public class scorer {
                         System.out.println(test1.getIdentifier() + "~" + test2.getIdentifier() + " node similarity: " + testJI + "%");
                     }
                 }
+
             }
         }
-        System.out.println("Total comparisons: "+total+"\nHaving JI == 0: "+zeroJI);
-*/
+        System.out.println("Total comparison: " + total + " intersection > 0 : " + intersection);
+        //System.out.println("Total comparisons: "+total+"\nHaving JI == 0: "+zeroJI);
+
+ */
     }
 
     public static void toTable(String glycanType, ArrayList<doppelganger> networks) throws FileNotFoundException {
@@ -66,9 +102,9 @@ public class scorer {
                 "Virtual Links Number A" + "\t" + "Virtual Links Number B" + "\t" +
 
                 "Real Nodes Overlap" + "\t" + "Real Nodes Jaccard Index" + "\t" +
-                //"Real Links Overlap" + "\t" + "Real Links Jaccard Index" + "\t" +
+                "Real Links Overlap" + "\t" + "Real Links Jaccard Index" + "\t" +
                 "Virtual Nodes Overlap" + "\t" + "Virtual Nodes Jaccard Index" + "\t" +
-                //"Virtual Links Overlap" + "\t" + "Virtual Links Jaccard Index" + "\t" +
+                "Virtual Links Overlap" + "\t" + "Virtual Links Jaccard Index" + "\t" +
 
                 "Composition A (virtual T)" + "\t" + "Composition B (virtual T)" + "\t" +
                 "Composition A (virtual F)" + "\t" + "Composition B (virtual F)" + "\t" +
@@ -113,8 +149,9 @@ public class scorer {
                                         compare.nodeUnionSize(network1.getRealNodes(),network2.getRealNodes());
                                 double realNodesJaccardIndex = compare.jaccardIndex(realNodesOverlap,realNodesUnion);
 
-                                //int realLinksOverlap = ;
-                                //double realLinksJaccardIndex;
+                                int realLinksOverlap = compare.linkInteresectionSize(network1.getRealLinks(),network2.getRealLinks());
+                                int realLinksUnion = compare.linkUnionSize(network1.getRealLinks(),network2.getRealLinks());
+                                double realLinksJaccardIndex = compare.jaccardIndex(realLinksOverlap,realLinksUnion);
 
                                 int virtualNodesOverlap =
                                         compare.nodeInteresectionSize(network1.getVirtualNodes(),network2.getVirtualNodes());
@@ -122,8 +159,11 @@ public class scorer {
                                         compare.nodeUnionSize(network1.getVirtualNodes(),network2.getVirtualNodes());
                                 double virtualNodesJaccardIndex = compare.jaccardIndex(virtualNodesOverlap, virtualNodesUnion);
 
-                                //int virtualLinksOverlap;
-                                //double virtualLinksJaccardIndex;
+                                int virtualLinksOverlap =
+                                        compare.linkInteresectionSize(network1.getVirtualLinks(),network2.getVirtualLinks());
+                                int virtualLinksUnion =
+                                        compare.linkUnionSize(network1.getVirtualLinks(),network2.getVirtualLinks());
+                                double virtualLinksJaccardIndex = compare.jaccardIndex(virtualLinksOverlap, virtualLinksUnion);
 
                                 String body = network1.getIdentifier() + "\t" + network2.getIdentifier() + "\t" +
                                         linkCosSimVT + "\t" + linkCosSimVF + "\t" +
@@ -141,9 +181,9 @@ public class scorer {
                                         network1.virtualLinksNumber() + "\t" + network2.virtualLinksNumber() + "\t" +
 
                                         realNodesOverlap + "\t" + realNodesJaccardIndex + "\t" +
-                                        //"Real Links Overlap" + "\t" + "Real Links Jaccard Index" + "\t" +
+                                        realLinksOverlap + "\t" + realLinksJaccardIndex + "\t" +
                                         virtualNodesOverlap + "\t" + virtualNodesJaccardIndex + "\t" +
-                                        //"Virtual Links Overlap" + "\t" + "Virtual Links Jaccard Index" + "\t" +
+                                        virtualLinksOverlap + "\t" + virtualLinksJaccardIndex + "\t" +
 
                                         network1.getLinkStringVT() + "\t" + network2.getLinkStringVT() + "\t" +
                                         network1.getLinkStringVF() + "\t" + network2.getLinkStringVF() + "\t" +

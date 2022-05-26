@@ -29,6 +29,9 @@ public class doppelganger {
     private ArrayList<node> realNodes = new ArrayList<>();
     private ArrayList<node> virtualNodes = new ArrayList<>();
 
+    private ArrayList<link> realLinks;
+    private ArrayList<link> virtualLinks;
+
     private double networkDensityVT;
     private double networkDensityVF;
 
@@ -87,6 +90,7 @@ public class doppelganger {
         this.propertiesFreqVF = helper.propertiesFrequencies(this.propertiesCountVF, this.nodesNumberVF());
         
         /* Set link similarity attributes */
+        this.setLinkArrays(); // Sets both realLinks and virtualLinks
         this.setLinkStrings(); // Sets both linkStringVT and linkStringVF
         this.linkCountVT = helper.countLinks(this.linkStringVT);
         this.linkCountVF = helper.countLinks(this.linkStringVF);
@@ -267,12 +271,46 @@ public class doppelganger {
         this.linkStringVT = linksVT.toString();
         this.linkStringVF = linksVF.toString();
     }
+
+    public void setLinkArrays() {
+        /* Composes both virtualLinks and realLinks arraylists */
+        Map<Integer, link> links = this.getPOSTObject().getLinks();
+        ArrayList<link> realLinks = new ArrayList<>();
+        ArrayList<link> virtualLinks = new ArrayList<>();
+
+        ArrayList<String> virtuals = new ArrayList<>();
+        for (node virtual : this.virtualNodes) virtuals.add(virtual.toString());
+
+        for (Integer i : links.keySet()) {
+
+            if ( !(virtuals.contains(links.get(i).getSource()))
+                && !(virtuals.contains(links.get(i).getTarget()))
+                && !(realLinks.contains(links.get(i))) ) {
+
+                realLinks.add(links.get(i)); // realLinks takes only links between two real nodes
+            }
+            else {
+                if ( !(virtualLinks.contains(links.get(i))) ) virtualLinks.add(links.get(i));
+            }
+        }
+
+        this.realLinks = realLinks;
+        this.virtualLinks = virtualLinks;
+    }
     public String getLinkStringVT() {
         return this.linkStringVT;
     }
 
     public String getLinkStringVF() {
         return this.linkStringVF;
+    }
+
+    public ArrayList<link> getRealLinks() {
+        return realLinks;
+    }
+
+    public ArrayList<link> getVirtualLinks() {
+        return virtualLinks;
     }
 
     public HashMap<Character, Integer> getLinkCountVT() {
@@ -286,6 +324,7 @@ public class doppelganger {
     public int virtualLinksNumber() {
         return this.linksNumberVT()-this.linksNumberVF();
     }
+
     public int linksNumberVT() {
         if ( this.linkStringVT == null ) return 0;
         return this.linkStringVT.length();
