@@ -1,5 +1,8 @@
 package org.expasy.glyconnect.doppelganger.scorer;
 
+import org.expasy.glyconnect.doppelganger.doppelganger.POSTObject.link;
+import org.expasy.glyconnect.doppelganger.doppelganger.POSTObject.node;
+
 import java.util.ArrayList;
 
 public class compare {
@@ -31,31 +34,107 @@ public class compare {
         return Math.abs(densityA - densityB);
     }
 
-    public double jaccardIndex(ArrayList<String> setA, ArrayList<String> setB) {
-        ArrayList<String> AintersectionB = new ArrayList<>();
-        ArrayList<String> AunionB        = new ArrayList<>();
+    public static ArrayList<node> nodeIntersection(ArrayList<node> setA, ArrayList<node> setB) {
+        ArrayList<node> AintersectionB = new ArrayList<>();
 
-        for (int f = 0; f < setA.size(); f++) {
-            for (int s = 0; s < setB.size(); s++) {
-                String sA = setA.get(f);
-                String sB = setB.get(s);
-
-                // Union is the set including elements present in AT LEAST ONE of the original sets ( = the set of all the elements)
-                if ( !(sA.equals(sB)) ) {
-                    if ( !AunionB.contains(sA) ) AunionB.add(sA);
-                    if ( !AunionB.contains(sB) ) AunionB.add(sB);
-                }
-
+        for (node nodeA : setA) {
+            for (node nodeB: setB) {
                 // Intersection is the set including elements present on BOTH original sets
-                if(sA.equals(sB)) {
-                    if ( !AintersectionB.contains(sA) ) AintersectionB.add(sA);
-                    if ( !AunionB.contains(sA) )        AunionB.add(sA);
+                if ( nodeA.equals(nodeB) ) {
+                    if ( !AintersectionB.contains(nodeA) ) AintersectionB.add(nodeA);
                 }
             }
         }
 
+        return AintersectionB;
+    }
+
+    public static int nodeInteresectionSize(ArrayList<node> setA, ArrayList<node> setB) {
+        return nodeIntersection(setA, setB).size();
+    }
+
+    public static ArrayList<node> nodeUnion(ArrayList<node> setA, ArrayList<node> setB) {
+        // Union is the set including elements present in AT LEAST ONE of the original sets ( = the set of all the elements)
+        ArrayList<node> AunionB = new ArrayList<>();
+
+        for (node nodeA : setA) {
+            if ( !AunionB.contains(nodeA) ) AunionB.add(nodeA);
+        }
+
+        for (node nodeB : setB) {
+            if ( !AunionB.contains(nodeB) ) AunionB.add(nodeB);
+        }
+
+        return AunionB;
+    }
+
+    public static int nodeUnionSize(ArrayList<node> setA, ArrayList<node> setB) {
+        return nodeUnion(setA, setB).size();
+    }
+
+    public static ArrayList<link> linkIntersection(ArrayList<link> setA, ArrayList<link> setB) {
+        ArrayList<link> AintersectionB = new ArrayList<>();
+
+        for (link linkA : setA) {
+            for (link linkB: setB) {
+                // Intersection is the set including elements present on BOTH original sets
+                if ( linkA.equals(linkB) ) {
+                    if ( !AintersectionB.contains(linkA) ) AintersectionB.add(linkA);
+                }
+            }
+        }
+        return AintersectionB;
+    }
+
+    public static int linkInteresectionSize(ArrayList<link> setA, ArrayList<link> setB) {
+        return linkIntersection(setA, setB).size();
+    }
+
+    public static ArrayList<link> linkUnion(ArrayList<link> setA, ArrayList<link> setB) {
+        // Union is the set including elements present in AT LEAST ONE of the original sets ( = the set of all the elements)
+        ArrayList<link> AunionB = new ArrayList<>();
+
+        for (link linkA : setA) {
+            if ( !AunionB.contains(linkA) ) AunionB.add(linkA);
+        }
+
+        for (link linkB : setB) {
+            if ( !AunionB.contains(linkB) ) AunionB.add(linkB);
+        }
+
+        return AunionB;
+    }
+
+    public static int linkUnionSize(ArrayList<link> setA, ArrayList<link> setB) {
+        return linkUnion(setA, setB).size();
+    }
+
+    public static double jaccardIndex(int interectionSize, int unionSize) {
+        /* Keeping the old method commented because of nostalgia
+        for (int f = 0; f < setA.size(); f++) {
+            for (int s = 0; s < setB.size(); s++) {
+                node nodeA = setA.get(f);
+                node nodeB = setB.get(s);
+
+                // Union is the set including elements present in AT LEAST ONE of the original sets ( = the set of all the elements)
+                if ( !(nodeA.equals(nodeB)) ) {
+                    if ( !AunionB.contains(nodeA) ) AunionB.add(nodeA);
+                    if ( !AunionB.contains(nodeB) ) AunionB.add(nodeB);
+                }
+
+                // Intersection is the set including elements present on BOTH original sets
+                if ( nodeA.equals(nodeB) ) {
+                    if ( !AintersectionB.contains(nodeA) ) AintersectionB.add(nodeA);
+                    if ( !AunionB.contains(nodeA) )        AunionB.add(nodeA);
+                }
+            }
+        }
+       */
+
         // Jaccard index is the size of the intersection over the size of the union of two sets
-        double jaccardIndex = (double)AintersectionB.size() / (double)AunionB.size();
+        double jaccardIndex = (double)interectionSize / (double)unionSize;
+
+        if ( Double.isNaN(jaccardIndex) ) return  0.0;
 
         return jaccardIndex * 100;
     }
