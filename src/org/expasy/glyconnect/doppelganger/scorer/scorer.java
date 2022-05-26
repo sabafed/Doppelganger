@@ -12,7 +12,7 @@ public class scorer {
         String glycanType = "N-Linked";
 
         ArrayList<doppelganger> gangers = reader.readfiles("proteinsAll", glycanType);
-        //toTable(glycanType,gangers);
+        toTable(glycanType,gangers);
 /*
         int total = 0;
         int zeroJI = 0;
@@ -42,7 +42,7 @@ public class scorer {
         double densityDifferenceMax = 1.0;
         int minNetworkSize = 5;
 
-        String fileName = glycanType+"_minSize"+minNetworkSize+"_CosSim"+cosSimThreshold+"_Density"+densityDifferenceMax;
+        String fileName = glycanType+"_minSize"+minNetworkSize+"_CosSim"+cosSimThreshold+"_Density"+densityDifferenceMax+"_JaccardIndex";
         PrintStream output = new PrintStream(new File("results/"+fileName+"_TEST_"+".tsv"));
         PrintStream console = System.out;
         System.setOut(output);
@@ -66,9 +66,9 @@ public class scorer {
                 "Virtual Links Number A" + "\t" + "Virtual Links Number B" + "\t" +
 
                 "Real Nodes Overlap" + "\t" + "Real Nodes Jaccard Index" + "\t" +
-                "Real Links Overlap" + "\t" + "Real Links Jaccard Index" + "\t" +
+                //"Real Links Overlap" + "\t" + "Real Links Jaccard Index" + "\t" +
                 "Virtual Nodes Overlap" + "\t" + "Virtual Nodes Jaccard Index" + "\t" +
-                "Virtual Links Overlap" + "\t" + "Virtual Links Jaccard Index" + "\t" +
+                //"Virtual Links Overlap" + "\t" + "Virtual Links Jaccard Index" + "\t" +
 
                 "Composition A (virtual T)" + "\t" + "Composition B (virtual T)" + "\t" +
                 "Composition A (virtual F)" + "\t" + "Composition B (virtual F)" + "\t" +
@@ -113,15 +113,17 @@ public class scorer {
                                         compare.nodeUnionSize(network1.getRealNodes(),network2.getRealNodes());
                                 double realNodesJaccardIndex = compare.jaccardIndex(realNodesOverlap,realNodesUnion);
 
-                                int realLinksOverlap =
-                                        compare.linkInteresectionSize(network1.getL);
-                                double realLinksJaccardIndex;
+                                //int realLinksOverlap = ;
+                                //double realLinksJaccardIndex;
 
-                                int virtualNodesOverlap;
-                                double virtualNodesJaccardIndex;
+                                int virtualNodesOverlap =
+                                        compare.nodeInteresectionSize(network1.getVirtualNodes(),network2.getVirtualNodes());
+                                int virtualNodesUnion =
+                                        compare.nodeUnionSize(network1.getVirtualNodes(),network2.getVirtualNodes());
+                                double virtualNodesJaccardIndex = compare.jaccardIndex(virtualNodesOverlap, virtualNodesUnion);
 
-                                int virtualLinksOverlap;
-                                double virtualLinksJaccardIndex;
+                                //int virtualLinksOverlap;
+                                //double virtualLinksJaccardIndex;
 
                                 String body = network1.getIdentifier() + "\t" + network2.getIdentifier() + "\t" +
                                         linkCosSimVT + "\t" + linkCosSimVF + "\t" +
@@ -138,10 +140,10 @@ public class scorer {
                                         network1.virtualNodesNumber() + "\t" + network2.virtualNodesNumber() + "\t" +
                                         network1.virtualLinksNumber() + "\t" + network2.virtualLinksNumber() + "\t" +
 
-                                        "Real Nodes Overlap" + "\t" + "Real Nodes Jaccard Index" + "\t" +
-                                        "Real Links Overlap" + "\t" + "Real Links Jaccard Index" + "\t" +
-                                        "Virtual Nodes Overlap" + "\t" + "Virtual Nodes Jaccard Index" + "\t" +
-                                        "Virtual Links Overlap" + "\t" + "Virtual Links Jaccard Index" + "\t" +
+                                        realNodesOverlap + "\t" + realNodesJaccardIndex + "\t" +
+                                        //"Real Links Overlap" + "\t" + "Real Links Jaccard Index" + "\t" +
+                                        virtualNodesOverlap + "\t" + virtualNodesJaccardIndex + "\t" +
+                                        //"Virtual Links Overlap" + "\t" + "Virtual Links Jaccard Index" + "\t" +
 
                                         network1.getLinkStringVT() + "\t" + network2.getLinkStringVT() + "\t" +
                                         network1.getLinkStringVF() + "\t" + network2.getLinkStringVF() + "\t" +

@@ -132,7 +132,7 @@ public class compare {
        */
 
         // Jaccard index is the size of the intersection over the size of the union of two sets
-        double jaccardIndex = (double)interectionSize / (double)unionSize;
+        double jaccardIndex = (double)interectionSize / (double) ( unionSize - interectionSize);
 
         if ( Double.isNaN(jaccardIndex) ) return  0.0;
 
