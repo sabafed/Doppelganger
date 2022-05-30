@@ -11,11 +11,16 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class POSTRequest {
+    private String identifier;  /* Depending on the source, the identifier can be:
+                                 *      - Article's DOI;
+                                 *      - Protein identifier ( "id;uniprotAcc" )
+                                 *      - Disease identifier ( "taxonomyId;diseaseName" )
+                                 *      - Source  identifier ( "id;name" )
+                                 */
     private String url;
     private String GETBody;
     private String POSTBody;
-    private String doi;
-    private String identifier;
+
     private String taxonomy;
     private String protein;
     private String glycanType;
@@ -27,12 +32,8 @@ public class POSTRequest {
         this.url = GETReq.getUrl();
         this.setGETBody(GETReq);
         this.setPOSTBody(GETReq);
-        if ( this.url.contains("reference=") ) this.setDoi();
-        if ( this.url.contains("taxonomy=") ) this.setTaxonomy();
-        if ( this.url.contains("protein=") ) {
-            this.setProtein();
-            this.setIdentifier();
-        }
+
+        this.setIdentifier(); // Also sets this.taxonomy and this.protein
         this.setGlycanType();
     }
 
@@ -99,10 +100,10 @@ public class POSTRequest {
         this.POSTBody = POSTBody;
     }
 
-    public void setDoi() {
+    public String setDoi() {
         String[] doi = this.url.split("reference=");
         doi = doi[1].split("&");
-        this.doi = doi[0];
+        return doi[0];
     }
 
     public String getIdentifier() {
@@ -110,31 +111,28 @@ public class POSTRequest {
     }
 
     public void setIdentifier() {
-        JsonObject jsonObject = JsonParser.parseString(this.GETBody).getAsJsonObject();
+        if ( this.url.contains("reference=") ) this.identifier = this.setDoi();
 
-        JsonArray jsonArray = jsonObject.get("GETRequest").getAsJsonArray();
+        else if ( this.url.contains("taxonomy=") ) {
+            this.setTaxonomy();
 
-        for (int i = 0; i < 1; i++) {
-            JsonObject jo = jsonArray.get(i).getAsJsonObject();
+            JsonObject jsonObject = JsonParser.parseString(this.GETBody).getAsJsonObject();
+            JsonArray jsonArray = jsonObject.get("GETRequest").getAsJsonArray();
 
-            if ( jo.get("protein") != null ) {
-                JsonObject protein = jo.get("protein").getAsJsonObject();
-
-                if ( protein.get("id") != null ) {
-                    String id = protein.get("id").getAsString();
-
-                    if ( protein.get("uniprots") != null ) {
-                        JsonArray uniprots = protein.get("uniprots").getAsJsonArray();
-
-                        for (int j = 0; j < 1; j++) {
-                            if ( uniprots.get(i).getAsJsonObject().get("uniprot_acc") != null) {
-                                String uniprotAcc = uniprots.get(i).getAsJsonObject().get("uniprot_acc").getAsString();
-                                this.identifier = id+";"+uniprotAcc;
-                            }
-                        }
-                    }
-                }
+            if ( this.url.contains("protein=") ) {
+                this.setProtein();
+                this.identifier = identifiers.proteinIdentifier(jsonArray);
             }
+            else if ( this.url.contains("disease=") ) this.identifier = identifiers.diseaseIdentifier(jsonArray);
+
+            /* to be tested
+            else if ( this.url.contains("tissue=") ) this.identifier = identifiers.sourceIdentifier(jsonArray,"tissue");
+
+            else if ( this.url.contains("cell_type=") ) this.identifier = identifiers.sourceIdentifier(jsonArray,"cell_type");
+
+            else if ( this.url.contains("cell_component=") ) this.identifier = indentifiers.sourceIdentifier(jsonArray,"cell_component");
+            else if ( this.url.contains("cell_line=") ) {}
+            */
         }
     }
 
@@ -161,10 +159,6 @@ public class POSTRequest {
         if (this.url.contains("N-Linked")) this.glycanType = "N-Linked";
         else if (this.url.contains("O-Linked")) this.glycanType = "O-Linked";
         else this.glycanType = "null";
-    }
-
-    public String getDoi() {
-        return doi;
     }
 
     public String getGlycanType() {

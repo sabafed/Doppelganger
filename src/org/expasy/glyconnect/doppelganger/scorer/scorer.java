@@ -12,7 +12,7 @@ public class scorer {
         String glycanType = "N-Linked";
 
         ArrayList<doppelganger> gangers = reader.readfiles("proteinsAll", glycanType);
-        toTable(glycanType,gangers);
+        //toTable(glycanType,gangers);
 /*
         int total = 0;
         int intersection = 0;

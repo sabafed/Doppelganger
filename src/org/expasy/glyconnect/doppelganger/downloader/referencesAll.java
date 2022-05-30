@@ -53,7 +53,7 @@ public class referencesAll {
         String outFileName =
                 "/home/federico/Documenti/Thesis/Doppelganger/referenceDB/"+
                         postObj.getGlycanType()+"/"+
-                        postObj.getDoi().replace("/","_");// "/" is folder separator.
+                        postObj.getIdentifier().replace("/","_");// "/" is folder separator.
 
         PrintStream outFile = new PrintStream(outFileName);
         PrintStream console = System.out;
