@@ -39,7 +39,7 @@ public class identifiers {
         for (int i = 0; i < 1; i++) {
             String taxonomyId = jsonArray.get(i).getAsJsonObject().get("taxonomy").getAsJsonObject().get("taxonomy_id").getAsString();
             JsonArray diseases = jsonArray.get(i).getAsJsonObject().get("diseases").getAsJsonArray();
-            identifier = taxonomyId+";"+diseases.get(i).getAsJsonObject().get("name");
+            identifier = taxonomyId+";"+diseases.get(i).getAsJsonObject().get("name").getAsString();
         }
         return identifier;
     }

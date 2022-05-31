@@ -5,6 +5,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import java.io.PrintStream;
 import java.net.URLEncoder;
 
 public class diseaseAll {
@@ -38,15 +39,15 @@ public class diseaseAll {
                         GETRequest nGET = new GETRequest(nUrl);
                         GETRequest oGET = new GETRequest(oUrl);
 
-                        if ( nGET.getResponse().length() > 2 && nGET.getResponse() != null ) new POSTRequest(nGET);
-                        if ( oGET.getResponse().length() > 2 && oGET.getResponse() != null ) new POSTRequest(oGET);
+                        if ( nGET.getResponse().length() > 2 && nGET.getResponse() != null ) diseaseToJson(nGET);
+                        if ( oGET.getResponse().length() > 2 && oGET.getResponse() != null ) diseaseToJson(oGET);
                     }
                 }
             }
         }
     }
-/*
-    public static void proteinToJson(GETRequest getObj) throws Exception {
+
+    public static void diseaseToJson(GETRequest getObj) throws Exception {
         System.out.println("________________________________________________\nSending POSTTRequest");
         POSTRequest postObj = new POSTRequest(getObj);
 
@@ -61,7 +62,7 @@ public class diseaseAll {
         if ( postObj.getIdentifier() != null ) {
             String outFileName = "/home/federico/Documenti/Thesis/Doppelganger/diseasesAll/" +
                     postObj.getGlycanType() + "/" +
-                    postObj.getIdentifier();
+                    postObj.getIdentifier().replace("/","_");
 
             PrintStream outFile = new PrintStream(outFileName);
             PrintStream console = System.out;
@@ -71,6 +72,4 @@ public class diseaseAll {
             System.out.println("    File '"+outFileName+"' created!");
         }
     }
-
- */
 }
