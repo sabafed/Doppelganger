@@ -8,7 +8,7 @@ import com.google.gson.JsonParser;
 import java.io.PrintStream;
 import java.net.URLEncoder;
 
-public class diseaseAll {
+public class _diseasesAll {
     public static void main(String[] args) throws Exception {
         diseasesAllDownloader();
     }

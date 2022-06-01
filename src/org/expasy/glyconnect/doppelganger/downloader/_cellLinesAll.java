@@ -7,7 +7,7 @@ import com.google.gson.JsonParser;
 import java.io.PrintStream;
 import java.net.URLEncoder;
 
-public class cellLinesAll {
+public class _cellLinesAll {
     public static void main(String[] args) throws Exception {
         cellLinesAllDownloader();
     }

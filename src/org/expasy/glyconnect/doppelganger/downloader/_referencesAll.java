@@ -8,13 +8,12 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 
-public class referencesAll {
+public class _referencesAll {
     public static void main(String[] args) throws Exception {
-        //String url = "https://glyconnect.expasy.org/api/glycosylations?reference=10.1016/j.talanta.2020.121495&glycan_type=N-Linked";
-        //referenceDBdownloader();
+        //referencesAllDownloader();
     }
 
-    public static void referenceDBdownloader() throws Exception {
+    public static void referencesAllDownloader() throws Exception {
         GETRequest referencesAll = new GETRequest("https://beta.glyconnect.expasy.org/api/references/all");
         String json = referencesAll.getResponse();
         JsonArray jsonArray = JsonParser.parseString(json).getAsJsonArray();
@@ -29,8 +28,8 @@ public class referencesAll {
         }
 
         for (String doi : referenceDoi) {
-            String nUrl = "https://glyconnect.expasy.org/api/glycosylations?reference="+doi+"&glycan_type=N-Linked";
-            String oUrl = "https://glyconnect.expasy.org/api/glycosylations?reference="+doi+"&glycan_type=O-Linked";
+            String nUrl = "https://beta.glyconnect.expasy.org/api/glycosylations?reference="+doi+"&glycan_type=N-Linked";
+            String oUrl = "https://beta.glyconnect.expasy.org/api/glycosylations?reference="+doi+"&glycan_type=O-Linked";
 
             GETRequest nGET = new GETRequest(nUrl);
             GETRequest oGET =  new GETRequest(oUrl);
@@ -51,7 +50,7 @@ public class referencesAll {
 
         String output = GETBody+","+POSTBody;
         String outFileName =
-                "/home/federico/Documenti/Thesis/Doppelganger/referenceDB/"+
+                "/home/federico/Documenti/Thesis/Doppelganger/referencesAll/"+
                         postObj.getGlycanType()+"/"+
                         postObj.getIdentifier().replace("/","_");// "/" is folder separator.
 
