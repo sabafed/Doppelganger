@@ -41,7 +41,7 @@ public class identifiers {
             JsonArray diseases = jsonArray.get(i).getAsJsonObject().get("diseases").getAsJsonArray();
             identifier = taxonomyId+";"+diseases.get(i).getAsJsonObject().get("name").getAsString();
         }
-        return identifier;
+        return identifier.replace("\n","");
     }
 
     public static String sourceIdentifier(JsonArray jsonArray, String query) {
@@ -51,5 +51,15 @@ public class identifiers {
                     jsonArray.get(i).getAsJsonObject().get("source").getAsJsonObject().get(query).getAsJsonObject().getAsString();
         }
         return identifier;
+    }
+
+    /**
+     * Used to set identifiers for queries without "taxonomy=" in the URL
+     * such as references and cell_lines
+     */
+    public static String noTaxonomyIdentifier(String url, String query) {
+        String[] identifier = url.split(query);
+        identifier = identifier[1].split("&");
+        return identifier[0];
     }
 }

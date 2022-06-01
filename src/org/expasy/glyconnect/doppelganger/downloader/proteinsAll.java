@@ -45,7 +45,7 @@ public class proteinsAll {
     }
 
     public static void proteinToJson(GETRequest getObj) throws Exception {
-        System.out.println("________________________________________________\nSending POSTTRequest");
+        System.out.println("________________________________________________\nSending POSTRequest");
         POSTRequest postObj = new POSTRequest(getObj);
 
         String GETBody = postObj.getGETBody();

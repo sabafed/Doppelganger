@@ -100,18 +100,15 @@ public class POSTRequest {
         this.POSTBody = POSTBody;
     }
 
-    public String setDoi() {
-        String[] doi = this.url.split("reference=");
-        doi = doi[1].split("&");
-        return doi[0];
-    }
+
 
     public String getIdentifier() {
         return identifier;
     }
 
     public void setIdentifier() {
-        if ( this.url.contains("reference=") ) this.identifier = this.setDoi();
+        if ( this.url.contains("reference=") ) this.identifier = identifiers.noTaxonomyIdentifier(this.url,"reference=");
+        else if ( this.url.contains("cell_line=") ) this.identifier = identifiers.noTaxonomyIdentifier(this.url,"cell_line=");
 
         else if ( this.url.contains("taxonomy=") ) {
             this.setTaxonomy();
@@ -123,15 +120,16 @@ public class POSTRequest {
                 this.setProtein();
                 this.identifier = identifiers.proteinIdentifier(jsonArray);
             }
-            else if ( this.url.contains("disease=") ) this.identifier = identifiers.diseaseIdentifier(jsonArray);
+            else if ( this.url.contains("disease=") )   this.identifier = identifiers.diseaseIdentifier(jsonArray);
+
 
             /* to be tested
             else if ( this.url.contains("tissue=") ) this.identifier = identifiers.sourceIdentifier(jsonArray,"tissue");
 
             else if ( this.url.contains("cell_type=") ) this.identifier = identifiers.sourceIdentifier(jsonArray,"cell_type");
 
-            else if ( this.url.contains("cell_component=") ) this.identifier = indentifiers.sourceIdentifier(jsonArray,"cell_component");
-            else if ( this.url.contains("cell_line=") ) {}
+            else if ( this.url.contains("cell_component=") ) this.identifier = identifiers.sourceIdentifier(jsonArray,"cell_component");
+
             */
         }
     }

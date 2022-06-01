@@ -60,6 +60,6 @@ public class taxonomy {
 
     @Override
     public String toString() {
-        return this.id+";"+this.species;
+        return this.taxonomyId+";"+this.species;
     }
 }

@@ -58,11 +58,13 @@ public class doppelganger {
      *                   - the identifier composed as "GlyconnectId;UniprotAcc".
      */
     public doppelganger(Path sourceJson) throws Exception {
+        /*
         if ( sourceJson.toString().contains("proteinsAll") || sourceJson.toString().contains("diseasesAll") )
-            this.identifier = sourceJson.getFileName().toString();
+            this.identifier = sourceJson.getFileName().toString(); //.replace("\n","");
 
         if ( sourceJson.toString().contains("referencesAll") )
-            this.identifier = sourceJson.getFileName().toString().replace("_","/");
+        */
+        this.identifier = sourceJson.getFileName().toString().replace("_","/");
 
         this.setGlycanType(sourceJson);
 
@@ -340,11 +342,11 @@ public class doppelganger {
     }
 
     /* Misc */
-    public boolean equals(doppelganger other) {
-        if ( this.identifier != null && other.identifier != null && this.identifier.equals(other.identifier) ) {
-            if ( this.glycanType.equals(other.glycanType) ) {
-                if ( this.getGETObject().equals(other.getGETObject()) ) {
-                    if ( this.getPOSTObject().equals(other.getPOSTObject()) ) {
+    public boolean equals(doppelganger that) {
+        if ( this.identifier != null && that.identifier != null && this.identifier.equals(that.identifier) ) {
+            if ( this.glycanType.equals(that.glycanType) ) {
+                if ( this.getGETObject().equals(that.getGETObject()) ) {
+                    if ( this.getPOSTObject().equals(that.getPOSTObject()) ) {
                         return true;
                     }
                 }
@@ -367,8 +369,10 @@ public class doppelganger {
                 "\nVirtual nodes: "+ this.getVirtualNodes() +
                 "\nReal nodes number: "+ this.realNodesNumber() +
                 "\nVirtual nodes number: "+this.virtualNodesNumber() +
-                "\nReal links: "+this.getLinkStringVT() +
-                "\nVirtual links: "+this.getLinkStringVF() +
+                "\nReal links: "+ this.getRealLinks() +
+                "\nVirtual links: "+ this.getVirtualLinks() +
+                "\nReal links string: "+this.getLinkStringVT() +
+                "\nVirtual links string: "+this.getLinkStringVF() +
                 "\nReal links number: "+this.linksNumberVF() +
                 "\nVirtual links number: "+this.virtualLinksNumber() +
                 "\nNetwork density VT: "+this.getNetworkDensityVT() +

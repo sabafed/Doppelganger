@@ -10,25 +10,29 @@ import java.util.ArrayList;
 public class scorer {
     public static void main(String[] args) throws Exception {
         String glycanType = "N-Linked";
-        String sourceDirectory = "diseasesAll";
+        //String sourceDirectory = "referencesAll";
+        //String sourceDirectory = "proteinsAll";
+        String sourceDirectory = "diseasesAll"; // Disease also have taxonomy columns
+        //String sourceDirectory = "cellLinesAll";
         ArrayList<doppelganger> gangers = reader.readfiles(sourceDirectory, glycanType);
         //for (doppelganger doppel : gangers) doppel.attributesChecker();
 
         toTable(glycanType, gangers, sourceDirectory);
-
+/*
         int total = 0;
         int intersection = 0;
         double cosSimThreshold = 0.85;
-/*
+
         for (int i = 0; i < gangers.size(); i++) {
             for (int j = 0; j < gangers.size(); j++) {
                 doppelganger test1 = gangers.get(i);
                 doppelganger test2 = gangers.get(j);
 
-                if ( !test1.equals(test2) ){
-                    if (test1.getRealNodes().size() > 5 && test2.getRealNodes().size() > 5) {
+                if ( !test1.equals(test2) ) {
+                    if ( test1.getRealNodes().size() > 5 && test2.getRealNodes().size() > 5 ) {
                         double densityDiffVF = compare.densityDifference(test1.getNetworkDensityVF(), test2.getNetworkDensityVF());
-                        if (densityDiffVF < 1) {
+
+                        if ( densityDiffVF < 10 ) {
                             double linkCosSimVT = compare.cosineSimilarity(helper.frequenciesAsDouble(test1.getLinkFreqVT()),
                                     helper.frequenciesAsDouble(test2.getLinkFreqVT()));
 
@@ -40,24 +44,24 @@ public class scorer {
                             double propCosSimVF = compare.cosineSimilarity(helper.frequenciesAsDouble(helper.freqsStringToChar(test1.getPropertiesFreqVF())),
                                     helper.frequenciesAsDouble(helper.freqsStringToChar(test2.getPropertiesFreqVF())));
 
-                            if (linkCosSimVT >= cosSimThreshold || linkCosSimVF >= cosSimThreshold
-                                    || propCosSimVT >= cosSimThreshold || propCosSimVF >= cosSimThreshold) {
+                            if ( linkCosSimVT >= cosSimThreshold || linkCosSimVF >= cosSimThreshold
+                                    || propCosSimVT >= cosSimThreshold || propCosSimVF >= cosSimThreshold ) {
+
                                 System.out.println(test1.getIdentifier() + "\t" + test2.getIdentifier() + "\t" +
-                                        linkCosSimVT + "\t" + linkCosSimVT + "\t" + propCosSimVT + "\t" + propCosSimVF + "\t" +
-                                        test1.getNetworkDensityVF() + "\t" + test2.getNetworkDensityVF() + "\t" + densityDiffVF);
+                                        compare.linkIntersection(test1.getRealLinks(), test2.getRealLinks()));
                             }
                         }
                     }
                 }
             }
         }
+*/
 
- */
     }
 
     public static void toTable(String glycanType, ArrayList<doppelganger> networks, String sourceDirectory) throws FileNotFoundException {
         double cosSimThreshold = 0.85;
-        double densityDifferenceMax = 1.0;
+        double densityDifferenceMax = 1.05;
         int minNetworkSize = 5;
 
         String fileName = sourceDirectory+"_"+glycanType+"_minSize"+minNetworkSize+"_CosSim"+cosSimThreshold+"_Density"+densityDifferenceMax+"_JaccardIndex";
@@ -75,6 +79,8 @@ public class scorer {
 
                 "Nodes Number A (Virtual F)" + "\t" + "Nodes Number B (Virtual F)" + "\t" +
                 "Links Number A (Virtual F)" + "\t" + "Links Number B (Virtual F)" + "\t" +
+                "Real Nodes Overlap" + "\t" + "Real Nodes Jaccard Index" + "\t" +
+                "Real Links Overlap" + "\t" + "Real Links Jaccard Index" + "\t" +
 
                 "Density A (Virtual T)" + "\t" + "Density B (Virtual T)" + "\t" +
                 "Density Difference (Virtual T)" + "\t" + "Density Ratio (Virtual T)" + "\t" +
@@ -84,8 +90,6 @@ public class scorer {
                 "Virtual Nodes Number A" + "\t" + "Virtual Nodes Number B" + "\t" +
                 "Virtual Links Number A" + "\t" + "Virtual Links Number B" + "\t" +
 
-                "Real Nodes Overlap" + "\t" + "Real Nodes Jaccard Index" + "\t" +
-                "Real Links Overlap" + "\t" + "Real Links Jaccard Index" + "\t" +
                 "Virtual Nodes Overlap" + "\t" + "Virtual Nodes Jaccard Index" + "\t" +
                 "Virtual Links Overlap" + "\t" + "Virtual Links Jaccard Index" + "\t" +
 
@@ -153,12 +157,14 @@ public class scorer {
                                 double virtualLinksJaccardIndex = compare.jaccardIndex(virtualLinksOverlap, virtualLinksUnion);
 
                                 String body = network1.getIdentifier() + "\t" + network2.getIdentifier() + "\t" +
-                                        network1.getGETObject().getTaxonomies().get(0) + "\t" + network2.getGETObject().getTaxonomies().get(0) + "\t" +
+                                        network1.getGETObject().getTaxonomies().get(0).getSpecies() + "\t" + network2.getGETObject().getTaxonomies().get(0).getSpecies() + "\t" +
                                         linkCosSimVT + "\t" + linkCosSimVF + "\t" +
                                         propCosSimVT + "\t" + propCosSimVF + "\t" +
 
                                         network1.realNodesNumber() + "\t" + network2.realNodesNumber() + "\t" +
                                         network1.linksNumberVF() + "\t" + network2.linksNumberVF() +"\t" +
+                                        realNodesOverlap + "\t" + realNodesJaccardIndex + "\t" +
+                                        realLinksOverlap + "\t" + realLinksJaccardIndex + "\t" +
 
                                         network1.getNetworkDensityVT() + "\t" + network2.getNetworkDensityVT() + "\t" +
                                         densityDiffVT + "\t" + densityRatioVT + "\t" +
@@ -168,8 +174,6 @@ public class scorer {
                                         network1.virtualNodesNumber() + "\t" + network2.virtualNodesNumber() + "\t" +
                                         network1.virtualLinksNumber() + "\t" + network2.virtualLinksNumber() + "\t" +
 
-                                        realNodesOverlap + "\t" + realNodesJaccardIndex + "\t" +
-                                        realLinksOverlap + "\t" + realLinksJaccardIndex + "\t" +
                                         virtualNodesOverlap + "\t" + virtualNodesJaccardIndex + "\t" +
                                         virtualLinksOverlap + "\t" + virtualLinksJaccardIndex + "\t" +
 

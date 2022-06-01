@@ -13,7 +13,7 @@ public class diseaseAll {
         diseasesAllDownloader();
     }
     public static void diseasesAllDownloader() throws Exception {
-        GETRequest diseasesAll = new GETRequest("https://glyconnect.expasy.org/api/diseases-all");
+        GETRequest diseasesAll = new GETRequest("https://beta.glyconnect.expasy.org/api/diseases-all");
         String json = diseasesAll.getResponse();
 
         JsonArray jsonArray = JsonParser.parseString(json).getAsJsonArray();
@@ -48,7 +48,7 @@ public class diseaseAll {
     }
 
     public static void diseaseToJson(GETRequest getObj) throws Exception {
-        System.out.println("________________________________________________\nSending POSTTRequest");
+        System.out.println("________________________________________________\nSending POSTRequest");
         POSTRequest postObj = new POSTRequest(getObj);
 
         String GETBody = postObj.getGETBody();
@@ -62,7 +62,7 @@ public class diseaseAll {
         if ( postObj.getIdentifier() != null ) {
             String outFileName = "/home/federico/Documenti/Thesis/Doppelganger/diseasesAll/" +
                     postObj.getGlycanType() + "/" +
-                    postObj.getIdentifier().replace("/","_").replace("\n","");
+                    postObj.getIdentifier().replace("/","_");
 
             PrintStream outFile = new PrintStream(outFileName);
             PrintStream console = System.out;
