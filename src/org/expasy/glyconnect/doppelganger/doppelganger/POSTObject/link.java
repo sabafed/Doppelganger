@@ -58,6 +58,17 @@ public class link {
         this.target = this.linkJson.get("target").getAsString();
     }
 
+    public boolean equals(link that) {
+        if ( this.source != null && this.target != null ) {
+            if ( that.source != null && that.target != null ) {
+                if ( this.source.equals(that.source) && this.target.equals(that.target))
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
     @Override
     public String toString() {
         return this.source+"~"+this.target;
