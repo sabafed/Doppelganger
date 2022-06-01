@@ -10,14 +10,17 @@ import java.util.ArrayList;
 public class scorer {
     public static void main(String[] args) throws Exception {
         String glycanType = "N-Linked";
+
         //String sourceDirectory = "referencesAll";
         //String sourceDirectory = "proteinsAll";
         String sourceDirectory = "diseasesAll"; // Disease also have taxonomy columns
         //String sourceDirectory = "cellLinesAll";
-        ArrayList<doppelganger> gangers = reader.readfiles(sourceDirectory, glycanType);
-        //for (doppelganger doppel : gangers) doppel.attributesChecker();
 
+        ArrayList<doppelganger> gangers = reader.readfiles(sourceDirectory, glycanType);
+
+        //for (doppelganger doppel : gangers) doppel.attributesChecker();
         toTable(glycanType, gangers, sourceDirectory);
+
 /*
         int total = 0;
         int intersection = 0;

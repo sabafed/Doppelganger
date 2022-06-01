@@ -258,10 +258,10 @@ public class node {
         for (JsonElement ra : referencesArray) references.add(ra.getAsString());
     }
 
-    public boolean equals(node other) {
-        if ( this.id != null && other.id != null && this.id.equals(other.id)){
-            if (this.condensedFormat != null && other.condensedFormat != null &&
-            this.condensedFormat.equals(other.condensedFormat)) {
+    public boolean equals(node that) {
+        if ( this.id != null && that.id != null && this.id.equals(that.id)){
+            if (this.condensedFormat != null && that.condensedFormat != null &&
+            this.condensedFormat.equals(that.condensedFormat)) {
                 return true;
             }
         }
