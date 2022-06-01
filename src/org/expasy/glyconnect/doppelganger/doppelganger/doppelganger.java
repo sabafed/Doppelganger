@@ -20,7 +20,6 @@ import java.util.Map;
 // from this class, call all the others and make a single object.
 public class doppelganger {
     private String identifier;
-    private String doi;
     private String glycanType;
 
     private final GETObject GETObject;
@@ -59,11 +58,11 @@ public class doppelganger {
      *                   - the identifier composed as "GlyconnectId;UniprotAcc".
      */
     public doppelganger(Path sourceJson) throws Exception {
-        if ( sourceJson.toString().contains("proteinsAll") )
+        if ( sourceJson.toString().contains("proteinsAll") || sourceJson.toString().contains("diseasesAll") )
             this.identifier = sourceJson.getFileName().toString();
 
         if ( sourceJson.toString().contains("referencesAll") )
-            this.doi = sourceJson.getFileName().toString().replace("_","/");
+            this.identifier = sourceJson.getFileName().toString().replace("_","/");
 
         this.setGlycanType(sourceJson);
 
@@ -129,9 +128,6 @@ public class doppelganger {
 
     public void setNetworkDensityVF() {
         this.networkDensityVF = compare.networkDensity(this.realNodesNumber(), this.linksNumberVF());
-    }
-    public String getDoi() {
-        return this.doi;
     }
 
     public GETObject getGETObject() {
@@ -345,8 +341,7 @@ public class doppelganger {
 
     /* Misc */
     public boolean equals(doppelganger other) {
-        if ( (this.doi != null && other.doi != null && this.doi.equals(other.doi)) ||
-                (this.identifier != null && other.identifier != null && this.identifier.equals(other.identifier)) ) {
+        if ( this.identifier != null && other.identifier != null && this.identifier.equals(other.identifier) ) {
             if ( this.glycanType.equals(other.glycanType) ) {
                 if ( this.getGETObject().equals(other.getGETObject()) ) {
                     if ( this.getPOSTObject().equals(other.getPOSTObject()) ) {

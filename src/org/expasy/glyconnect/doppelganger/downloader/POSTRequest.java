@@ -17,7 +17,7 @@ public class POSTRequest {
                                  *      - Disease identifier ( "taxonomyId;diseaseName" )
                                  *      - Source  identifier ( "id;name" )
                                  */
-    private String url;
+    private final String url;
     private String GETBody;
     private String POSTBody;
 

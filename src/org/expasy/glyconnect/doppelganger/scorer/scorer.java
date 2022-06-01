@@ -10,80 +10,63 @@ import java.util.ArrayList;
 public class scorer {
     public static void main(String[] args) throws Exception {
         String glycanType = "N-Linked";
+        String sourceDirectory = "diseasesAll";
+        ArrayList<doppelganger> gangers = reader.readfiles(sourceDirectory, glycanType);
+        //for (doppelganger doppel : gangers) doppel.attributesChecker();
 
-        ArrayList<doppelganger> gangers = reader.readfiles("proteinsAll", glycanType);
-        //toTable(glycanType,gangers);
-/*
+        toTable(glycanType, gangers, sourceDirectory);
+
         int total = 0;
         int intersection = 0;
         double cosSimThreshold = 0.85;
-
+/*
         for (int i = 0; i < gangers.size(); i++) {
             for (int j = 0; j < gangers.size(); j++) {
                 doppelganger test1 = gangers.get(i);
                 doppelganger test2 = gangers.get(j);
 
-                if ( test1.getRealNodes().size() > 5 && test2.getRealNodes().size() > 5 ){
-                    if ( compare.densityDifference(test1.getNetworkDensityVF(), test2.getNetworkDensityVF()) < 1 ) {
-                        double linkCosSimVT = compare.cosineSimilarity( helper.frequenciesAsDouble(test1.getLinkFreqVT()),
-                                helper.frequenciesAsDouble(test2.getLinkFreqVT()) );
+                if ( !test1.equals(test2) ){
+                    if (test1.getRealNodes().size() > 5 && test2.getRealNodes().size() > 5) {
+                        double densityDiffVF = compare.densityDifference(test1.getNetworkDensityVF(), test2.getNetworkDensityVF());
+                        if (densityDiffVF < 1) {
+                            double linkCosSimVT = compare.cosineSimilarity(helper.frequenciesAsDouble(test1.getLinkFreqVT()),
+                                    helper.frequenciesAsDouble(test2.getLinkFreqVT()));
 
-                        double linkCosSimVF = compare.cosineSimilarity(helper.frequenciesAsDouble(test1.getLinkFreqVF()),
-                                helper.frequenciesAsDouble(test2.getLinkFreqVF()));
+                            double linkCosSimVF = compare.cosineSimilarity(helper.frequenciesAsDouble(test1.getLinkFreqVF()),
+                                    helper.frequenciesAsDouble(test2.getLinkFreqVF()));
 
-                        double propCosSimVT = compare.cosineSimilarity( helper.frequenciesAsDouble( helper.freqsStringToChar(test1.getPropertiesFreqVT()) ),
-                                helper.frequenciesAsDouble( helper.freqsStringToChar(test2.getPropertiesFreqVF()) ) );
-                        double propCosSimVF = compare.cosineSimilarity( helper.frequenciesAsDouble( helper.freqsStringToChar(test1.getPropertiesFreqVF()) ),
-                                helper.frequenciesAsDouble( helper.freqsStringToChar(test2.getPropertiesFreqVF()) ) );
+                            double propCosSimVT = compare.cosineSimilarity(helper.frequenciesAsDouble(helper.freqsStringToChar(test1.getPropertiesFreqVT())),
+                                    helper.frequenciesAsDouble(helper.freqsStringToChar(test2.getPropertiesFreqVF())));
+                            double propCosSimVF = compare.cosineSimilarity(helper.frequenciesAsDouble(helper.freqsStringToChar(test1.getPropertiesFreqVF())),
+                                    helper.frequenciesAsDouble(helper.freqsStringToChar(test2.getPropertiesFreqVF())));
 
-                        if (linkCosSimVT >= cosSimThreshold || linkCosSimVF >= cosSimThreshold
-                                || propCosSimVT >= cosSimThreshold || propCosSimVF >= cosSimThreshold ) {
-                            total++;
-
-                            if (compare.linkIntersection(test1.getRealLinks(), test2.getRealLinks()).size() > -1) {
-
-                                System.out.println();
-                                System.out.println(test1.getIdentifier() + " ~ " + test1.getRealLinks());
-                                System.out.println(test2.getIdentifier() + " ~ " + test2.getRealLinks());
-                                System.out.println("Link Intersection: " + compare.linkIntersection(test1.getRealLinks(), test2.getRealLinks()));
-                                System.out.println("Link Union: " + compare.linkUnion(test1.getRealLinks(), test2.getRealLinks()));
-
-
-                                intersection++;
+                            if (linkCosSimVT >= cosSimThreshold || linkCosSimVF >= cosSimThreshold
+                                    || propCosSimVT >= cosSimThreshold || propCosSimVF >= cosSimThreshold) {
+                                System.out.println(test1.getIdentifier() + "\t" + test2.getIdentifier() + "\t" +
+                                        linkCosSimVT + "\t" + linkCosSimVT + "\t" + propCosSimVT + "\t" + propCosSimVF + "\t" +
+                                        test1.getNetworkDensityVF() + "\t" + test2.getNetworkDensityVF() + "\t" + densityDiffVF);
                             }
                         }
                     }
                 }
-
-                if ( !test1.equals(test2) && test1.getIdentifier().contains("Q14766") && test2.getIdentifier().contains("P00747") ) {
-                    if ( test1.realNodesNumber() > 5 && test2.realNodesNumber() > 5 ){
-                        double testJI = compare.jaccardIndex(test1.getRealNodes(), test2.getRealNodes());
-                        total++;
-                        if (testJI == 0.0) zeroJI++;
-
-                        System.out.println(test1.getIdentifier() + "~" + test2.getIdentifier() + " node similarity: " + testJI + "%");
-                    }
-                }
-
             }
         }
-        System.out.println("Total comparison: " + total + " intersection > 0 : " + intersection);
-        //System.out.println("Total comparisons: "+total+"\nHaving JI == 0: "+zeroJI);
 
  */
     }
 
-    public static void toTable(String glycanType, ArrayList<doppelganger> networks) throws FileNotFoundException {
+    public static void toTable(String glycanType, ArrayList<doppelganger> networks, String sourceDirectory) throws FileNotFoundException {
         double cosSimThreshold = 0.85;
         double densityDifferenceMax = 1.0;
         int minNetworkSize = 5;
 
-        String fileName = glycanType+"_minSize"+minNetworkSize+"_CosSim"+cosSimThreshold+"_Density"+densityDifferenceMax+"_JaccardIndex";
+        String fileName = sourceDirectory+"_"+glycanType+"_minSize"+minNetworkSize+"_CosSim"+cosSimThreshold+"_Density"+densityDifferenceMax+"_JaccardIndex";
         PrintStream output = new PrintStream(new File("results/"+fileName+"_TEST_"+".tsv"));
         PrintStream console = System.out;
         System.setOut(output);
 
         String header = "Network A" + "\t" + "Network B" + "\t"+
+                "Taxonomy A" + "\t" + "Taxonomy B" + "\t" +
                 //"Same Cluster"+"\t" +
 
                 "Link Cosine Similarity (virtual T)" + "\t" + "Link Cosine Similarity (virtual F)" + "\t" +
@@ -94,9 +77,9 @@ public class scorer {
                 "Links Number A (Virtual F)" + "\t" + "Links Number B (Virtual F)" + "\t" +
 
                 "Density A (Virtual T)" + "\t" + "Density B (Virtual T)" + "\t" +
-                "Density Difference (Virtual T)" + "\t" +
+                "Density Difference (Virtual T)" + "\t" + "Density Ratio (Virtual T)" + "\t" +
                 "Density A (Virtual F)" + "\t" + "Density B (Virtual F)" + "\t" +
-                "Density Difference (Virtual F)" + "\t" +
+                "Density Difference (Virtual F)" + "\t" + "Density Ratio (Virtual F)" + "\t" +
 
                 "Virtual Nodes Number A" + "\t" + "Virtual Nodes Number B" + "\t" +
                 "Virtual Links Number A" + "\t" + "Virtual Links Number B" + "\t" +
@@ -124,11 +107,15 @@ public class scorer {
                     doppelganger network2 = networks.get(s);
 
                     // Networks with less than 6 nodes are not considered
-                    if (network1.realNodesNumber() > minNetworkSize && network2.realNodesNumber() > minNetworkSize) {
+                    if ( network1.realNodesNumber() > minNetworkSize && network2.realNodesNumber() > minNetworkSize ) {
                         double densityDiffVT = compare.densityDifference(network1.getNetworkDensityVT(), network2.getNetworkDensityVT());
                         double densityDiffVF = compare.densityDifference(network1.getNetworkDensityVF(), network2.getNetworkDensityVF());
 
-                        if (densityDiffVT < densityDifferenceMax && densityDiffVF < densityDifferenceMax) {
+                        double densityRatioVT = compare.densityRatio(network1.getNetworkDensityVT(), network2.getNetworkDensityVT());
+                        double densityRatioVF = compare.densityRatio(network1.getNetworkDensityVF(), network2.getNetworkDensityVF());
+
+                        if ( densityDiffVT < densityDifferenceMax && densityDiffVF < densityDifferenceMax ) {
+                        //if ( densityRatioVT < 1.5 && densityRatioVT > 0.95 && densityDiffVF < 1.5 && densityDiffVF > 0.95 ) {
                             double linkCosSimVT = compare.cosineSimilarity( helper.frequenciesAsDouble(network1.getLinkFreqVT()),
                                     helper.frequenciesAsDouble(network2.getLinkFreqVT()) );
 
@@ -166,6 +153,7 @@ public class scorer {
                                 double virtualLinksJaccardIndex = compare.jaccardIndex(virtualLinksOverlap, virtualLinksUnion);
 
                                 String body = network1.getIdentifier() + "\t" + network2.getIdentifier() + "\t" +
+                                        network1.getGETObject().getTaxonomies().get(0) + "\t" + network2.getGETObject().getTaxonomies().get(0) + "\t" +
                                         linkCosSimVT + "\t" + linkCosSimVF + "\t" +
                                         propCosSimVT + "\t" + propCosSimVF + "\t" +
 
@@ -173,9 +161,9 @@ public class scorer {
                                         network1.linksNumberVF() + "\t" + network2.linksNumberVF() +"\t" +
 
                                         network1.getNetworkDensityVT() + "\t" + network2.getNetworkDensityVT() + "\t" +
-                                        densityDiffVT + "\t" +
+                                        densityDiffVT + "\t" + densityRatioVT + "\t" +
                                         network1.getNetworkDensityVF() + "\t" + network2.getNetworkDensityVF() + "\t" +
-                                        densityDiffVF + "\t" +
+                                        densityDiffVF + "\t" + densityRatioVF + "\t" +
 
                                         network1.virtualNodesNumber() + "\t" + network2.virtualNodesNumber() + "\t" +
                                         network1.virtualLinksNumber() + "\t" + network2.virtualLinksNumber() + "\t" +

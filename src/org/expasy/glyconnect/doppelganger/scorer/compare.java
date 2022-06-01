@@ -30,6 +30,10 @@ public class compare {
         return density;
     }
 
+    public static double densityRatio(double densityA, double densityB) {
+        if ( densityB == 0.0 ) return densityB/densityA;
+        return densityA/densityB;
+    }
     public static double densityDifference(double densityA, double densityB) {
         return Math.abs(densityA - densityB);
     }
@@ -136,6 +140,6 @@ public class compare {
 
         if ( Double.isNaN(jaccardIndex) ) return  0.0;
 
-        return jaccardIndex * 100;
+        return jaccardIndex;
     }
 }

@@ -62,7 +62,7 @@ public class diseaseAll {
         if ( postObj.getIdentifier() != null ) {
             String outFileName = "/home/federico/Documenti/Thesis/Doppelganger/diseasesAll/" +
                     postObj.getGlycanType() + "/" +
-                    postObj.getIdentifier().replace("/","_");
+                    postObj.getIdentifier().replace("/","_").replace("\n","");
 
             PrintStream outFile = new PrintStream(outFileName);
             PrintStream console = System.out;
