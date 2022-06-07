@@ -10,11 +10,13 @@ import java.util.ArrayList;
 public class scorer {
     public static void main(String[] args) throws Exception {
         String glycanType = "N-Linked";
+        //String glycanType = "O-Linked";
 
         //String sourceDirectory = "referencesAll";
         //String sourceDirectory = "proteinsAll";
-        String sourceDirectory = "diseasesAll"; // Disease also have taxonomy columns
+        //String sourceDirectory = "diseasesAll"; // Disease also have taxonomy columns
         //String sourceDirectory = "cellLinesAll";
+        String sourceDirectory = "sourcesAll/tissue";
 
         ArrayList<doppelganger> gangers = reader.readfiles(sourceDirectory, glycanType);
 
@@ -63,10 +65,12 @@ public class scorer {
     }
 
     public static void toTable(String glycanType, ArrayList<doppelganger> networks, String sourceDirectory) throws FileNotFoundException {
-        double cosSimThreshold = 0.85;
+        double cosSimThreshold = 0.90;
         double densityDifferenceMax = 1.05;
         int minNetworkSize = 5;
 
+        //sourcesAll folder contains subfolders tha could get in the way of file saving
+        sourceDirectory = sourceDirectory.replace("/", "_");
         String fileName = sourceDirectory+"_"+glycanType+"_minSize"+minNetworkSize+"_CosSim"+cosSimThreshold+"_Density"+densityDifferenceMax+"_JaccardIndex";
         PrintStream output = new PrintStream(new File("results/"+fileName+"_TEST_"+".tsv"));
         PrintStream console = System.out;

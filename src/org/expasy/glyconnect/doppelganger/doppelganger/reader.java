@@ -22,7 +22,7 @@ public class reader {
 
     public static ArrayList<doppelganger> readfiles(String sourceDirectory, String glycanType) throws Exception {
         ArrayList<doppelganger> gangers = new ArrayList<>();
-        File directory = new File("/home/federico/Documenti/Thesis/Doppelganger/"+sourceDirectory+"/"+glycanType);;
+        File directory = new File("/home/federico/Documenti/Thesis/Doppelganger/dataAll/"+sourceDirectory+"/"+glycanType);
         File[] files = directory.listFiles();
 
         int totalDoiless = 0;
