@@ -2,12 +2,11 @@ package org.expasy.glyconnect.doppelganger.downloader;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-
 import java.net.HttpURLConnection;
 import java.net.URL;
 
 /**
- *  Class that sends a GET request to https://glyconnect.expasy.org/api/
+ *  Class that sends a GET request to https://beta.glyconnect.expasy.org/api/
  */
 public class GETRequest {
     private final String url;
@@ -32,15 +31,15 @@ public class GETRequest {
         connection.setRequestProperty("User-Agent", "Mozilla/5.0");
 
         Integer responseCode = connection.getResponseCode();
-
-        if (responseCode != 200){
+/*
+        if ( responseCode != 200 ){
             System.out.println("WARNING: GET Request Response Code = "+ responseCode);
             System.exit(1);
         }
-
+*/
         StringBuffer response = new StringBuffer();
 
-        if (responseCode == HttpURLConnection.HTTP_OK)
+        if ( responseCode == HttpURLConnection.HTTP_OK )
         {
             BufferedReader inputReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
             String inputLine;
@@ -56,7 +55,7 @@ public class GETRequest {
     public void setResponse() throws Exception {
         String response = this.sendGET();
 
-        if (response.length() > 2 && response.contains(",\"results\"")) {
+        if ( response.length() > 2 && response.contains(",\"results\"") ) {
             int startIndex = response.indexOf(",\"results\"") + 1;
             int endIndex   = response.indexOf("}]}]}");
             response = response.substring(startIndex,endIndex)+"}]}]";

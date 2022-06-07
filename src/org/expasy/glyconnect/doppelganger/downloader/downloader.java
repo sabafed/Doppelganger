@@ -15,8 +15,10 @@ public class downloader {
         //proteinsAllDownloader();
         //diseasesAllDownloader();
         //cellLinesAllDownloader();
+        //sourcesAllDownloader();
         //referencesAllDownloader();
     }
+
     public static void proteinsAllDownloader() throws Exception {
         GETRequest proteinsAll = new GETRequest("https://beta.glyconnect.expasy.org/api/proteins-all");
         String json = proteinsAll.getResponse();
@@ -29,15 +31,15 @@ public class downloader {
             String species = "";
             String protein = "";
 
+            if ( jsonObject.get("name") != null && !jsonObject.get("name").isJsonNull() )
+                protein = URLEncoder.encode(jsonObject.get("name").getAsString(), "UTF-8");
+
             if (jsonObject.get("taxonomy") != null) {
                 JsonObject taxonomy = jsonObject.get("taxonomy").getAsJsonObject();
                 if ( taxonomy.get("species") != null ) {
                     species = URLEncoder.encode(taxonomy.get("species").getAsString(), "UTF-8");
                 }
             }
-
-            if ( jsonObject.get("name") != null && !jsonObject.get("name").isJsonNull() )
-                protein = URLEncoder.encode(jsonObject.get("name").getAsString(), "UTF-8");
 
             String nUrl = "https://beta.glyconnect.expasy.org/api/glycosylations?taxonomy="+species+"&protein="+protein+"&glycan_type=N-Linked";
             String oUrl = "https://beta.glyconnect.expasy.org/api/glycosylations?taxonomy="+species+"&protein="+protein+"&glycan_type=O-Linked";
@@ -71,8 +73,8 @@ public class downloader {
                     JsonObject jo = je.getAsJsonObject();
                     if ( jo.get("species") != null ) {
                         species = URLEncoder.encode(jo.get("species").getAsString(), "UTF-8");
-                        String nUrl = "https://beta.glyconnect.expasy.org/api/glycosylations?taxonomy="+species+"&disease="+ disease +"&glycan_type=N-Linked";
-                        String oUrl = "https://beta.glyconnect.expasy.org/api/glycosylations?taxonomy="+species+"&disease="+ disease +"&glycan_type=O-Linked";
+                        String nUrl = "https://beta.glyconnect.expasy.org//api/glycosylations?taxonomy="+species+"&disease="+ disease +"&glycan_type=N-Linked";
+                        String oUrl = "https://beta.glyconnect.expasy.org//api/glycosylations?taxonomy="+species+"&disease="+ disease +"&glycan_type=O-Linked";
 
                         GETRequest nGET = new GETRequest(nUrl);
                         GETRequest oGET = new GETRequest(oUrl);
@@ -110,6 +112,56 @@ public class downloader {
         }
     }
 
+
+    public static void sourcesAllDownloader() throws Exception {
+        GETRequest sourcesAll = new GETRequest("https://beta.glyconnect.expasy.org/api/sources-all");
+        String json = sourcesAll.getResponse();
+
+        JsonArray jsonArray = JsonParser.parseString(json).getAsJsonArray();
+
+        for (int i = 0; i < jsonArray.size(); i++) {
+            JsonArray sources = jsonArray.get(i).getAsJsonObject().get("source").getAsJsonArray();
+            JsonArray taxons = jsonArray.get(i).getAsJsonObject().get("taxons").getAsJsonArray();
+
+            for (int f = 0; f < sources.size(); f++){
+                for (int s = 0; s < taxons.size(); s++){
+                    String type = URLEncoder.encode(sources.get(f).getAsJsonObject().get("type").getAsString(), "UTF-8");
+                    String taxonomy = URLEncoder.encode(taxons.get(s).getAsJsonObject().get("species").getAsString(), "UTF-8");
+
+                    String nUrl = "";
+                    String oUrl = "";
+
+                    if ( type.equals("tissue") || type.equals("cell_type") || type.equals("tissue_plant") ) {
+                        String name = sources.get(f).getAsJsonObject().get("name").getAsString();
+
+                        nUrl = ("https://beta.glyconnect.expasy.org/api/glycosylations?taxonomy="+taxonomy+
+                                "&"+type+"="+name+
+                                "&glycan_type=N-Linked");
+                        oUrl = ("https://beta.glyconnect.expasy.org/api/glycosylations?taxonomy="+taxonomy+
+                                "&"+type+"="+name+
+                                "&glycan_type=O-Linked");
+                    }
+
+                    else if ( type.equals("cell_component") ) {
+                        String name = sources.get(f).getAsJsonObject().get("name").getAsString();
+
+                        nUrl = ("https://beta.glyconnect.expasy.org/api/glycosylations?"+type+"="+name+
+                                "&glycan_type=N-Linked");
+                        oUrl = ("https://beta.glyconnect.expasy.org/api/glycosylations?"+type+"="+name+
+                                "&glycan_type=O-Linked");
+                    }
+
+                    GETRequest nGET = new GETRequest(nUrl);
+                    GETRequest oGET = new GETRequest(oUrl);
+
+
+                    if ( nGET.getResponse().length() > 2 && nGET.getResponse() != null ) dataToJson(nGET, "sourcesAll/"+type);
+                    if ( oGET.getResponse().length() > 2 && oGET.getResponse() != null ) dataToJson(oGET, "sourcesAll/"+type);
+                }
+            }
+        }
+    }
+
     public static void referencesAllDownloader() throws Exception {
         GETRequest referencesAll = new GETRequest("https://beta.glyconnect.expasy.org/api/references/all");
         String json = referencesAll.getResponse();
@@ -125,8 +177,8 @@ public class downloader {
         }
 
         for (String doi : referenceDoi) {
-            String nUrl = "https://beta.glyconnect.expasy.org/api/glycosylations?reference="+doi+"&glycan_type=N-Linked";
-            String oUrl = "https://beta.glyconnect.expasy.org/api/glycosylations?reference="+doi+"&glycan_type=O-Linked";
+            String nUrl = "https://beta.glyconnect.expasy.org//api/glycosylations?reference="+doi+"&glycan_type=N-Linked";
+            String oUrl = "https://beta.glyconnect.expasy.org//api/glycosylations?reference="+doi+"&glycan_type=O-Linked";
 
             GETRequest nGET = new GETRequest(nUrl);
             GETRequest oGET =  new GETRequest(oUrl);
@@ -149,7 +201,7 @@ public class downloader {
         String output = GETBody+","+POSTBody;
 
         if ( postObj.getIdentifier() != null ) {
-            String outFileName = "/home/federico/Documenti/Thesis/Doppelganger/"+targetDirectory+"/" +
+            String outFileName = "/home/federico/Documenti/Thesis/Doppelganger/dataAll"+targetDirectory+"/" +
                     postObj.getGlycanType() + "/" +
                         postObj.getIdentifier().replace("/","_"); // "/" is folder separator.
 

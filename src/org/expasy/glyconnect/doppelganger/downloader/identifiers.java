@@ -47,8 +47,10 @@ public class identifiers {
     public static String sourceIdentifier(JsonArray jsonArray, String query) {
         String identifier = "";
         for (int i = 0; i < 1; i++) {
-            identifier =
-                    jsonArray.get(i).getAsJsonObject().get("source").getAsJsonObject().get(query).getAsJsonObject().getAsString();
+            String taxonomyId = jsonArray.get(i).getAsJsonObject().get("taxonomy").getAsJsonObject().get("taxonomy_id").getAsString();
+            String name = String.valueOf(jsonArray.get(i).getAsJsonObject().get("source").getAsJsonObject().get(query).getAsJsonObject().get("name").getAsString());
+
+            identifier = taxonomyId+";"+name;
         }
         return identifier;
     }

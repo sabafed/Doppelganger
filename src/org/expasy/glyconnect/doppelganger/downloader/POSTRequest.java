@@ -15,12 +15,11 @@ public class POSTRequest {
                                  *      - Article's DOI;
                                  *      - Protein identifier ( "id;uniprotAcc" )
                                  *      - Disease identifier ( "taxonomyId;diseaseName" )
-                                 *      - Source  identifier ( "id;name" )
+                                 *      - Source  identifier ( "taxonomyId;tissueName" )
                                  */
     private final String url;
     private String GETBody;
     private String POSTBody;
-
     private String taxonomy;
     private String protein;
     private String glycanType;
@@ -100,7 +99,9 @@ public class POSTRequest {
         this.POSTBody = POSTBody;
     }
 
-
+    public String getUrl() {
+        return this.url;
+    }
 
     public String getIdentifier() {
         return identifier;
@@ -111,6 +112,7 @@ public class POSTRequest {
         else if ( this.url.contains("cell_line=") ) this.identifier = identifiers.noTaxonomyIdentifier(this.url,"cell_line=");
 
         else if ( this.url.contains("taxonomy=") ) {
+            System.out.println(this.url);
             this.setTaxonomy();
 
             JsonObject jsonObject = JsonParser.parseString(this.GETBody).getAsJsonObject();
@@ -120,16 +122,27 @@ public class POSTRequest {
                 this.setProtein();
                 this.identifier = identifiers.proteinIdentifier(jsonArray);
             }
-            else if ( this.url.contains("disease=") )   this.identifier = identifiers.diseaseIdentifier(jsonArray);
 
+            else if ( this.url.contains("disease=") ) {
+                this.identifier = identifiers.diseaseIdentifier(jsonArray);
+            }
 
-            /* to be tested
-            else if ( this.url.contains("tissue=") ) this.identifier = identifiers.sourceIdentifier(jsonArray,"tissue");
+            else if ( this.url.contains("tissue=") ) {
+                this.identifier = identifiers.sourceIdentifier(jsonArray,"tissue");
+            }
 
-            else if ( this.url.contains("cell_type=") ) this.identifier = identifiers.sourceIdentifier(jsonArray,"cell_type");
+            else if ( this.url.contains("cell_type=") ) {
+                this.identifier = identifiers.sourceIdentifier(jsonArray,"cell_type");
+            }
 
-            else if ( this.url.contains("cell_component=") ) this.identifier = identifiers.sourceIdentifier(jsonArray,"cell_component");
-
+            else if ( this.url.contains("tissue_plant=") ) {
+                this.identifier = identifiers.sourceIdentifier(jsonArray,"tissue_plant");
+            }
+            /*
+            else if ( this.url.contains("cell_component=") ) {
+                System.out.println("component");
+                this.identifier = identifiers.sourceIdentifier(jsonArray,"cell_component");
+            }
             */
         }
     }
