@@ -122,28 +122,21 @@ public class POSTRequest {
                 this.setProtein();
                 this.identifier = identifiers.proteinIdentifier(jsonArray);
             }
-
             else if ( this.url.contains("disease=") ) {
                 this.identifier = identifiers.diseaseIdentifier(jsonArray);
             }
-
             else if ( this.url.contains("tissue=") ) {
                 this.identifier = identifiers.sourceIdentifier(jsonArray,"tissue");
             }
-
             else if ( this.url.contains("cell_type=") ) {
                 this.identifier = identifiers.sourceIdentifier(jsonArray,"cell_type");
             }
-
             else if ( this.url.contains("tissue_plant=") ) {
                 this.identifier = identifiers.sourceIdentifier(jsonArray,"tissue_plant");
             }
-            /*
             else if ( this.url.contains("cell_component=") ) {
-                System.out.println("component");
                 this.identifier = identifiers.sourceIdentifier(jsonArray,"cell_component");
             }
-            */
         }
     }
 
