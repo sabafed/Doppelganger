@@ -13,17 +13,21 @@ public class scorer {
         //String glycanType = "O-Linked";
 
         //String sourceDirectory = "referencesAll";
-        //String sourceDirectory = "proteinsAll";
-        //String sourceDirectory = "diseasesAll"; // Disease also have taxonomy columns
+        String sourceDirectory = "proteinsAll";
+        //String sourceDirectory = "diseasesAll"; Also have taxonomy columns
         //String sourceDirectory = "cellLinesAll";
-        String sourceDirectory = "sourcesAll/tissue";
+
+        //String sourceDirectory = "sourcesAll/cell_component"; Also have taxonomy columns
+        //String sourceDirectory = "sourcesAll/cell_type"; Also have taxonomy columns
+        //String sourceDirectory = "sourcesAll/tissue"; Also have taxonomy columns
+        //String sourceDirectory = "sourcesAll/tissue_plant"; Also have taxonomy columns
 
         ArrayList<doppelganger> gangers = reader.readfiles(sourceDirectory, glycanType);
-
+        //for (doppelganger doppel: gangers) System.out.println(doppel.getIdentifier()+" : "+doppel.nodesNumberVF());
         //for (doppelganger doppel : gangers) doppel.attributesChecker();
         toTable(glycanType, gangers, sourceDirectory);
 
-/*
+/* For DEBUG
         int total = 0;
         int intersection = 0;
         double cosSimThreshold = 0.85;
@@ -71,7 +75,7 @@ public class scorer {
 
         //sourcesAll folder contains subfolders tha could get in the way of file saving
         sourceDirectory = sourceDirectory.replace("/", "_");
-        String fileName = sourceDirectory+"_"+glycanType+"_minSize"+minNetworkSize+"_CosSim"+cosSimThreshold+"_Density"+densityDifferenceMax+"_JaccardIndex";
+        String fileName = sourceDirectory+"_"+glycanType+"_minSize"+minNetworkSize+"_CosSim"+cosSimThreshold+"_Density"+densityDifferenceMax+"_LinkComposition"+"_JaccardIndex";
         PrintStream output = new PrintStream(new File("results/"+fileName+"_TEST_"+".tsv"));
         PrintStream console = System.out;
         System.setOut(output);
@@ -100,8 +104,10 @@ public class scorer {
                 "Virtual Nodes Overlap" + "\t" + "Virtual Nodes Jaccard Index" + "\t" +
                 "Virtual Links Overlap" + "\t" + "Virtual Links Jaccard Index" + "\t" +
 
-                "Composition A (virtual T)" + "\t" + "Composition B (virtual T)" + "\t" +
-                "Composition A (virtual F)" + "\t" + "Composition B (virtual F)" + "\t" +
+                "Links String A (virtual T)" + "\t" + "Links String B (virtual T)" + "\t" +
+                "Links Composition A (virtual T)" + "\t" + "Links Composition B (virtual T)" + "\t" +
+                "Links String A (virtual F)" + "\t" + "Links String B (virtual F)" + "\t" +
+                "Links Composition A (virtual F)" + "\t" + "Links Composition B (virtual F)" + "\t" +
 
                 "Link counts A (virtual T)" + "\t" + "Link counts B (virtual T)" + "\t" +
                 "Frequencies A (virtual T)" + "\t" + "Frequencies B (virtual T)" + "\t" +
@@ -185,7 +191,9 @@ public class scorer {
                                         virtualLinksOverlap + "\t" + virtualLinksJaccardIndex + "\t" +
 
                                         network1.getLinkStringVT() + "\t" + network2.getLinkStringVT() + "\t" +
+                                        network1.getLinkStringCompositionVT() + "\t" + network2.getLinkStringCompositionVT() + "\t" +
                                         network1.getLinkStringVF() + "\t" + network2.getLinkStringVF() + "\t" +
+                                        network1.getLinkStringCompositionVF() + "\t" + network2.getLinkStringCompositionVF() + "\t" +
 
                                         network1.getLinkCountVT() + "\t" + network2.getLinkCountVT() + "\t" +
                                         network1.getLinkFreqVT() + "\t" + network2.getLinkFreqVT() + "\t" +

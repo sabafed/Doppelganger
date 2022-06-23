@@ -14,7 +14,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 // from this class, call all the others and make a single object.
@@ -43,12 +42,17 @@ public class doppelganger {
     /* Attributes for link similarity */
     private String linkStringVT; // String of all the links in the doppelganger object, virtuals included.
     private String linkStringVF; // String of all the links in the doppelganger object, virtuals excluded.
+
+    private String linkStringCompositionVT;
+    private String linkStringCompositionVF;
+
     private HashMap<Character, Integer> linkCountVT = new HashMap<>(); // Counts the occurrences of each link in the network, virtuals included.
     private HashMap<Character, Integer> linkCountVF = new HashMap<>(); // Counts the occurrences of each link in the network, virtuals excluded.
     private HashMap<Character, Double> linkFreqVT = new HashMap<>(); // Link frequencies relative to the total number of links in the network, virtuals included;
     private HashMap<Character, Double> linkFreqVF = new HashMap<>(); // Link frequencies relative to the total number of links in the network, virtuals excluded;
 
     public int doiless;
+    private String clusterRepresentative;
 
     /**
      * Main constructor
@@ -93,6 +97,9 @@ public class doppelganger {
         /* Set link similarity attributes */
         this.setLinkArrays(); // Sets both realLinks and virtualLinks
         this.setLinkStrings(); // Sets both linkStringVT and linkStringVF
+        this.linkStringCompositionVT = setLinkStringComposition(this.linkStringVT);
+        this.linkStringCompositionVF = setLinkStringComposition(this.linkStringVF);
+
         this.linkCountVT = helper.countLinks(this.linkStringVT);
         this.linkCountVF = helper.countLinks(this.linkStringVF);
 
@@ -102,6 +109,8 @@ public class doppelganger {
         /* Set others */
         this.setNetworkDensityVT();
         this.setNetworkDensityVF();
+
+        //this.clusterRepresentative = reader.clusterRepresentative();
     }
 
     public String getIdentifier() {
@@ -295,6 +304,32 @@ public class doppelganger {
         this.realLinks = realLinks;
         this.virtualLinks = virtualLinks;
     }
+
+    public String setLinkStringComposition(String linkString) {
+        HashMap<String,Integer> composition = new HashMap<>();
+        StringBuilder compoString = new StringBuilder();
+
+        // Shifting frame
+        for (int i = 0; i < linkString.length() - 1; i++) {
+            String frame = linkString.charAt(i)+""+linkString.charAt(i + 1);
+            if ( composition.get(frame) == null ) composition.put(frame, 1);
+            else composition.replace(frame, composition.get(frame)+1);
+        }
+
+        for (String k : composition.keySet()) {
+            compoString.append(k).append(":").append(composition.get(k)).append(" "); // Link composition is in glyconnect-like format because I found it super handy to work with.
+        }
+        return compoString.toString();
+    }
+
+    public String getLinkStringCompositionVT() {
+        return this.linkStringCompositionVT;
+    }
+
+    public String getLinkStringCompositionVF() {
+        return this.linkStringCompositionVF;
+    }
+
     public String getLinkStringVT() {
         return this.linkStringVT;
     }
@@ -341,7 +376,7 @@ public class doppelganger {
         return this.linkFreqVF;
     }
 
-    /* Misc */
+    // TODO: 22/06/22 implement hashcode and override the equals method (for al classes)
     public boolean equals(doppelganger that) {
         if ( this.identifier != null && that.identifier != null && this.identifier.equals(that.identifier) ) {
             if ( this.glycanType.equals(that.glycanType) ) {
@@ -355,8 +390,8 @@ public class doppelganger {
         return false;
     }
 
-    public boolean isInside(List<doppelganger> list) {
-        for (doppelganger doppel : list) {
+    public boolean isInside(ArrayList<doppelganger> gangers) {
+        for (doppelganger doppel : gangers) {
             if ( this.equals(doppel) ) return true;
         }
         return false;
@@ -373,6 +408,8 @@ public class doppelganger {
                 "\nVirtual links: "+ this.getVirtualLinks() +
                 "\nReal links string: "+this.getLinkStringVT() +
                 "\nVirtual links string: "+this.getLinkStringVF() +
+                "\nReal links composition: "+this.getLinkStringCompositionVT()+
+                "\nVirtual links composition: "+this.getLinkStringCompositionVF()+
                 "\nReal links number: "+this.linksNumberVF() +
                 "\nVirtual links number: "+this.virtualLinksNumber() +
                 "\nNetwork density VT: "+this.getNetworkDensityVT() +
