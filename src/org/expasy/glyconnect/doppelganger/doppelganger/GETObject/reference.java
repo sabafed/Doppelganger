@@ -2,6 +2,8 @@ package org.expasy.glyconnect.doppelganger.doppelganger.GETObject;
 
 import com.google.gson.JsonObject;
 
+import java.util.Objects;
+
 public class reference {
     private final JsonObject referenceJson;
     private String doi;
@@ -79,6 +81,24 @@ public class reference {
 
     public void setYear(String year) {
         this.year = year;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof reference)) return false;
+        reference reference = (reference) o;
+        return Objects.equals(doi, reference.doi) &&
+                Objects.equals(id, reference.id) &&
+                Objects.equals(pmid, reference.pmid) &&
+                Objects.equals(title, reference.title) &&
+                Objects.equals(authors, reference.authors) &&
+                Objects.equals(year, reference.year);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(doi, id, pmid, title, authors, year);
     }
 
     @Override

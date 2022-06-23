@@ -5,6 +5,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class node {
     private final JsonObject nodesJson;
@@ -258,14 +259,39 @@ public class node {
         for (JsonElement ra : referencesArray) references.add(ra.getAsString());
     }
 
-    public boolean equals(node that) {
-        if ( this.id != null && that.id != null && this.id.equals(that.id)){
-            if (this.condensedFormat != null && that.condensedFormat != null &&
-            this.condensedFormat.equals(that.condensedFormat)) {
-                return true;
-            }
-        }
-        return false;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof node)) return false;
+        node node = (node) o;
+        return id.equals(node.id) &&
+                Objects.equals(glytoucanId, node.glytoucanId) &&
+                Objects.equals(glyconnectFormat, node.glyconnectFormat) &&
+                Objects.equals(byonicFormat, node.byonicFormat) &&
+                Objects.equals(condensedFormat, node.condensedFormat) &&
+                Objects.equals(averageMass, node.averageMass) &&
+                Objects.equals(monoisotopicMass, node.monoisotopicMass) &&
+                Objects.equals(label, node.label) &&
+                Objects.equals(glycanType, node.glycanType) &&
+                Objects.equals(structures, node.structures) &&
+                Objects.equals(references, node.references) &&
+                Objects.equals(properties, node.properties);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id,
+                glytoucanId,
+                glyconnectFormat,
+                byonicFormat,
+                condensedFormat,
+                averageMass,
+                monoisotopicMass,
+                label,
+                glycanType,
+                structures,
+                references,
+                properties);
     }
 
     @Override

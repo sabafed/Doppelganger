@@ -2,6 +2,8 @@ package org.expasy.glyconnect.doppelganger.doppelganger.GETObject;
 
 import com.google.gson.JsonObject;
 
+import java.util.Objects;
+
 public class _cellType {
     private JsonObject cellTypeJson;
     private String id;
@@ -47,6 +49,21 @@ public class _cellType {
 
     public void setCellOntologyId(String cellOntologyId) {
         this.cellOntologyId = cellOntologyId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof _cellType)) return false;
+        _cellType cellType = (_cellType) o;
+        return Objects.equals(id, cellType.id) &&
+                Objects.equals(name, cellType.name) &&
+                Objects.equals(cellOntologyId, cellType.cellOntologyId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, cellOntologyId);
     }
 
     @Override

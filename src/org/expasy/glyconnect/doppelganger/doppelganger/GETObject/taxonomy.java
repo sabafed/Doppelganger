@@ -2,6 +2,8 @@ package org.expasy.glyconnect.doppelganger.doppelganger.GETObject;
 
 import com.google.gson.JsonObject;
 
+import java.util.Objects;
+
 public class taxonomy {
     private final JsonObject taxonomyJson;
     private String commonName;
@@ -56,6 +58,22 @@ public class taxonomy {
 
     public void setSpecies(String species) {
         this.species = species;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof taxonomy)) return false;
+        taxonomy taxonomy = (taxonomy) o;
+        return Objects.equals(commonName, taxonomy.commonName) &&
+                Objects.equals(id, taxonomy.id) &&
+                Objects.equals(taxonomyId, taxonomy.taxonomyId) &&
+                Objects.equals(species, taxonomy.species);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(commonName, id, taxonomyId, species);
     }
 
     @Override

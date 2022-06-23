@@ -5,6 +5,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import java.util.HashMap;
+import java.util.Objects;
 
 public class POSTObject {
     private final JsonObject POSTSection;
@@ -51,16 +52,23 @@ public class POSTObject {
         return links;
     }
 
-
-
-    public boolean equals(POSTObject other) {
-        return this.POSTSection.equals(other.getPOSTSection());
-    }
-
     public void attributesChecker() {
         System.out.println(
                 "Nodes: "+this.getNodes()+"\n"+
                 "Links: "+this.getLinks()+"\n");
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof POSTObject)) return false;
+        POSTObject that = (POSTObject) o;
+        return nodes.equals(that.nodes) && Objects.equals(links, that.links);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(nodes, links);
     }
 
     @Override

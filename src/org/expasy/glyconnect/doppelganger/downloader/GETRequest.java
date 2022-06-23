@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Objects;
 
 /**
  *  Class that sends a GET request to https://beta.glyconnect.expasy.org/api/
@@ -69,5 +70,26 @@ public class GETRequest {
 
     public String getResponse() {
         return responseGET;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof GETRequest)) return false;
+        GETRequest that = (GETRequest) o;
+        return Objects.equals(url, that.url) &&
+                Objects.equals(responseGET, that.responseGET);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(url, responseGET);
+    }
+
+    @Override
+    public String toString() {
+        return "GETRequest{" +
+                "url='" + url + '\'' +
+                '}';
     }
 }

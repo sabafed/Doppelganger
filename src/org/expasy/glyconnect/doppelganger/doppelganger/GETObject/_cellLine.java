@@ -2,6 +2,8 @@ package org.expasy.glyconnect.doppelganger.doppelganger.GETObject;
 
 import com.google.gson.JsonObject;
 
+import java.util.Objects;
+
 public class _cellLine {
     private JsonObject cellLineJson;
     private String id;
@@ -63,6 +65,22 @@ public class _cellLine {
 
     private void setProblematic(boolean problematic) {
         isProblematic = problematic;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof _cellLine)) return false;
+        _cellLine cellLine = (_cellLine) o;
+        return isProblematic == cellLine.isProblematic &&
+                Objects.equals(id, cellLine.id) &&
+                Objects.equals(name, cellLine.name) &&
+                Objects.equals(cellosaurusId, cellLine.cellosaurusId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, cellosaurusId, isProblematic);
     }
 
     @Override

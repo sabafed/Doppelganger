@@ -6,6 +6,7 @@ import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class protein {
     private final JsonObject proteinJson;
@@ -69,6 +70,22 @@ public class protein {
                 this.uniprots.add(uniprot);
             }
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof protein)) return false;
+        protein protein = (protein) o;
+        return reviewed == protein.reviewed &&
+                Objects.equals(id, protein.id) &&
+                Objects.equals(name, protein.name) &&
+                Objects.equals(uniprots, protein.uniprots);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, reviewed, uniprots);
     }
 
     @Override

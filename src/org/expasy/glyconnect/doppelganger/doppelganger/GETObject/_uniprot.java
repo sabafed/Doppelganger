@@ -2,6 +2,8 @@ package org.expasy.glyconnect.doppelganger.doppelganger.GETObject;
 
 import com.google.gson.JsonObject;
 
+import java.util.Objects;
+
 public class _uniprot {
     private JsonObject uniprotJson;
     private String uniprotAcc;
@@ -75,6 +77,23 @@ public class _uniprot {
 
     private void setGlygen(String glygen) {
         this.glygen = glygen;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof _uniprot)) return false;
+        _uniprot uniprot = (_uniprot) o;
+        return Objects.equals(uniprotAcc, uniprot.uniprotAcc) &&
+                Objects.equals(uniprotId, uniprot.uniprotId) &&
+                Objects.equals(nextprot, uniprot.nextprot) &&
+                Objects.equals(genecards, uniprot.genecards) &&
+                Objects.equals(glygen, uniprot.glygen);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(uniprotAcc, uniprotId, nextprot, genecards, glygen);
     }
 
     @Override

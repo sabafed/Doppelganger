@@ -2,6 +2,8 @@ package org.expasy.glyconnect.doppelganger.doppelganger.GETObject;
 
 import com.google.gson.JsonObject;
 
+import java.util.Objects;
+
 public class composition {
     private final JsonObject compositionJson;
     private String id;
@@ -115,6 +117,35 @@ public class composition {
 
     public String getGlycanType() {
         return glycanType;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof composition)) return false;
+        composition that = (composition) o;
+        return Double.compare(that.averageMass, averageMass) == 0 &&
+                Double.compare(that.monoisotopicMass, monoisotopicMass) == 0 &&
+                Objects.equals(id, that.id) &&
+                Objects.equals(glytoucanId, that.glytoucanId) &&
+                Objects.equals(glyconnectFormat, that.glyconnectFormat) &&
+                Objects.equals(byonicFormat, that.byonicFormat) &&
+                Objects.equals(condensedFormat, that.condensedFormat) &&
+                Objects.equals(label, that.label) &&
+                Objects.equals(glycanType, that.glycanType);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id,
+                glytoucanId,
+                glyconnectFormat,
+                byonicFormat,
+                condensedFormat,
+                averageMass,
+                monoisotopicMass,
+                label,
+                glycanType);
     }
 
     @Override

@@ -18,17 +18,14 @@ public class reader {
 
         ArrayList<doppelganger> gangers = new ArrayList<>(readfiles("proteinsAll", glycanType));
 
-        // Testing link composition comparison
+        // Testing link comparison
         for (int i = 0; i < gangers.size(); i++) {
             if (i < gangers.size() - 1){
                 doppelganger net1 = gangers.get(i);
                 doppelganger net2 = gangers.get(i + 1);
 
-                if ( net1.getLinkStringCompositionVT().length() != 0 && net2.getLinkStringCompositionVT().length() != 0) {
-                    System.out.println("\nIdentifiers: " + net1.getIdentifier() + " ~ " + net2.getIdentifier());
-                    System.out.println("VT: " + net1.getLinkStringCompositionVT() + " ~ " + net2.getLinkStringCompositionVT());
-                    System.out.println("VF: " + net1.getLinkStringCompositionVF() + " ~ " + net2.getLinkStringCompositionVF());
-                }
+                if ( net1.equals(net2) )
+                    System.out.println(net1.getIdentifier() + " EQUALS \n" + net2.getIdentifier() + "\n");
             }
         }
 
@@ -68,7 +65,7 @@ public class reader {
             Path doiJson = Path.of(String.valueOf(file));
             doppelganger doppel = new doppelganger(doiJson);
 
-            if ( !doppel.isInside(gangers) ) gangers.add(doppel);
+            if ( !gangers.contains(doppel) ) gangers.add(doppel);
 
             //totalDoiless += doppel.doiless;
             //System.out.println(doppel.getIdentifier()+"\n___________________________________________________________________");

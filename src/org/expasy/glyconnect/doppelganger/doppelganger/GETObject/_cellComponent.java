@@ -2,6 +2,8 @@ package org.expasy.glyconnect.doppelganger.doppelganger.GETObject;
 
 import com.google.gson.JsonObject;
 
+import java.util.Objects;
+
 public class _cellComponent {
     private final JsonObject cellComponentJson;
     private String id;
@@ -52,6 +54,21 @@ public class _cellComponent {
 
     public void setGoId(String goId) {
         this.goId = goId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof _cellComponent)) return false;
+        _cellComponent that = (_cellComponent) o;
+        return Objects.equals(id, that.id) &&
+                Objects.equals(name, that.name) &&
+                Objects.equals(goId, that.goId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, goId);
     }
 
     @Override

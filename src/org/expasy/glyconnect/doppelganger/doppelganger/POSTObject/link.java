@@ -2,6 +2,8 @@ package org.expasy.glyconnect.doppelganger.doppelganger.POSTObject;
 
 import com.google.gson.JsonObject;
 
+import java.util.Objects;
+
 public class link {
     private final JsonObject linkJson;
     private String abbreviation;
@@ -58,17 +60,22 @@ public class link {
         this.target = this.linkJson.get("target").getAsString();
     }
 
-    public boolean equals(link that) {
-        if ( this.source != null && this.target != null ) {
-            if ( that.source != null && that.target != null ) {
-                if ( this.source.equals(that.source) && this.target.equals(that.target))
-                {
-                    return true;
-                }
-            }
-        }
-        return false;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof link)) return false;
+        link link = (link) o;
+        return Objects.equals(abbreviation, link.abbreviation) &&
+                Objects.equals(condensedFormat, link.condensedFormat) &&
+                Objects.equals(source, link.source) &&
+                Objects.equals(target, link.target);
     }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(abbreviation, condensedFormat, source, target);
+    }
+
     @Override
     public String toString() {
         return this.source+"~"+this.target;

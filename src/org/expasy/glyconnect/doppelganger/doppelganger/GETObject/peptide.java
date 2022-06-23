@@ -2,6 +2,8 @@ package org.expasy.glyconnect.doppelganger.doppelganger.GETObject;
 
 import com.google.gson.JsonObject;
 
+import java.util.Objects;
+
 public class peptide {
     private final JsonObject peptideJson;
     private String id;
@@ -47,6 +49,21 @@ public class peptide {
 
     public void setSequence(String sequence) {
         this.sequence = sequence;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof peptide)) return false;
+        peptide peptide = (peptide) o;
+        return Objects.equals(id, peptide.id) &&
+                Objects.equals(length, peptide.length) &&
+                Objects.equals(sequence, peptide.sequence);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, length, sequence);
     }
 
     @Override

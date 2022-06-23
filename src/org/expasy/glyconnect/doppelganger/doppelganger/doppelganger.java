@@ -15,6 +15,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 // from this class, call all the others and make a single object.
 public class doppelganger {
@@ -376,25 +377,49 @@ public class doppelganger {
         return this.linkFreqVF;
     }
 
-    // TODO: 22/06/22 implement hashcode and override the equals method (for al classes)
-    public boolean equals(doppelganger that) {
-        if ( this.identifier != null && that.identifier != null && this.identifier.equals(that.identifier) ) {
-            if ( this.glycanType.equals(that.glycanType) ) {
-                if ( this.getGETObject().equals(that.getGETObject()) ) {
-                    if ( this.getPOSTObject().equals(that.getPOSTObject()) ) {
-                        return true;
-                    }
-                }
-            }
-        }
-        return false;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof doppelganger)) return false;
+        doppelganger that = (doppelganger) o;
+        return Double.compare(that.networkDensityVT, networkDensityVT) == 0 &&
+                Double.compare(that.networkDensityVF, networkDensityVF) == 0 &&
+                identifier.equals(that.identifier) &&
+                glycanType.equals(that.glycanType) &&
+                GETObject.equals(that.GETObject) &&
+                POSTObject.equals(that.POSTObject) &&
+                realNodes.equals(that.realNodes) &&
+                Objects.equals(virtualNodes, that.virtualNodes) &&
+                Objects.equals(realLinks, that.realLinks) &&
+                Objects.equals(virtualLinks, that.virtualLinks) &&
+                Objects.equals(propertiesCountVT, that.propertiesCountVT) &&
+                Objects.equals(propertiesCountVF, that.propertiesCountVF) &&
+                Objects.equals(propertiesFreqVT, that.propertiesFreqVT) &&
+                Objects.equals(propertiesFreqVF, that.propertiesFreqVF) &&
+                Objects.equals(linkStringVT, that.linkStringVT) &&
+                Objects.equals(linkStringVF, that.linkStringVF) &&
+                Objects.equals(linkStringCompositionVT, that.linkStringCompositionVT) &&
+                Objects.equals(linkStringCompositionVF, that.linkStringCompositionVF) &&
+                Objects.equals(linkCountVT, that.linkCountVT) &&
+                Objects.equals(linkCountVF, that.linkCountVF) &&
+                Objects.equals(linkFreqVT, that.linkFreqVT) &&
+                Objects.equals(linkFreqVF, that.linkFreqVF) &&
+                Objects.equals(clusterRepresentative, that.clusterRepresentative);
     }
 
-    public boolean isInside(ArrayList<doppelganger> gangers) {
-        for (doppelganger doppel : gangers) {
-            if ( this.equals(doppel) ) return true;
-        }
-        return false;
+    @Override
+    public int hashCode() {
+        return Objects.hash(identifier, glycanType,
+                GETObject, POSTObject,
+                realNodes, virtualNodes,
+                realLinks, virtualLinks,
+                networkDensityVT, networkDensityVF,
+                propertiesCountVT, propertiesCountVF,
+                propertiesFreqVT, propertiesFreqVF, linkStringVT,
+                linkStringVF, linkStringCompositionVT,
+                linkStringCompositionVF, linkCountVT,
+                linkCountVF, linkFreqVT,
+                linkFreqVF, clusterRepresentative);
     }
 
     public void attributesChecker() {

@@ -2,6 +2,8 @@ package org.expasy.glyconnect.doppelganger.doppelganger.GETObject;
 
 import com.google.gson.JsonObject;
 
+import java.util.Objects;
+
 public class structure {
     private final JsonObject structureJson;
     private String id;
@@ -86,6 +88,31 @@ public class structure {
 
     public void setReviewed(boolean reviewed) {
         this.reviewed = reviewed;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof structure)) return false;
+        structure structure = (structure) o;
+        return hasImage == structure.hasImage &&
+                isUndefined == structure.isUndefined
+                && reviewed == structure.reviewed &&
+                Objects.equals(id, structure.id) &&
+                Objects.equals(glytoucanId, structure.glytoucanId) &&
+                Objects.equals(glycanCore, structure.glycanCore) &&
+                Objects.equals(glycanType, structure.glycanType);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id,
+                glytoucanId,
+                glycanCore,
+                glycanType,
+                hasImage,
+                isUndefined,
+                reviewed);
     }
 
     @Override

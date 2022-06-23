@@ -4,10 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 // from this class, call all the other subclasses and make a single object.
@@ -143,8 +140,40 @@ public class GETObject {
         return taxonomies;
     }
 
-    public boolean equals(GETObject getObject){
-        return (this.getGETSection().equals(getObject.getGETSection()));
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof GETObject)) return false;
+        GETObject getObject = (GETObject) o;
+        return Objects.equals(glycanType, getObject.glycanType) &&
+                Objects.equals(compositions, getObject.compositions) &&
+                Objects.equals(diseases, getObject.diseases) &&
+                Objects.equals(peptides, getObject.peptides) &&
+                Objects.equals(proteins, getObject.proteins) &&
+                Objects.equals(references, getObject.references) &&
+                Objects.equals(sites, getObject.sites) &&
+                Objects.equals(sources, getObject.sources) &&
+                Objects.equals(structures, getObject.structures) &&
+                Objects.equals(taxonomies, getObject.taxonomies);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(glycanType,
+                compositions,
+                diseases,
+                peptides,
+                proteins,
+                references,
+                sites,
+                sources,
+                structures,
+                taxonomies);
+    }
+
+    @Override
+    public String toString() {
+        return String.valueOf(this.GETSection);
     }
 
     public void attributesChecker() {

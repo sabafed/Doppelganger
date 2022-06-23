@@ -9,10 +9,12 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Objects;
 
 public class POSTRequest {
     private String identifier;  /* Depending on the source, the identifier can be:
                                  *      - Article's DOI;
+                                 *      - Cell Line identifier ("cell_lineName")
                                  *      - Protein identifier ( "id;uniprotAcc" )
                                  *      - Disease identifier ( "taxonomyId;diseaseName" )
                                  *      - Source  identifier ( "taxonomyId;tissueName" )
@@ -175,5 +177,31 @@ public class POSTRequest {
 
     public String getGETBody() {
         return GETBody;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof POSTRequest)) return false;
+        POSTRequest that = (POSTRequest) o;
+        return Objects.equals(identifier, that.identifier) &&
+                Objects.equals(url, that.url) &&
+                Objects.equals(taxonomy, that.taxonomy) &&
+                Objects.equals(protein, that.protein) &&
+                Objects.equals(glycanType, that.glycanType);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(identifier, url, taxonomy, protein, glycanType);
+    }
+
+    @Override
+    public String toString() {
+        return "POSTRequest{" +
+                "identifier='" + identifier + '\'' +
+                ", taxonomy='" + taxonomy + '\'' +
+                ", glycanType='" + glycanType + '\'' +
+                '}';
     }
 }

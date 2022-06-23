@@ -2,6 +2,8 @@ package org.expasy.glyconnect.doppelganger.doppelganger.GETObject;
 
 import com.google.gson.JsonObject;
 
+import java.util.Objects;
+
 public class _tissue {
     private final JsonObject tissueJson;
     private String id;
@@ -52,6 +54,21 @@ public class _tissue {
 
     public void setUberonId(String uberonId) {
         this.uberonId = uberonId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof _tissue)) return false;
+        _tissue tissue = (_tissue) o;
+        return Objects.equals(id, tissue.id) &&
+                Objects.equals(name, tissue.name) &&
+                Objects.equals(uberonId, tissue.uberonId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, uberonId);
     }
 
     @Override
