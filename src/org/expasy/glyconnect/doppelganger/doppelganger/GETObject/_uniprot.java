@@ -19,7 +19,9 @@ public class _uniprot {
         this.uniprotJson = uniprotJson;
 
         this.setUniprotAcc(this.uniprotJson.get("uniprot_acc").getAsString());
-        this.setUniprotId(this.uniprotJson.get("uniprot_id").getAsString());
+
+        if ( this.uniprotJson.get("uniprot_id") != null )
+            this.setUniprotId(this.uniprotJson.get("uniprot_id").getAsString());
 
         if ( this.uniprotJson.get("nextprot") != null )
             this.setNextprot(this.uniprotJson.get("nextprot").getAsString());
