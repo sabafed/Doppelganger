@@ -12,10 +12,7 @@ import org.expasy.glyconnect.doppelganger.scorer.helper;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 // from this class, call all the others and make a single object.
 public class doppelganger {
@@ -44,8 +41,8 @@ public class doppelganger {
     private String linkStringVT; // String of all the links in the doppelganger object, virtuals included.
     private String linkStringVF; // String of all the links in the doppelganger object, virtuals excluded.
 
-    private String linkStringCompositionVT;
-    private String linkStringCompositionVF;
+    private final TreeMap<String, Integer> linkTransitionsVT;
+    private final TreeMap<String, Integer> linkTransitionsVF;
 
     private HashMap<Character, Integer> linkCountVT = new HashMap<>(); // Counts the occurrences of each link in the network, virtuals included.
     private HashMap<Character, Integer> linkCountVF = new HashMap<>(); // Counts the occurrences of each link in the network, virtuals excluded.
@@ -98,8 +95,9 @@ public class doppelganger {
         /* Set link similarity attributes */
         this.setLinkArrays(); // Sets both realLinks and virtualLinks
         this.setLinkStrings(); // Sets both linkStringVT and linkStringVF
-        this.linkStringCompositionVT = setLinkStringComposition(this.linkStringVT);
-        this.linkStringCompositionVF = setLinkStringComposition(this.linkStringVF);
+
+        this.linkTransitionsVT = helper.linkTransitions(this.POSTObject.getLinks());
+        this.linkTransitionsVF = helper.linkTransitions(this.realLinks);
 
         this.linkCountVT = helper.countLinks(this.linkStringVT);
         this.linkCountVF = helper.countLinks(this.linkStringVF);
@@ -204,8 +202,8 @@ public class doppelganger {
                 propertiesCount.replace(prop, propertiesCount.get(prop)+1);
                 /*
                 Each time a property is present in a node,
-                said property is get from propertiesCount
-                and its value is increased by 1
+                get property from propertiesCount
+                and increase its value by 1
                 */
             }
         }
@@ -306,29 +304,12 @@ public class doppelganger {
         this.virtualLinks = virtualLinks;
     }
 
-    public String setLinkStringComposition(String linkString) {
-        HashMap<String,Integer> composition = new HashMap<>();
-        StringBuilder compoString = new StringBuilder();
-
-        // Shifting frame
-        for (int i = 0; i < linkString.length() - 1; i++) {
-            String frame = linkString.charAt(i)+""+linkString.charAt(i + 1);
-            if ( composition.get(frame) == null ) composition.put(frame, 1);
-            else composition.replace(frame, composition.get(frame)+1);
-        }
-
-        for (String k : composition.keySet()) {
-            compoString.append(k).append(":").append(composition.get(k)).append(" "); // Link composition is in glyconnect-like format because I found it super handy to work with.
-        }
-        return compoString.toString();
+    public TreeMap<String, Integer> getLinkTransitionsVT() {
+        return this.linkTransitionsVT;
     }
 
-    public String getLinkStringCompositionVT() {
-        return this.linkStringCompositionVT;
-    }
-
-    public String getLinkStringCompositionVF() {
-        return this.linkStringCompositionVF;
+    public TreeMap<String, Integer> getLinkTransitionsVF() {
+        return this.linkTransitionsVF;
     }
 
     public String getLinkStringVT() {
@@ -398,8 +379,8 @@ public class doppelganger {
                 Objects.equals(propertiesFreqVF, that.propertiesFreqVF) &&
                 Objects.equals(linkStringVT, that.linkStringVT) &&
                 Objects.equals(linkStringVF, that.linkStringVF) &&
-                Objects.equals(linkStringCompositionVT, that.linkStringCompositionVT) &&
-                Objects.equals(linkStringCompositionVF, that.linkStringCompositionVF) &&
+                Objects.equals(linkTransitionsVT, that.linkTransitionsVT) &&
+                Objects.equals(linkTransitionsVF, that.linkTransitionsVF) &&
                 Objects.equals(linkCountVT, that.linkCountVT) &&
                 Objects.equals(linkCountVF, that.linkCountVF) &&
                 Objects.equals(linkFreqVT, that.linkFreqVT) &&
@@ -416,8 +397,8 @@ public class doppelganger {
                 networkDensityVT, networkDensityVF,
                 propertiesCountVT, propertiesCountVF,
                 propertiesFreqVT, propertiesFreqVF, linkStringVT,
-                linkStringVF, linkStringCompositionVT,
-                linkStringCompositionVF, linkCountVT,
+                linkStringVF, linkTransitionsVT,
+                linkTransitionsVF, linkCountVT,
                 linkCountVF, linkFreqVT,
                 linkFreqVF, clusterRepresentative);
     }
@@ -433,8 +414,8 @@ public class doppelganger {
                 "\nVirtual links: "+ this.getVirtualLinks() +
                 "\nReal links string: "+this.getLinkStringVT() +
                 "\nVirtual links string: "+this.getLinkStringVF() +
-                "\nReal links composition: "+this.getLinkStringCompositionVT()+
-                "\nVirtual links composition: "+this.getLinkStringCompositionVF()+
+                "\nReal links composition: "+this.getLinkTransitionsVT()+
+                "\nVirtual links composition: "+this.getLinkTransitionsVF()+
                 "\nReal links number: "+this.linksNumberVF() +
                 "\nVirtual links number: "+this.virtualLinksNumber() +
                 "\nNetwork density VT: "+this.getNetworkDensityVT() +

@@ -1,6 +1,10 @@
 package org.expasy.glyconnect.doppelganger.scorer;
 
+import org.expasy.glyconnect.doppelganger.doppelganger.POSTObject.link;
+
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.TreeMap;
 
 /**
  * Helper class.
@@ -146,5 +150,49 @@ public class helper {
             pos++;
         }
         return frequencies;
+    }
+
+    public static TreeMap<String, Integer> linkTransitions(ArrayList<link> links) {
+        TreeMap<String, Integer> transitions = new TreeMap<>();
+
+        for (int i = 0; i < links.size(); i++) {
+            for (int j = i + 1; j < links.size(); j++) {
+
+                if ( links.get(j).getSource().equals(links.get(i).getTarget()) ) {
+                    String transition = links.get(i).getCondensedFormat() + links.get(j).getCondensedFormat();
+                    if ( !transitions.containsKey(transition) ) transitions.put(transition, 1);
+                    else transitions.replace( transition, transitions.get(transition)+1 );
+                }
+
+                if ( links.get(j).getTarget().equals(links.get(i).getSource()) ) {
+                    String transition = links.get(j).getCondensedFormat() + links.get(i).getCondensedFormat();
+                    if ( !transitions.containsKey(transition) ) transitions.put(transition, 1);
+                    else transitions.replace( transition, transitions.get(transition)+1 );
+                }
+            }
+        }
+        return transitions;
+    }
+
+    public static TreeMap<String, Integer> linkTransitions(HashMap<Integer, link> links) {
+        TreeMap<String, Integer> transitions = new TreeMap<>();
+
+        for (int i = 0; i < links.size(); i++) {
+            for (int j = i + 1; j < links.size(); j++) {
+
+                if ( links.get(j).getSource().equals(links.get(i).getTarget()) ) {
+                    String transition = links.get(i).getCondensedFormat() + links.get(j).getCondensedFormat();
+                    if ( !transitions.containsKey(transition) ) transitions.put(transition, 1);
+                    else transitions.replace( transition, transitions.get(transition)+1 );
+                }
+
+                if ( links.get(j).getTarget().equals(links.get(i).getSource()) ) {
+                    String transition = links.get(j).getCondensedFormat() + links.get(i).getCondensedFormat();
+                    if ( !transitions.containsKey(transition) ) transitions.put(transition, 1);
+                    else transitions.replace( transition, transitions.get(transition)+1 );
+                }
+            }
+        }
+        return transitions;
     }
 }

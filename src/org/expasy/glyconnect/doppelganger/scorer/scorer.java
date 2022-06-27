@@ -105,9 +105,10 @@ public class scorer {
                 "Virtual Links Overlap" + "\t" + "Virtual Links Jaccard Index" + "\t" +
 
                 "Links String A (virtual T)" + "\t" + "Links String B (virtual T)" + "\t" +
-                "Links Composition A (virtual T)" + "\t" + "Links Composition B (virtual T)" + "\t" +
                 "Links String A (virtual F)" + "\t" + "Links String B (virtual F)" + "\t" +
-                "Links Composition A (virtual F)" + "\t" + "Links Composition B (virtual F)" + "\t" +
+
+                "Link Transitions A (virtual T)" + "\t" + "Link Transitions A (virtual F)" + "\t" +
+                "Link Transitions B (virtual T)" + "\t" + "Link Transitions B (virtual F)" + "\t" +
 
                 "Link counts A (virtual T)" + "\t" + "Link counts B (virtual T)" + "\t" +
                 "Frequencies A (virtual T)" + "\t" + "Frequencies B (virtual T)" + "\t" +
@@ -191,9 +192,10 @@ public class scorer {
                                         virtualLinksOverlap + "\t" + virtualLinksJaccardIndex + "\t" +
 
                                         network1.getLinkStringVT() + "\t" + network2.getLinkStringVT() + "\t" +
-                                        network1.getLinkStringCompositionVT() + "\t" + network2.getLinkStringCompositionVT() + "\t" +
                                         network1.getLinkStringVF() + "\t" + network2.getLinkStringVF() + "\t" +
-                                        network1.getLinkStringCompositionVF() + "\t" + network2.getLinkStringCompositionVF() + "\t" +
+
+                                        network1.getLinkTransitionsVT() + "\t" + network1.getLinkTransitionsVF() + "\t" +
+                                        network2.getLinkTransitionsVT() + "\t" + network2.getLinkTransitionsVF() + "\t" +
 
                                         network1.getLinkCountVT() + "\t" + network2.getLinkCountVT() + "\t" +
                                         network1.getLinkFreqVT() + "\t" + network2.getLinkFreqVT() + "\t" +

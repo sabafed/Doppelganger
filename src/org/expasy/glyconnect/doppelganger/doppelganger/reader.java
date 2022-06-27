@@ -17,17 +17,21 @@ public class reader {
         String glycanType = "N-Linked";
 
         ArrayList<doppelganger> gangers = new ArrayList<>(readfiles("proteinsAll", glycanType));
-
+/*
         // Testing link comparison
         for (int i = 0; i < gangers.size(); i++) {
             if (i < gangers.size() - 1){
                 doppelganger net1 = gangers.get(i);
-                doppelganger net2 = gangers.get(i + 1);
+                //doppelganger net2 = gangers.get(i + 1);
 
-                if ( net1.equals(net2) )
-                    System.out.println(net1.getIdentifier() + " EQUALS \n" + net2.getIdentifier() + "\n");
+                System.out.println("\nID: "+net1.getIdentifier());
+                System.out.println();
+
+
             }
         }
+
+ */
 
 
         /* Testing sequence cluster analysis
