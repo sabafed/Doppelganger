@@ -75,8 +75,9 @@ public class scorer {
 
         //sourcesAll folder contains subfolders tha could get in the way of file saving
         sourceDirectory = sourceDirectory.replace("/", "_");
+        String targetDirectory = "results/";
         String fileName = sourceDirectory+"_"+glycanType+"_minSize"+minNetworkSize+"_CosSim"+cosSimThreshold+"_Density"+densityDifferenceMax+"_LinkComposition"+"_JaccardIndex";
-        PrintStream output = new PrintStream(new File("results/"+fileName+"_TEST_"+".tsv"));
+        PrintStream output = new PrintStream(new File(targetDirectory+fileName+"_TEST_"+".tsv"));
         PrintStream console = System.out;
         System.setOut(output);
 
@@ -212,6 +213,6 @@ public class scorer {
         }
 
         System.setOut(console);
-        System.out.println("File '"+fileName+"' has been created!");
+        System.out.println("File '"+fileName+"' has been created in directory '"+targetDirectory+"'");
     }
 }

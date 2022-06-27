@@ -176,6 +176,7 @@ public class downloader {
     }
 
     public static void dataToJson(GETRequest getObj, String targetDirectory) throws Exception {
+        // TODO: 27/06/22 Implement a way to not send requests if there are no changes between the old and the new version of a file.
         System.out.println("________________________________________________\nSending POSTRequest");
         POSTRequest postObj = new POSTRequest(getObj);
 
