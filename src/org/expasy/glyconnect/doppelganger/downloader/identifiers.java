@@ -6,7 +6,7 @@ import com.google.gson.JsonObject;
 public class identifiers {
 
     public static String proteinIdentifier(JsonArray jsonArray) {
-        String identifier = "";
+        String identifier = null;
 
         for (int i = 0; i < 1; i++) { // One iteration only, because all the elements have the same identifier.
             JsonObject jo = jsonArray.get(i).getAsJsonObject();
@@ -34,7 +34,7 @@ public class identifiers {
     }
 
     public static String diseaseIdentifier(JsonArray jsonArray) {
-        String identifier = "";
+        String identifier = null;
 
         for (int i = 0; i < 1; i++) {
             String taxonomyId = jsonArray.get(i).getAsJsonObject().get("taxonomy").getAsJsonObject().get("taxonomy_id").getAsString();
@@ -45,7 +45,7 @@ public class identifiers {
     }
 
     public static String sourceIdentifier(JsonArray jsonArray, String query) {
-        String identifier = "";
+        String identifier = null;
         for (int i = 0; i < 1; i++) {
             String taxonomyId = jsonArray.get(i).getAsJsonObject().get("taxonomy").getAsJsonObject().get("taxonomy_id").getAsString();
             String name = String.valueOf(jsonArray.get(i).getAsJsonObject().get("source").getAsJsonObject().get(query).getAsJsonObject().get("name").getAsString());

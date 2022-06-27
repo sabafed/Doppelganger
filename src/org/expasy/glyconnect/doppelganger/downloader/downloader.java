@@ -12,11 +12,11 @@ import java.util.List;
 
 public class downloader {
     public static void main(String[] args) throws Exception {
-        //proteinsAllDownloader();
-        //diseasesAllDownloader();
-        //cellLinesAllDownloader();
+        proteinsAllDownloader();
+        diseasesAllDownloader();
+        cellLinesAllDownloader();
         sourcesAllDownloader();
-        //referencesAllDownloader();
+        referencesAllDownloader();
     }
 
     public static void proteinsAllDownloader() throws Exception {
@@ -191,6 +191,8 @@ public class downloader {
             String outFileName = "/home/federico/Documenti/Thesis/Doppelganger/dataAll/"+targetDirectory+"/" +
                     postObj.getGlycanType() + "/" +
                         postObj.getIdentifier().replace("/","_"); // "/" is folder separator.
+
+            System.out.println(postObj.getIdentifier());
 
             PrintStream outFile = new PrintStream(outFileName);
             PrintStream console = System.out;
