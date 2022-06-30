@@ -30,7 +30,7 @@ public class virtualsImpact {
         String targetDirectory = "results/virtualsImpact/";
         PrintStream output = new PrintStream(new File(targetDirectory+fileName+"_TEST_"+".tsv"));
         PrintStream console = System.out;
-        //System.setOut(output);
+        System.setOut(output);
 
         String header = "Identifier" + "\t"+ "Taxonomy" + "\t" +
 
@@ -50,7 +50,7 @@ public class virtualsImpact {
                 "Node properties (virtual F)" + "\t" +  "Node properties (virtual T)"
                 ;
 
-        //System.out.println(header);
+        System.out.println(header);
 
         int networkNumber = 0;
 
@@ -154,7 +154,7 @@ public class virtualsImpact {
 
                             propertiesFreqVF + "\t" + propertiesFreqVT;
 
-                    //System.out.println(body);
+                    System.out.println(body);
                 }
             }
         }
@@ -190,10 +190,10 @@ public class virtualsImpact {
                 allTransitionsVF + "\t" + allTransitionsVT + "\t" //+
                 //linkStrings + "\t" + linkStrings + "\t" + linkStrings + "\t" + linkStrings + "\t"
                 ;
-        //System.out.println(summary);
+        System.out.println(summary);
 
         System.setOut(console);
-        //System.out.println("File '"+fileName+"' has been created in directory '"+targetDirectory+"'");
-        for ( String k : allTransitionsVT.keySet() ) System.out.print(allTransitionsVT.get(k)+",");
+        System.out.println("File '"+fileName+"' has been created in directory '"+targetDirectory+"'");
+        //for ( String k : allTransitionsVT.keySet() ) System.out.print(allTransitionsVT.get(k)+",");
     }
 }
