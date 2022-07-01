@@ -4,6 +4,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import org.expasy.glyconnect.doppelganger.doppelganger.doppelganger;
+import org.expasy.glyconnect.doppelganger.doppelganger.reader;
 
 import java.io.PrintStream;
 import java.net.URLEncoder;
@@ -12,11 +14,11 @@ import java.util.List;
 
 public class downloader {
     public static void main(String[] args) throws Exception {
-        proteinsAllDownloader();
-        diseasesAllDownloader();
-        cellLinesAllDownloader();
+        //proteinsAllDownloader();
+        //diseasesAllDownloader();
+        //cellLinesAllDownloader();
         sourcesAllDownloader();
-        referencesAllDownloader();
+        //referencesAllDownloader();
     }
 
     public static void proteinsAllDownloader() throws Exception {
@@ -112,7 +114,6 @@ public class downloader {
         }
     }
 
-
     public static void sourcesAllDownloader() throws Exception {
         GETRequest sourcesAll = new GETRequest("https://beta.glyconnect.expasy.org/api/sources-all");
         String json = sourcesAll.getResponse();
@@ -151,6 +152,8 @@ public class downloader {
 
     public static void referencesAllDownloader() throws Exception {
         GETRequest referencesAll = new GETRequest("https://beta.glyconnect.expasy.org/api/references/all");
+        String targetDirectory = "referencesAll";
+
         String json = referencesAll.getResponse();
         JsonArray jsonArray = JsonParser.parseString(json).getAsJsonArray();
 
@@ -168,15 +171,41 @@ public class downloader {
             String oUrl = "https://beta.glyconnect.expasy.org//api/glycosylations?reference="+doi+"&glycan_type=O-Linked";
 
             GETRequest nGET = new GETRequest(nUrl);
-            GETRequest oGET =  new GETRequest(oUrl);
+            GETRequest oGET = new GETRequest(oUrl);
 
-            if (nGET.getResponse().length() > 2) dataToJson(nGET, "referencesAll");
-            if (oGET.getResponse().length() > 2) dataToJson(oGET, "referencesAll");
+            // Parsing the folder before should save uploading times
+            ArrayList<doppelganger> nDoppel = reader.readfiles(targetDirectory, "N-Linked");
+            ArrayList<doppelganger> oDoppel = reader.readfiles(targetDirectory, "O-Linked");
+
+            boolean nNeedsPOST = needsPOST(nGET, targetDirectory, nDoppel);
+            boolean oNeedsPOST = needsPOST(oGET, targetDirectory, oDoppel);
+
+            if ( nGET.getResponse().length() > 2 && nNeedsPOST ) {
+                dataToJson(nGET, targetDirectory);
+            }
+            if ( oGET.getResponse().length() > 2 && oNeedsPOST ) {
+                dataToJson(oGET, targetDirectory);
+            }
         }
     }
 
+    // TODO: 28/06/22 fix needsPOST method to save updating time. 
+    public static boolean needsPOST(GETRequest getRequest, String targetDirectory, ArrayList<doppelganger> doppelgangers) throws Exception {
+        boolean needsPOST = true;
+
+        if ( doppelgangers.size() == 0 ) return needsPOST;
+        else {
+            for ( doppelganger doppelganger : doppelgangers ) {
+                String doppelGET = doppelganger.getGETObject().getGETSection().toString();
+
+                if ( doppelGET.equals(getRequest) ) needsPOST = false;
+            }
+        }
+        return needsPOST;
+    }
+
     public static void dataToJson(GETRequest getObj, String targetDirectory) throws Exception {
-        // TODO: 27/06/22 Implement a way to not send requests if there are no changes between the old and the new version of a file.
+        // TODO: 27/06/22 Implement a way to not send requests if there are no changes between the old and the new version of a file. More details in project notes.
         System.out.println("________________________________________________\nSending POSTRequest");
         POSTRequest postObj = new POSTRequest(getObj);
 
