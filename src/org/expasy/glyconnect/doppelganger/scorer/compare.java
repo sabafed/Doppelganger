@@ -62,13 +62,9 @@ public class compare {
         // Union is the set including elements present in AT LEAST ONE of the original sets ( = the set of all the elements)
         ArrayList<node> AunionB = new ArrayList<>();
 
-        for (node nodeA : setA) {
-            if ( !AunionB.contains(nodeA) ) AunionB.add(nodeA);
-        }
+        AunionB.addAll(setA);
 
-        for (node nodeB : setB) {
-            if ( !AunionB.contains(nodeB) ) AunionB.add(nodeB);
-        }
+        AunionB.addAll(setB);
 
         return AunionB;
     }
@@ -82,7 +78,7 @@ public class compare {
 
         for (link linkA : setA) {
             for (link linkB: setB) {
-                // Intersection is the set including elements present on BOTH original sets
+                // Intersection is the set including elements present in BOTH original sets
                 if ( linkA.equals(linkB) ) {
                     if ( !AintersectionB.contains(linkA) ) AintersectionB.add(linkA);
                 }
@@ -99,13 +95,9 @@ public class compare {
         // Union is the set including elements present in AT LEAST ONE of the original sets ( = the set of all the elements)
         ArrayList<link> AunionB = new ArrayList<>();
 
-        for (link linkA : setA) {
-            if ( !AunionB.contains(linkA) ) AunionB.add(linkA);
-        }
+        AunionB.addAll(setA);
 
-        for (link linkB : setB) {
-            if ( !AunionB.contains(linkB) ) AunionB.add(linkB);
-        }
+        AunionB.addAll(setB);
 
         return AunionB;
     }
@@ -136,11 +128,11 @@ public class compare {
         ArrayList<Character> intersection = new ArrayList<>();
 
         for (Character count : countA.keySet()) {
-            if ( countA.get(count) != 0 && !(intersection.contains(count)) ) intersection.add(count);
+            if ( countA.get(count) != 0 ) intersection.add(count);
         }
 
         for (Character count : countB.keySet()) {
-            if ( countB.get(count) != 0 && !(intersection.contains(count)) ) intersection.add(count);
+            if ( countB.get(count) != 0 ) intersection.add(count);
         }
 
         return intersection;
@@ -150,7 +142,7 @@ public class compare {
         return linkCountsUnion(countA, countB).size();
     }
 
-    public static double jaccardIndex(int interectionSize, int unionSize) {
+    public static double jaccardIndex(int intersectionSize, int unionSize) {
         /* Keeping the old method commented because of nostalgia
         for (int f = 0; f < setA.size(); f++) {
             for (int s = 0; s < setB.size(); s++) {
@@ -172,8 +164,11 @@ public class compare {
         }
        */
 
+        if ( intersectionSize == unionSize ) return 1.0;
+
+        double denominator =  unionSize - intersectionSize;
         // Jaccard index is the size of the intersection over the size of the union of two sets
-        double jaccardIndex = (double)interectionSize / (double) ( unionSize - interectionSize);
+        double jaccardIndex = (double) intersectionSize / denominator;
 
         if ( Double.isNaN(jaccardIndex) ) return  0.0;
 

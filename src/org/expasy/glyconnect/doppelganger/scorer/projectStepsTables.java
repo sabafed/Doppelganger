@@ -31,7 +31,7 @@ public class projectStepsTables {
 
     public static void jaccardIndexToTable(String glycanType, ArrayList<doppelganger> networks, String sourceDirectory) throws FileNotFoundException {
         int minNetworkSize = 5;
-        double minJIScore = 0.6;
+        double minJIScore = 0.600000;
 
         //sourcesAll folder contains subfolders tha could get in the way of file saving
         sourceDirectory = sourceDirectory.replace("/", "_");
@@ -47,14 +47,14 @@ public class projectStepsTables {
 
                 "Nodes Number A (Virtual F)" + "\t" + "Nodes Number B (Virtual F)" + "\t" +
                 "Links Number A (Virtual F)" + "\t" + "Links Number B (Virtual F)" + "\t" +
-                "Real Nodes Overlap" + "\t" + "Real Nodes Jaccard Index" + "\t" +
-                "Real Links Overlap" + "\t" + "Real Links Jaccard Index" + "\t" +
+                "Real Nodes Overlap" + "\t" + "Real Nodes Union" + "\t" + "Real Nodes Jaccard Index" + "\t" +
+                "Real Links Overlap" + "\t" + "Real Links Union" + "\t" + "Real Links Jaccard Index" + "\t" +
 
                 "Virtual Nodes Number A" + "\t" + "Virtual Nodes Number B" + "\t" +
                 "Virtual Links Number A" + "\t" + "Virtual Links Number B" + "\t" +
 
-                "Virtual Nodes Overlap" + "\t" + "Virtual Nodes Jaccard Index" + "\t" +
-                "Virtual Links Overlap" + "\t" + "Virtual Links Jaccard Index" + "\t" +
+                "Virtual Nodes Overlap" + "\t" + "Virtual Nodes Union" + "\t" + "Virtual Nodes Jaccard Index" + "\t" +
+                "Virtual Links Overlap" + "\t" + "Virtual Links Union" + "\t" + "Virtual Links Jaccard Index" + "\t" +
 
                 "Link counts A (virtual T)" + "\t" + "Link counts B (virtual T)" + "\t" +
                 "Link counts Intersection (virtual T)" + "\t" +
@@ -108,14 +108,14 @@ public class projectStepsTables {
 
                                     network1.realNodesNumber() + "\t" + network2.realNodesNumber() + "\t" +
                                     network1.linksNumberVF() + "\t" + network2.linksNumberVF() + "\t" +
-                                    realNodesOverlap + "\t" + realNodesJaccardIndex + "\t" +
-                                    realLinksOverlap + "\t" + realLinksJaccardIndex + "\t" +
+                                    realNodesOverlap + "\t" + realNodesUnion + "\t" +  realNodesJaccardIndex + "\t" +
+                                    realLinksOverlap + "\t" + realLinksUnion + "\t" + realLinksJaccardIndex + "\t" +
 
                                     network1.virtualNodesNumber() + "\t" + network2.virtualNodesNumber() + "\t" +
                                     network1.virtualLinksNumber() + "\t" + network2.virtualLinksNumber() + "\t" +
 
-                                    virtualNodesOverlap + "\t" + virtualNodesJaccardIndex + "\t" +
-                                    virtualLinksOverlap + "\t" + virtualLinksJaccardIndex + "\t" +
+                                    virtualNodesOverlap + "\t" + virtualNodesOverlap + "\t" + virtualNodesJaccardIndex + "\t" +
+                                    virtualLinksOverlap + "\t" + virtualLinksUnion + "\t" + virtualLinksJaccardIndex + "\t" +
 
                                     network1.getLinkCountVT() + "\t" + network2.getLinkCountVT() + "\t" +
                                     compare.linkCountsIntersection(network1.getLinkCountVT(), network2.getLinkCountVT()) + "\t" +
