@@ -4,6 +4,7 @@ import org.expasy.glyconnect.doppelganger.doppelganger.POSTObject.link;
 import org.expasy.glyconnect.doppelganger.doppelganger.POSTObject.node;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class compare {
     public static double cosineSimilarity(double[] vectorA, double[] vectorB) {
@@ -111,6 +112,42 @@ public class compare {
 
     public static int linkUnionSize(ArrayList<link> setA, ArrayList<link> setB) {
         return linkUnion(setA, setB).size();
+    }
+
+    public static ArrayList<Character> linkCountsIntersection(HashMap<Character, Integer> countA, HashMap<Character, Integer> countB) {
+        ArrayList<Character> union = new ArrayList<>();
+
+        for (Character cA : countA.keySet()){
+            for (Character cB: countB.keySet()) {
+                if ( !(union.contains(cA)) && !(union.contains(cB)) ) {
+                    if ( cA.equals(cB) ) union.add(cA);
+                }
+            }
+        }
+
+        return union;
+    }
+
+    public static int linkCountsIntersectionSize(HashMap<Character, Integer> countA, HashMap<Character, Integer> countB) {
+        return linkCountsIntersection(countA,countB).size();
+    }
+
+    public static ArrayList<Character> linkCountsUnion(HashMap<Character, Integer> countA, HashMap<Character, Integer> countB) {
+        ArrayList<Character> intersection = new ArrayList<>();
+
+        for (Character count : countA.keySet()) {
+            if ( countA.get(count) != 0 && !(intersection.contains(count)) ) intersection.add(count);
+        }
+
+        for (Character count : countB.keySet()) {
+            if ( countB.get(count) != 0 && !(intersection.contains(count)) ) intersection.add(count);
+        }
+
+        return intersection;
+    }
+
+    public static int linkCountsUnionSize(HashMap<Character, Integer> countA, HashMap<Character, Integer> countB) {
+        return linkCountsUnion(countA, countB).size();
     }
 
     public static double jaccardIndex(int interectionSize, int unionSize) {
