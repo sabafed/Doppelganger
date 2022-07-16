@@ -23,8 +23,7 @@ public class GETObject {
 
     public int doiless;
 
-    /**     A WAY TO AVOID OBJECT REPETITIONS WILL HAVE TO BE IMPLEMENTED
-     *      https://stackoverflow.com/questions/369512/how-to-compare-objects-by-multiple-fields/20093642#20093642
+    /**
      *  Main constructor
      *
      * @param GETSection The GET response in json format.
@@ -34,8 +33,7 @@ public class GETObject {
         this.GETSection = GETSection;
         this.glycanType = glycanType;
 
-        // I am using elementIndex to be able to derive the protein database (or other tabs) from the referenceDB
-        int elementIndex = 0;
+        int elementIndex = 0; // Keeps track of how many elements are present per object
         for (JsonElement jsonElement : GETSection) {
             JsonObject jsonObject = jsonElement.getAsJsonObject();
 
