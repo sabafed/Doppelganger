@@ -1,5 +1,7 @@
 package org.expasy.glyconnect.doppelganger.scorer;
 
+import org.expasy.glyconnect.doppelganger.doppelganger.GETObject.composition;
+import org.expasy.glyconnect.doppelganger.doppelganger.GETObject.taxonomy;
 import org.expasy.glyconnect.doppelganger.doppelganger.doppelganger;
 import org.expasy.glyconnect.doppelganger.doppelganger.reader;
 
@@ -7,26 +9,53 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.Map;
 
 public class projectStepsTables {
     public static void main(String[] args) throws Exception {
         String glycanType = "N-Linked";
         //String glycanType = "O-Linked";
 
-        //String sourceDirectory = "referencesAll";
-        String sourceDirectory = "proteinsAll";
-        //String sourceDirectory = "diseasesAll"; Also have taxonomy columns
+        String sourceDirectory = "referencesAll";
+        //String sourceDirectory = "proteinsAll";
+        //String sourceDirectory = "diseasesAll";
         //String sourceDirectory = "cellLinesAll";
 
-        //String sourceDirectory = "sourcesAll/cell_component"; Also have taxonomy columns
-        //String sourceDirectory = "sourcesAll/cell_type"; Also have taxonomy columns
-        //String sourceDirectory = "sourcesAll/tissue"; Also have taxonomy columns
-        //String sourceDirectory = "sourcesAll/tissue_plant"; Also have taxonomy columns
+        //String sourceDirectory = "sourcesAll/cell_component";
+        //String sourceDirectory = "sourcesAll/cell_type";
+        //String sourceDirectory = "sourcesAll/tissue";
+        //String sourceDirectory = "sourcesAll/tissue_plant";
 
         ArrayList<doppelganger> networks = reader.readfiles(sourceDirectory, glycanType);
-        //for (doppelganger doppel : networks) System.out.println(doppel.getIdentifier()+" : "+doppel.nodesNumberVF());
-        //for (doppelganger doppel : networks) doppel.attributesChecker();
-        jaccardIndexToTable(glycanType, networks, sourceDirectory);
+
+        //jaccardIndexToTable(glycanType, networks, sourceDirectory);
+
+        System.out.println(sourceDirectory.split("/")[1] +" - "+glycanType);
+        taxaComposCounter(networks);
+    }
+
+    public static void taxaComposCounter(ArrayList<doppelganger> networks ) throws Exception {
+        ArrayList<String> taxa = new ArrayList<>();
+        ArrayList<String> comps = new ArrayList<>();
+
+        for (doppelganger doppelganger: networks) {
+            Map<Integer,taxonomy> taxonomies = doppelganger.getGETObject().getTaxonomies();
+            Map<Integer, composition> compositions = doppelganger.getGETObject().getCompositions();
+
+            for (int t : taxonomies.keySet()) {
+                String taxon = taxonomies.get(t).getCommonName();
+
+                if ( !(taxa.contains(taxon)) ) taxa.add(taxon);
+            }
+
+            for (int c : compositions.keySet()) {
+                String compo = compositions.get(c).getCondensedFormat();
+
+                if ( !(comps.contains(compo)) ) comps.add(compo);
+            }
+        }
+
+        System.out.println("Taxa: "+taxa.size()+" - Compositions: "+comps.size() );
     }
 
     public static void jaccardIndexToTable(String glycanType, ArrayList<doppelganger> networks, String sourceDirectory) throws FileNotFoundException {

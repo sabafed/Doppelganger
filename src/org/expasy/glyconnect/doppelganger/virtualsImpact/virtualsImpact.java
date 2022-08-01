@@ -1,5 +1,6 @@
 package org.expasy.glyconnect.doppelganger.virtualsImpact;
 
+import org.expasy.glyconnect.doppelganger.doppelganger.POSTObject.node;
 import org.expasy.glyconnect.doppelganger.doppelganger.doppelganger;
 import org.expasy.glyconnect.doppelganger.doppelganger.reader;
 
@@ -10,23 +11,33 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.TreeMap;
 
+/**
+ * This class produces data summaries to understand the impact of virtual nodes on the results.
+ */
 public class virtualsImpact {
     public static void main(String[] args) throws Exception {
 
         String sourceDirectory = "proteinsAll";
         //String sourceDirectory = "sourcesAll/tissue";
 
-        //String glycanType = "N-Linked";
-        String glycanType = "O-Linked";
+        String glycanType = "N-Linked";
+        //String glycanType = "O-Linked";
 
         ArrayList<doppelganger> gangers = reader.readfiles(sourceDirectory, glycanType);
 
-        doppelgangersToTable(sourceDirectory, glycanType, gangers);
+        /**
+         * ArrayList references is used to determine the which virtual nodes exists in the database as experimentally proven
+         * and which are created from Compozitor without appearing in the literature.
+         */
+        ArrayList<doppelganger> references = reader.readfiles("referencesAll", glycanType);
+
+        virtualsImpact(gangers,references);
+        //dataSummaryToTable(sourceDirectory, glycanType, gangers);
     }
 
-    public static void doppelgangersToTable(String sourceDirectory, String glycanType, ArrayList<doppelganger> gangers) throws FileNotFoundException {
+    public static void dataSummaryToTable(String sourceDirectory, String glycanType, ArrayList<doppelganger> gangers) throws FileNotFoundException {
         sourceDirectory = sourceDirectory.replace("/", "_");
-        String fileName = sourceDirectory+"_"+glycanType+"_VirtualsImpact_Summary";
+        String fileName = sourceDirectory+"_"+glycanType+"_DataSummary";
         String targetDirectory = "results/virtualsImpact/";
         PrintStream output = new PrintStream(new File(targetDirectory+fileName+"_TEST_"+".tsv"));
         PrintStream console = System.out;
@@ -194,6 +205,36 @@ public class virtualsImpact {
 
         System.setOut(console);
         System.out.println("File '"+fileName+"' has been created in directory '"+targetDirectory+"'");
-        //for ( String k : allTransitionsVT.keySet() ) System.out.print(allTransitionsVT.get(k)+",");
+
+        // TODO: 27/07/22 make a script to return transitions table for VF and VT.
+        /*
+        for ( String k : allTransitionsVF.keySet() ) System.out.print("\""+k+"\""+",");
+
+        System.out.println();
+
+        for ( String k : allTransitionsVF.keySet() ) System.out.print(allTransitionsVF.get(k)+",");
+
+        */
+    }
+
+    public static void virtualsImpact(ArrayList<doppelganger> gangers, ArrayList<doppelganger> references) throws Exception {
+        ArrayList<node> realNodesAll = new ArrayList<>();
+
+        for (doppelganger ref : references) {
+            for (node real : ref.getRealNodes()) {
+                if ( !(realNodesAll.contains(real)) ) realNodesAll.add(real);
+            }
+        }
+
+        for (doppelganger doppel : gangers) {
+            for (node virtual : doppel.getVirtualNodes()) {
+                for (node real : realNodesAll) {
+                    if (virtual.toString().equals(real.toString())) {
+                        System.out.println("Virtual "+ virtual.toString() + " equals to real " +
+                                real.toString());
+                    }
+                }
+            }
+        }
     }
 }
