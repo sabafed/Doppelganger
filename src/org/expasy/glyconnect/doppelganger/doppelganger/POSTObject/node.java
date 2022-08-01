@@ -269,12 +269,14 @@ public class node {
                 Objects.equals(glyconnectFormat, node.glyconnectFormat) &&
                 Objects.equals(byonicFormat, node.byonicFormat) &&
                 Objects.equals(condensedFormat, node.condensedFormat) &&
+                /*
                 Objects.equals(averageMass, node.averageMass) &&
                 Objects.equals(monoisotopicMass, node.monoisotopicMass) &&
                 Objects.equals(label, node.label) &&
                 Objects.equals(glycanType, node.glycanType) &&
                 Objects.equals(structures, node.structures) &&
                 Objects.equals(references, node.references) &&
+                */
                 Objects.equals(properties, node.properties);
     }
 
