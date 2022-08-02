@@ -403,6 +403,11 @@ public class doppelganger {
                 linkFreqVF, clusterRepresentative);
     }
 
+    @Override
+    public String toString() {
+        return this.identifier;
+    }
+
     public void attributesChecker() {
         System.out.println(this.getIdentifier());
 

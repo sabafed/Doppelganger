@@ -20,8 +20,8 @@ public class virtualsImpact {
         String sourceDirectory = "proteinsAll";
         //String sourceDirectory = "sourcesAll/tissue";
 
-        String glycanType = "N-Linked";
-        //String glycanType = "O-Linked";
+        //String glycanType = "N-Linked";
+        String glycanType = "O-Linked";
 
         ArrayList<doppelganger> gangers = reader.readfiles(sourceDirectory, glycanType);
 
@@ -218,23 +218,55 @@ public class virtualsImpact {
     }
 
     public static void virtualsImpact(ArrayList<doppelganger> gangers, ArrayList<doppelganger> references) throws Exception {
-        ArrayList<node> realNodesAll = new ArrayList<>();
+        HashMap<node,ArrayList<doppelganger>> realNodesAll = new HashMap<>();
+        HashMap<node,ArrayList<doppelganger>> virtualNodesAll = new HashMap<>();
+
+        ArrayList<String> virtualsCreated  = new ArrayList<>();
+        ArrayList<String> virtualsExisting = new ArrayList<>();
 
         for (doppelganger ref : references) {
             for (node real : ref.getRealNodes()) {
-                if ( !(realNodesAll.contains(real)) ) realNodesAll.add(real);
+                realNodesAll.computeIfAbsent(real, k -> new ArrayList<doppelganger>());
+                if ( !(realNodesAll.get(real).contains(ref)) ) realNodesAll.get(real).add(ref);
+                //System.out.println(realNodesAll.get(real));//DEBUG
             }
         }
 
         for (doppelganger doppel : gangers) {
             for (node virtual : doppel.getVirtualNodes()) {
-                for (node real : realNodesAll) {
-                    if (virtual.toString().equals(real.toString())) {
-                        System.out.println("Virtual "+ virtual.toString() + " equals to real " +
-                                real.toString());
-                    }
+                virtualNodesAll.computeIfAbsent(virtual, k -> new ArrayList<doppelganger>());
+
+                if ( !(virtualNodesAll.get(virtual).contains(doppel)) )
+                    virtualNodesAll.get(virtual).add(doppel);
+            }
+        }
+
+        for (node real : realNodesAll.keySet()){
+            for (node virtual : virtualNodesAll.keySet()){
+                if ( virtual.getCondensedFormat().equals(real.getCondensedFormat()) ) {
+                    if ( !(virtualsExisting.contains(real.toString())) )
+                        virtualsExisting.add(real.toString());
+                }
+                else {
+                    if ( !virtualsCreated.contains(real.toString()) )
+                        virtualsCreated.add(real.toString());
                 }
             }
         }
+
+        virtualsCreated.removeAll(virtualsExisting);
+
+        System.out.println("Real nodes  in referencesAll database: "+realNodesAll.size());
+        System.out.println("Virtual nodes total: "+virtualNodesAll.size());
+
+        System.out.println("Real nodes labeled as virtuals: " + virtualsExisting.size());
+        System.out.println("Virtuals created by Compozitor: " + virtualsCreated.size());
+
+        for (String ex : virtualsExisting) {
+            for (String cr : virtualsCreated) {
+                if ( ex.equals(cr) ) System.out.println(cr + " = "+ ex +"\n");
+            }
+        }
+
     }
 }
