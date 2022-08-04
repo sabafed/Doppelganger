@@ -1,71 +1,25 @@
-package org.expasy.glyconnect.doppelganger.scorer;
+package org.expasy.glyconnect.doppelganger.QA;
 
-import org.expasy.glyconnect.doppelganger.doppelganger.GETObject.composition;
-import org.expasy.glyconnect.doppelganger.doppelganger.GETObject.taxonomy;
 import org.expasy.glyconnect.doppelganger.doppelganger.doppelganger;
-import org.expasy.glyconnect.doppelganger.doppelganger.reader;
+import org.expasy.glyconnect.doppelganger.scorer.compare;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
 import java.util.ArrayList;
-import java.util.Map;
 
-public class projectStepsTables {
-    public static void main(String[] args) throws Exception {
-        String glycanType = "N-Linked";
-        //String glycanType = "O-Linked";
-
-        String sourceDirectory = "referencesAll";
-        //String sourceDirectory = "proteinsAll";
-        //String sourceDirectory = "diseasesAll";
-        //String sourceDirectory = "cellLinesAll";
-
-        //String sourceDirectory = "sourcesAll/cell_component";
-        //String sourceDirectory = "sourcesAll/cell_type";
-        //String sourceDirectory = "sourcesAll/tissue";
-        //String sourceDirectory = "sourcesAll/tissue_plant";
-
-        ArrayList<doppelganger> networks = reader.readfiles(sourceDirectory, glycanType);
-
-        //jaccardIndexToTable(glycanType, networks, sourceDirectory);
-
-        System.out.println(sourceDirectory.split("/")[1] +" - "+glycanType);
-        taxaComposCounter(networks);
-    }
-
-    public static void taxaComposCounter(ArrayList<doppelganger> networks ) throws Exception {
-        ArrayList<String> taxa = new ArrayList<>();
-        ArrayList<String> comps = new ArrayList<>();
-
-        for (doppelganger doppelganger: networks) {
-            Map<Integer,taxonomy> taxonomies = doppelganger.getGETObject().getTaxonomies();
-            Map<Integer, composition> compositions = doppelganger.getGETObject().getCompositions();
-
-            for (int t : taxonomies.keySet()) {
-                String taxon = taxonomies.get(t).getCommonName();
-
-                if ( !(taxa.contains(taxon)) ) taxa.add(taxon);
-            }
-
-            for (int c : compositions.keySet()) {
-                String compo = compositions.get(c).getCondensedFormat();
-
-                if ( !(comps.contains(compo)) ) comps.add(compo);
-            }
-        }
-
-        System.out.println("Taxa: "+taxa.size()+" - Compositions: "+comps.size() );
-    }
-
+/**
+ * This class produces data on the quality of the results and writes them to a file.
+ */
+public class QAExport {
     public static void jaccardIndexToTable(String glycanType, ArrayList<doppelganger> networks, String sourceDirectory) throws FileNotFoundException {
         int minNetworkSize = 5;
         double minJIScore = 0.600000;
 
         //sourcesAll folder contains subfolders tha could get in the way of file saving
         sourceDirectory = sourceDirectory.replace("/", "_");
-        String targetDirectory = "results/";
-        String fileName = sourceDirectory + "_" + glycanType + "_minSize" + minNetworkSize + "_JaccardIndex";
+        String targetDirectory = "results/steps";
+        String fileName = sourceDirectory + "_" + glycanType + "_minSize" + minNetworkSize + "_JaccardIndex0.6";
         File outFile = new File(targetDirectory + fileName + "_TEST_" + ".tsv");
         PrintStream output = new PrintStream(outFile);
         PrintStream console = System.out;
@@ -130,8 +84,8 @@ public class projectStepsTables {
 
                         if ( realNodesJaccardIndex > minJIScore ||
                                 realLinksJaccardIndex > minJIScore ||
-                                    virtualNodesJaccardIndex > minJIScore ||
-                                        virtualLinksJaccardIndex > minJIScore ) {
+                                virtualNodesJaccardIndex > minJIScore ||
+                                virtualLinksJaccardIndex > minJIScore ) {
                             String body = network1.getIdentifier() + "\t" + network2.getIdentifier() + "\t" +
                                     network1.getGETObject().getTaxonomies().get(0).getSpecies() + "\t" + network2.getGETObject().getTaxonomies().get(0).getSpecies() + "\t" +
 
