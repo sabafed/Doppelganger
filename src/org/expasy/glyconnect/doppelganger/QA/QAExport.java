@@ -2,6 +2,7 @@ package org.expasy.glyconnect.doppelganger.QA;
 
 import org.expasy.glyconnect.doppelganger.doppelganger.doppelganger;
 import org.expasy.glyconnect.doppelganger.scorer.compare;
+import org.expasy.glyconnect.doppelganger.scorer.helper;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -12,44 +13,21 @@ import java.util.ArrayList;
  * This class produces data on the quality of the results and writes them to a file.
  */
 public class QAExport {
-    public static void jaccardIndexToTable(String glycanType, ArrayList<doppelganger> networks, String sourceDirectory) throws FileNotFoundException {
+    public static void jaccardIndexToTable(String glycanType, ArrayList<doppelganger> networks,
+                                           String sourceDirectory, String method) throws FileNotFoundException {
         int minNetworkSize = 5;
-        double minJIScore = 0.600000;
+        double minJIScore = 0.000000;
 
         //sourcesAll folder contains subfolders tha could get in the way of file saving
         sourceDirectory = sourceDirectory.replace("/", "_");
-        String targetDirectory = "results/steps";
-        String fileName = sourceDirectory + "_" + glycanType + "_minSize" + minNetworkSize + "_JaccardIndex0.6";
+        String targetDirectory = "results/steps/";
+        String fileName = sourceDirectory + "_" + glycanType + "_minSize" + minNetworkSize + "_"+method+minJIScore;
         File outFile = new File(targetDirectory + fileName + "_TEST_" + ".tsv");
         PrintStream output = new PrintStream(outFile);
         PrintStream console = System.out;
         System.setOut(output);
 
-        String header = "Network A" + "\t" + "Network B" + "\t" +
-                "Taxonomy A" + "\t" + "Taxonomy B" + "\t" +
-
-                "Nodes Number A (Virtual F)" + "\t" + "Nodes Number B (Virtual F)" + "\t" +
-                "Links Number A (Virtual F)" + "\t" + "Links Number B (Virtual F)" + "\t" +
-                "Real Nodes Overlap" + "\t" + "Real Nodes Union" + "\t" + "Real Nodes Jaccard Index" + "\t" +
-                "Real Links Overlap" + "\t" + "Real Links Union" + "\t" + "Real Links Jaccard Index" + "\t" +
-
-                "Virtual Nodes Number A" + "\t" + "Virtual Nodes Number B" + "\t" +
-                "Virtual Links Number A" + "\t" + "Virtual Links Number B" + "\t" +
-
-                "Virtual Nodes Overlap" + "\t" + "Virtual Nodes Union" + "\t" + "Virtual Nodes Jaccard Index" + "\t" +
-                "Virtual Links Overlap" + "\t" + "Virtual Links Union" + "\t" + "Virtual Links Jaccard Index" + "\t" +
-
-                "Link counts A (virtual T)" + "\t" + "Link counts B (virtual T)" + "\t" +
-                "Link counts Intersection (virtual T)" + "\t" +
-                "Link counts Union (virtual T)" + "\t" +
-                "Link counts Jaccard Index (virtual T)" + "\t" +
-                "Frequencies A (virtual T)" + "\t" + "Frequencies B (virtual T)" + "\t" +
-
-                "Link counts A (virtual F)" + "\t" + "Link counts B (virtual F)" + "\t" +
-                "Link counts Intersection (virtual F)" + "\t" +
-                "Link counts Union (virtual F)" + "\t" +
-                "Link counts Jaccard Index (virtual F)" + "\t" +
-                "Frequencies A (virtual F)" + "\t" + "Frequencies B (virtual F)";
+        String header = makeHeader(method);
 
         System.out.println(header);
 
@@ -59,7 +37,7 @@ public class QAExport {
                     if ( networks.get(f).realNodesNumber() > minNetworkSize && networks.get(s).realNodesNumber() > minNetworkSize) {
                         doppelganger network1 = networks.get(f);
                         doppelganger network2 = networks.get(s);
-
+/*
                         int realNodesOverlap =
                                 compare.nodeInteresectionSize(network1.getRealNodes(), network2.getRealNodes());
                         int realNodesUnion =
@@ -82,49 +60,219 @@ public class QAExport {
                                 compare.linkUnionSize(network1.getVirtualLinks(), network2.getVirtualLinks());
                         double virtualLinksJaccardIndex = compare.jaccardIndex(virtualLinksOverlap, virtualLinksUnion);
 
+
                         if ( realNodesJaccardIndex > minJIScore ||
                                 realLinksJaccardIndex > minJIScore ||
                                 virtualNodesJaccardIndex > minJIScore ||
                                 virtualLinksJaccardIndex > minJIScore ) {
-                            String body = network1.getIdentifier() + "\t" + network2.getIdentifier() + "\t" +
-                                    network1.getGETObject().getTaxonomies().get(0).getSpecies() + "\t" + network2.getGETObject().getTaxonomies().get(0).getSpecies() + "\t" +
 
-                                    network1.realNodesNumber() + "\t" + network2.realNodesNumber() + "\t" +
-                                    network1.linksNumberVF() + "\t" + network2.linksNumberVF() + "\t" +
-                                    realNodesOverlap + "\t" + realNodesUnion + "\t" +  realNodesJaccardIndex + "\t" +
-                                    realLinksOverlap + "\t" + realLinksUnion + "\t" + realLinksJaccardIndex + "\t" +
-
-                                    network1.virtualNodesNumber() + "\t" + network2.virtualNodesNumber() + "\t" +
-                                    network1.virtualLinksNumber() + "\t" + network2.virtualLinksNumber() + "\t" +
-
-                                    virtualNodesOverlap + "\t" + virtualNodesOverlap + "\t" + virtualNodesJaccardIndex + "\t" +
-                                    virtualLinksOverlap + "\t" + virtualLinksUnion + "\t" + virtualLinksJaccardIndex + "\t" +
-
-                                    network1.getLinkCountVT() + "\t" + network2.getLinkCountVT() + "\t" +
-                                    compare.linkCountsIntersection(network1.getLinkCountVT(), network2.getLinkCountVT()) + "\t" +
-                                    compare.linkCountsUnion(network1.getLinkCountVT(), network2.getLinkCountVT()) + "\t" +
-
-                                    compare.jaccardIndex(compare.linkCountsIntersectionSize(network1.getLinkCountVT(), network2.getLinkCountVT()),
-                                            compare.linkCountsUnionSize(network1.getLinkCountVT(), network2.getLinkCountVT())) + "\t" +
-
-                                    network1.getLinkFreqVT() + "\t" + network2.getLinkFreqVT() + "\t" +
-
-                                    network1.getLinkCountVF() + "\t" + network2.getLinkCountVF() + "\t" +
-                                    compare.linkCountsIntersection(network1.getLinkCountVF(), network2.getLinkCountVF()) + "\t" +
-                                    compare.linkCountsUnion(network1.getLinkCountVF(), network2.getLinkCountVF())  + "\t" +
-
-                                    compare.jaccardIndex(compare.linkCountsIntersectionSize(network1.getLinkCountVF(), network2.getLinkCountVF()),
-                                            compare.linkCountsUnionSize(network1.getLinkCountVF(), network2.getLinkCountVF())) + "\t" +
-
-                                    network1.getLinkFreqVF() + "\t" + network2.getLinkFreqVF() + "\t";
+ */
+                            String body = QAExport.makeBody(network1, network2, method);
 
                             System.out.println(body);
-                        }
+                       // }
                     }
                 }
             }
         }
         System.setOut(console);
         System.out.println("File '" + fileName + "' has been created in directory '" + targetDirectory + "'");
+    }
+
+    public static String makeHeader(String method) {
+        String identifiers = "Network A" + "\t" + "Network B" + "\t"+
+                "Taxonomy A" + "\t" + "Taxonomy B" + "\t";
+
+        String linkCosSim = "Link Cosine Similarity (virtual T)" + "\t" + "Link Cosine Similarity (virtual F)" + "\t";
+
+        String profileCosSim = "Profile Cosine Similarity (virtual T)" + "\t" + "Profile Cosine Similarity (virtual F)" + "\t";
+
+        String realNodesLinks = "Nodes Number A (Virtual F)" + "\t" + "Nodes Number B (Virtual F)" + "\t" +
+                "Links Number A (Virtual F)" + "\t" + "Links Number B (Virtual F)" + "\t";
+
+        String realJaccardIndex = "Real Nodes Overlap" + "\t" + "Real Nodes Jaccard Index" + "\t" +
+                "Real Links Overlap" + "\t" + "Real Links Jaccard Index" + "\t";
+
+        String density = "Density A (Virtual T)" + "\t" + "Density B (Virtual T)" + "\t" +
+                "Density Difference (Virtual T)" + "\t" + "Density Ratio (Virtual T)" + "\t" +
+                "Density A (Virtual F)" + "\t" + "Density B (Virtual F)" + "\t" +
+                "Density Difference (Virtual F)" + "\t" + "Density Ratio (Virtual F)" + "\t";
+
+        String virtualNodesLinks = "Virtual Nodes Number A" + "\t" + "Virtual Nodes Number B" + "\t" +
+                "Virtual Links Number A" + "\t" + "Virtual Links Number B" + "\t";
+
+        String virtualJaccardIndex = "Virtual Nodes Overlap" + "\t" + "Virtual Nodes Jaccard Index" + "\t" +
+                "Virtual Links Overlap" + "\t" + "Virtual Links Jaccard Index" + "\t";
+
+        String linkStrings = "Links String A (virtual T)" + "\t" + "Links String B (virtual T)" + "\t" +
+                "Links String A (virtual F)" + "\t" + "Links String B (virtual F)" + "\t";
+
+        String linkTransitions = "Link Transitions A (virtual T)" + "\t" + "Link Transitions A (virtual F)" + "\t" +
+                "Link Transitions B (virtual T)" + "\t" + "Link Transitions B (virtual F)" + "\t";
+
+        String linkCountsFreqs = "Link counts A (virtual T)" + "\t" + "Link counts B (virtual T)" + "\t" +
+                "Frequencies A (virtual T)" + "\t" + "Frequencies B (virtual T)" + "\t" +
+
+                "Link counts A (virtual F)" + "\t" + "Link counts B (virtual F)" + "\t" +
+                "Frequencies A (virtual F)" + "\t" + "Frequencies B (virtual F)";
+
+        String header = identifiers;
+
+        switch (method) {
+            case "linkCosSim" ->
+                    header += linkCosSim + realNodesLinks + virtualNodesLinks + linkStrings + linkTransitions +
+                            linkCountsFreqs;
+            case "profileCosSim" ->
+                    header += profileCosSim + realNodesLinks + virtualNodesLinks + linkStrings + linkTransitions +
+                            linkCountsFreqs;
+            case "jaccardIndex" ->
+                    header += realNodesLinks + realJaccardIndex + virtualNodesLinks + virtualJaccardIndex + linkStrings +
+                            linkTransitions + linkCountsFreqs;
+            case "density" ->
+                    header += realNodesLinks + virtualNodesLinks + density + linkStrings + linkTransitions + linkCountsFreqs;
+            case "all" ->
+                header += linkCosSim + profileCosSim + realNodesLinks+ realJaccardIndex + density + virtualNodesLinks +
+                        virtualJaccardIndex + linkStrings + linkTransitions + linkCountsFreqs;
+            default -> {
+                System.out.println("Invalid method: " + method);
+                System.exit(1);
+            }
+        }
+        return header;
+    }
+
+    public static String makeBody(doppelganger network1, doppelganger network2, String method) {
+        String identifiers = network1.getIdentifier() + "\t" + network2.getIdentifier() + "\t" +
+                network1.getGETObject().getTaxonomies().get(0).getSpecies() + "\t" +
+                network2.getGETObject().getTaxonomies().get(0).getSpecies() + "\t";
+
+        double linkCosSimVT = 0.0;
+        double linkCosSimVF = 0.0;
+
+        double propCosSimVT = 0.0;
+        double propCosSimVF = 0.0;
+
+        String realNodesLinks = network1.realNodesNumber() + "\t" + network2.realNodesNumber() + "\t" +
+                network1.linksNumberVF() + "\t" + network2.linksNumberVF() +"\t";
+
+        int realNodesOverlap = 0;
+        int realNodesUnion = 0;
+        double realNodesJaccardIndex = 0.0;
+
+        int realLinksOverlap = 0;
+        int realLinksUnion = 0;
+        double realLinksJaccardIndex = 0.0;
+
+        String densityVT = network1.getNetworkDensityVT() + "\t" + network2.getNetworkDensityVT() + "\t" ;
+        double densityDiffVT = 0.0;
+        double densityRatioVT = 0.0;
+
+        String densityVF =  network1.getNetworkDensityVF() + "\t" + network2.getNetworkDensityVF() + "\t";
+        double densityDiffVF = 0.0;
+        double densityRatioVF = 0.0;
+
+        String virtualNodesLinks =  network1.virtualNodesNumber() + "\t" + network2.virtualNodesNumber() + "\t" +
+                network1.virtualLinksNumber() + "\t" + network2.virtualLinksNumber() + "\t";
+
+        int virtualNodesOverlap = 0;
+        int virtualNodesUnion = 0;
+        double virtualNodesJaccardIndex = 0.0;
+
+        int virtualLinksOverlap = 0;
+        int virtualLinksUnion = 0;
+        double virtualLinksJaccardIndex = 0.0;
+
+        String linkStrings = network1.getLinkStringVT() + "\t" + network2.getLinkStringVT() + "\t" +
+                network1.getLinkStringVF() + "\t" + network2.getLinkStringVF() + "\t";
+
+        String linkTransitions = network1.getLinkTransitionsVT() + "\t" + network1.getLinkTransitionsVF() + "\t" +
+                network2.getLinkTransitionsVT() + "\t" + network2.getLinkTransitionsVF() + "\t";
+
+        String linkCountsFreqs = network1.getLinkCountVT() + "\t" + network2.getLinkCountVT() + "\t" +
+                network1.getLinkFreqVT() + "\t" + network2.getLinkFreqVT() + "\t" +
+
+                network1.getLinkCountVF() + "\t" + network2.getLinkCountVF() + "\t" +
+                network1.getLinkFreqVF() + "\t" + network2.getLinkFreqVF() + "\t";
+
+        String body = identifiers;
+
+        if ( method.equals("linkCosSim") || method.equals("all") ) {
+            linkCosSimVT = compare.cosineSimilarity(
+                    helper.frequenciesAsDouble(network1.getLinkFreqVT()),
+                    helper.frequenciesAsDouble(network2.getLinkFreqVT()));
+
+            linkCosSimVF = compare.cosineSimilarity(
+                    helper.frequenciesAsDouble(network1.getLinkFreqVF()),
+                    helper.frequenciesAsDouble(network2.getLinkFreqVF()));
+
+            body += linkCosSimVT + "\t" + linkCosSimVF + "\t" + realNodesLinks + virtualNodesLinks
+                    + linkStrings + linkTransitions + linkCountsFreqs;
+        }
+        if ( method.equals("profileCosSim") || method.equals("all") ) {
+            propCosSimVT = compare.cosineSimilarity(
+                    helper.frequenciesAsDouble(helper.freqsStringToChar(network1.getPropertiesFreqVT())),
+                    helper.frequenciesAsDouble(helper.freqsStringToChar(network2.getPropertiesFreqVF())));
+
+            propCosSimVF = compare.cosineSimilarity(
+                    helper.frequenciesAsDouble(helper.freqsStringToChar(network1.getPropertiesFreqVF())),
+                    helper.frequenciesAsDouble(helper.freqsStringToChar(network2.getPropertiesFreqVF())));
+
+            body += propCosSimVT + "\t" + propCosSimVF + "\t" + realNodesLinks + virtualNodesLinks
+                    + linkStrings + linkTransitions + linkCountsFreqs;
+        }
+        if ( method.equals("jaccardIndex") || method.equals("all") ) {
+            realNodesOverlap = compare.nodeInteresectionSize(
+                    network1.getRealNodes(),
+                    network2.getRealNodes());
+            realNodesUnion = compare.nodeUnionSize(
+                    network1.getRealNodes(),
+                    network2.getRealNodes());
+            realNodesJaccardIndex = compare.jaccardIndex(realNodesOverlap, realNodesUnion);
+
+            realLinksOverlap = compare.linkInteresectionSize(network1.getRealLinks(), network2.getRealLinks());
+            realLinksUnion = compare.linkUnionSize(network1.getRealLinks(), network2.getRealLinks());
+            realLinksJaccardIndex = compare.jaccardIndex(realLinksOverlap, realLinksUnion);
+
+            virtualNodesOverlap = compare.nodeInteresectionSize(
+                    network1.getVirtualNodes(),
+                    network2.getVirtualNodes());
+            virtualNodesUnion = compare.nodeUnionSize(network1.getVirtualNodes(), network2.getVirtualNodes());
+            virtualNodesJaccardIndex = compare.jaccardIndex(virtualNodesOverlap, virtualNodesUnion);
+
+            virtualLinksOverlap = compare.linkInteresectionSize(network1.getVirtualLinks(), network2.getVirtualLinks());
+            virtualLinksUnion = compare.linkUnionSize(network1.getVirtualLinks(), network2.getVirtualLinks());
+            virtualLinksJaccardIndex = compare.jaccardIndex(virtualLinksOverlap, virtualLinksUnion);
+
+            body += realNodesLinks + realNodesOverlap + "\t" + realNodesJaccardIndex + "\t" +
+                    realLinksOverlap + "\t" + realLinksJaccardIndex + "\t" +
+                    virtualNodesLinks + virtualNodesOverlap + "\t" + virtualNodesJaccardIndex + "\t" +
+                    virtualLinksOverlap + "\t" + virtualLinksJaccardIndex + "\t" +
+                    linkStrings + linkTransitions + linkCountsFreqs;
+        }
+        if ( method.equals("density") || method.equals("all") ){
+            densityDiffVT = compare.densityDifference(network1.getNetworkDensityVT(), network2.getNetworkDensityVT());
+            densityRatioVT = compare.densityRatio(network1.getNetworkDensityVT(), network2.getNetworkDensityVT());
+
+            densityRatioVF = compare.densityRatio(network1.getNetworkDensityVF(), network2.getNetworkDensityVF());
+            densityDiffVF = compare.densityDifference(network1.getNetworkDensityVF(), network2.getNetworkDensityVF());
+
+            body += realNodesLinks + virtualNodesLinks +
+                    densityVT + densityDiffVT + "\t" + densityRatioVT + "\t" +
+                    densityVF + densityDiffVF + "\t" + densityRatioVF + "\t" +
+                    linkStrings + linkTransitions + linkCountsFreqs;
+        }
+
+        if ( method.equals("all") ) {
+            body += linkCosSimVT + "\t" + linkCosSimVF + "\t" + propCosSimVT + "\t" + propCosSimVF + "\t" +
+                    realNodesLinks + realNodesOverlap + "\t" + realNodesJaccardIndex + "\t" +
+                    realLinksOverlap + "\t" + realLinksJaccardIndex + "\t" +
+                    densityVT + densityDiffVT + "\t" + densityRatioVT + "\t" +
+                    densityVF + densityDiffVF + "\t" + densityRatioVF + "\t" +
+                    virtualNodesLinks + virtualNodesOverlap + "\t" + virtualNodesJaccardIndex + "\t" +
+                    virtualLinksOverlap + "\t" + virtualLinksJaccardIndex + "\t" +
+                    linkStrings + linkTransitions + linkCountsFreqs;
+        }
+
+        return body;
     }
 }

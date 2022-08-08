@@ -134,7 +134,7 @@ public class scorer {
                         double densityRatioVF = compare.densityRatio(network1.getNetworkDensityVF(), network2.getNetworkDensityVF());
 
                         if ( densityDiffVT < densityDifferenceMax && densityDiffVF < densityDifferenceMax ) {
-                        //if ( densityRatioVT < 1.5 && densityRatioVT > 0.95 && densityDiffVF < 1.5 && densityDiffVF > 0.95 ) {
+                        //if ( densityRatioVT < 1.05 && densityRatioVT > 0.95 && densityDiffVF < 1.5 && densityDiffVF > 0.95 ) {
                             double linkCosSimVT = compare.cosineSimilarity( helper.frequenciesAsDouble(network1.getLinkFreqVT()),
                                     helper.frequenciesAsDouble(network2.getLinkFreqVT()) );
 
