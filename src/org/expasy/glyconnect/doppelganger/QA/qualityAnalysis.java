@@ -46,9 +46,22 @@ public class qualityAnalysis {
         overview.put(cellLinesAll, glycanType);
         overview.put(referencesAll, glycanType);
 
+        /*
+        QAExport.jaccardIndexToTable(
+                nLinked,
+                reader.readfiles(proteinsAll,nLinked),
+                proteinsAll);
+        */
+
         //dataOverview(overview);
         //importQAComparisons(nLinked,proteinsAll,"Wanted");
         //importResultsTable(proteinsAll,nLinked,"JaccardIndex");
+
+
+
+        //ArrayList<doppelganger> doppelgangers = reader.readfiles(proteinsAll,nLinked);
+
+        //QAExport.jaccardIndexToTable(nLinked,doppelgangers,proteinsAll,"jaccardIndex");
 
         statistics();
     }
@@ -117,7 +130,7 @@ public class qualityAnalysis {
         //{identifierA~identifierB, nodesScore~linksScore}
         HashMap<String,String> results = new HashMap<>();
 
-        String compareTo = dataset+"_"+type+"_minSize5_"+method+".tsv";
+        String compareTo = dataset+"_"+type+"_minSize5_"+method+"0.0_TEST_"+".tsv";
 
         File compareFile = new File("/home/federico/Documenti/Thesis/Doppelganger/results/steps/"+compareTo);
 
@@ -138,29 +151,66 @@ public class qualityAnalysis {
 
     public static void statistics() throws Exception {
         String dataset = "proteinsAll";
-        String type = "N-Linked";
-        String method = "JaccardIndex";
-        String wanted = "Unwanted";
+        String method = "jaccardIndex";
 
-        HashMap<String,String> results = importResultsTable(dataset, type, method);
+        HashMap<String,String> nResults = importResultsTable(dataset, "N-Linked", method);
+        //HashMap<String,String> oResults = importResultsTable(dataset, "O-Linked", method);
 
-        ArrayList<String> comps = importQAComparisons(type, dataset, wanted );
+        ArrayList<String> nCompsWanted = importQAComparisons("N-Linked", dataset, "Wanted");
+        ArrayList<String> nCompsUnwanted = importQAComparisons("N-Linked", dataset, "Unwanted");
 
-        int counter = 0;
+        //ArrayList<String> oCompsWanted = importQAComparisons("O-Linked", dataset, "Wanted");
+        //ArrayList<String> oCompsUnwanted = importQAComparisons("O-Linked", dataset, "Unwanted");
 
-        for (String res : results.keySet()) {
-            for (String comp : comps) {
-                if ( res.equals(comp) ) {
-                    counter++;
-                    System.out.println(counter+" - " + wanted + " comparison: " + comp +
+        int nWantedCount = 0;
+        int nUnwantedCount = 0;
+
+        ArrayList<String> nWantedFound =  new ArrayList<>();
+        ArrayList<String> nUnwantedFound = new ArrayList<>();
+
+        for (String res : nResults.keySet()) {
+            for (String comp : nCompsWanted) {
+                if ( comp.equals(res) ) {
+                    if ( !(nWantedFound.contains(comp)) ) nWantedFound.add(comp);
+
+                    nWantedCount++;
+                    System.out.println(nWantedCount +" - wanted comparison: " + comp +
                             "\nretrieved with method: " + method +
-                            "\nscores: " + results.get(res) + "\n");
+                            "\nscores: " + nResults.get(res) + "\n");
                 }
             }
         }
 
-        System.out.println("Total "+wanted+" comparisons: "+ comps.size()+
-                "\nComparisons retrieved: "+counter+
-                "\nComparisons missed: "+(comps.size()-counter));
+        for (String res : nResults.keySet()) {
+            for (String comp : nCompsUnwanted) {
+                if (res.equals(comp)) {
+                    if ( !(nUnwantedFound.contains(comp)) ) nUnwantedFound.add(comp);
+
+                    nUnwantedCount++;
+                    System.out.println(nUnwantedCount + " - unwanted comparison: " + comp +
+                            "\nretrieved with method: " + method +
+                            "\nscores: " + nResults.get(res) + "\n");
+                }
+            }
+        }
+
+        ArrayList<String> nWantedMissed = new ArrayList<>(nCompsWanted);
+        nWantedMissed.removeAll(nWantedFound);
+
+        ArrayList<String> nUnwantedMissed = new ArrayList<>(nCompsUnwanted);
+        nUnwantedMissed.removeAll(nUnwantedFound);
+
+        System.out.println("__________________________________________________");
+        System.out.println("Total wanted comparisons: " + nCompsWanted.size() +
+                "\nComparisons retrieved: " + nWantedCount +
+                "\nComparisons missed: " + (nCompsWanted.size() - nWantedCount) +
+                "\n" + nWantedMissed );
+        System.out.println("__________________________________________________");
+        System.out.println("Total unwanted comparisons: " + nCompsUnwanted.size() +
+                "\nComparisons retrieved: " + nUnwantedCount +
+                "\nComparisons missed: " + (nCompsUnwanted.size() - nUnwantedCount) +
+                "\n" + nUnwantedMissed );
+        System.out.println("__________________________________________________");
+        //int oWantedFound = 0;
     }
 }
