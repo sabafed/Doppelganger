@@ -5,9 +5,6 @@ import org.expasy.glyconnect.doppelganger.doppelganger.GETObject.taxonomy;
 import org.expasy.glyconnect.doppelganger.doppelganger.doppelganger;
 import org.expasy.glyconnect.doppelganger.doppelganger.reader;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -104,63 +101,20 @@ public class qualityAnalysis {
         }
     }
 
-    public static ArrayList<String> importQAComparisons(String type, String dataset, String wanted) throws Exception {
-        ArrayList<String> comps = new ArrayList<>();
 
-        String compareTo = type+"_"+dataset.replace("All","List")+wanted+".tsv";
-
-        File compareFile = new File("/home/federico/Documenti/Thesis/Doppelganger/dataAll/misc/QA/"+compareTo);
-
-        FileReader importFR = new FileReader(compareFile);
-        BufferedReader importBR = new BufferedReader(importFR);
-
-        String line;
-
-        while ( (line = importBR.readLine()) != null ) {
-            String[] comparison = line.split("\\t");
-            String comp = comparison[0]+"~"+comparison[1];
-
-            if ( !(comps.contains(comp)) ) comps.add(comp);
-        }
-
-        return comps;
-    }
-
-    public static HashMap<String,String> importResultsTable(String dataset, String type, String method) throws Exception {
-        //{identifierA~identifierB, nodesScore~linksScore}
-        HashMap<String,String> results = new HashMap<>();
-
-        String compareTo = dataset+"_"+type+"_minSize5_"+method+"0.0_TEST_"+".tsv";
-
-        File compareFile = new File("/home/federico/Documenti/Thesis/Doppelganger/results/steps/"+compareTo);
-
-        FileReader importFR = new FileReader(compareFile);
-        BufferedReader importBR = new BufferedReader(importFR);
-
-        String line = importBR.readLine(); // Skipping header row
-
-        while ( (line = importBR.readLine()) != null ) {
-            String[] comparison = line.split("\\t");
-            String comp = comparison[0]+"~"+comparison[1];
-            String nodesLinksVals = comparison[10]+"~"+comparison[13];
-            results.computeIfAbsent(comp, k -> nodesLinksVals);
-        }
-
-        return results;
-    }
 
     public static void statistics() throws Exception {
         String dataset = "proteinsAll";
         String method = "jaccardIndex";
 
-        HashMap<String,String> nResults = importResultsTable(dataset, "N-Linked", method);
-        //HashMap<String,String> oResults = importResultsTable(dataset, "O-Linked", method);
+        HashMap<String,String> nResults = QAImport.importResultsTable(dataset, "N-Linked", method);
+        //HashMap<String,String> oResults = QAImport.importResultsTable(dataset, "O-Linked", method);
 
-        ArrayList<String> nCompsWanted = importQAComparisons("N-Linked", dataset, "Wanted");
-        ArrayList<String> nCompsUnwanted = importQAComparisons("N-Linked", dataset, "Unwanted");
+        ArrayList<String> nCompsWanted = QAImport.importQAComparisons("N-Linked", dataset, "Wanted");
+        ArrayList<String> nCompsUnwanted = QAImport.importQAComparisons("N-Linked", dataset, "Unwanted");
 
-        //ArrayList<String> oCompsWanted = importQAComparisons("O-Linked", dataset, "Wanted");
-        //ArrayList<String> oCompsUnwanted = importQAComparisons("O-Linked", dataset, "Unwanted");
+        //ArrayList<String> oCompsWanted = QAImport.importQAComparisons("O-Linked", dataset, "Wanted");
+        //ArrayList<String> oCompsUnwanted = QAImport.importQAComparisons("O-Linked", dataset, "Unwanted");
 
         int nWantedCount = 0;
         int nUnwantedCount = 0;
