@@ -25,9 +25,9 @@ public class virtualsImpact {
 
         ArrayList<doppelganger> gangers = reader.readfiles(sourceDirectory, glycanType);
 
-        /**
-         * ArrayList references is used to determine the which virtual nodes exists in the database as experimentally proven
-         * and which are created from Compozitor without appearing in the literature.
+        /*
+          ArrayList references is used to determine which virtual nodes exists in the database as experimentally proven
+          and which are created from Compozitor without appearing in the literature.
          */
         ArrayList<doppelganger> references = reader.readfiles("referencesAll", glycanType);
 
