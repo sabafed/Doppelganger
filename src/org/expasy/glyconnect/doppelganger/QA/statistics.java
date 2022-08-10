@@ -4,11 +4,28 @@ package org.expasy.glyconnect.doppelganger.QA;
  * Statistics class contains functions necessary to perform a quality analysis.
  */
 public class statistics {
+    /*
     public static void main(String[] args) {
-        int TP = 0;
-        int FN = 4;
-        int TN = 1;
-        int FP = 5;
+        test();
+    }
+    */
+
+    public static boolean admitValues(int val1, int val2) {
+        if ( val1 == 0 && val2 == 0 ) return false;
+        if ( val1 < 0 || val2 < 0 ) {
+            System.out.println("Unacceptable negative value:"+
+                    "\nValue1: " + val1 +
+                    "\nValue2: " + val2 );
+            System.exit(1);
+        }
+        return true;
+    }
+
+    public static void test() {
+        int TP = 5;
+        int FN = 0;
+        int TN = 5;
+        int FP = 0;
 
         double TPR = truePositiveRate(TP,FN);
         double TNR = trueNegativeRate(TN,FP);
@@ -24,26 +41,15 @@ public class statistics {
 
         System.out.println(
                 "\nTrue Positive Rate:          " + TPR +
-                "\nTrue Negative Rate:          " + TNR +
-                "\nPositive Predictive Value:   " + PPV +
-                "\nNegative Predictive Value:   " + NPV +
-                "\nFalse Discovery Rate:        " + FDR +
-                "\nFalse Negative Rate:         " + FNR +
-                "\nFalse Positive Rate:         " + FPR +
-                "\nFalse Omission Rate:         " + FOR +
-                "\nMCC with int:                " + MCC1 +
-                "\nMCC with double:             " + MCC2 );
-    }
-
-    public static boolean admitValues(int val1, int val2) {
-        if ( val1 == 0 && val2 == 0 ) return false;
-        if ( val1 < 0 || val2 < 0 ) {
-            System.out.println("Unacceptable negative value:"+
-                    "\nValue1: " + val1 +
-                    "\nValue2: " + val2 );
-            System.exit(1);
-        }
-        return true;
+                        "\nTrue Negative Rate:          " + TNR +
+                        "\nPositive Predictive Value:   " + PPV +
+                        "\nNegative Predictive Value:   " + NPV +
+                        "\nFalse Discovery Rate:        " + FDR +
+                        "\nFalse Negative Rate:         " + FNR +
+                        "\nFalse Positive Rate:         " + FPR +
+                        "\nFalse Omission Rate:         " + FOR +
+                        "\nMCC with int:                " + MCC1 +
+                        "\nMCC with double:             " + MCC2 );
     }
 
     // Senitivity:
@@ -99,7 +105,10 @@ public class statistics {
         int TNFP = trueNegatives + falsePositives;
         int TNFN = trueNegatives + falseNegatives;
 
-        int denominator = TPFP * TPFN * TNFP * TNFN;
+        int denominator;
+
+        if ( TPFP == 0 || TPFN == 0 || TNFP == 0 || TNFN == 0 ) denominator = 1;
+        else denominator = TPFP * TPFN * TNFP * TNFN;
 
         return ( (double) numerator / Math.sqrt(denominator) );
     }

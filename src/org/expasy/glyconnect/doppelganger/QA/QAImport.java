@@ -30,7 +30,7 @@ public class QAImport {
     }
 
     public static HashMap<String,String> importResultsTable(String dataset, String type, String method) throws Exception {
-        //{identifierA~identifierB, nodesScore~linksScore}
+        //{identifierA~identifierB, desiredScore}
         HashMap<String,String> results = new HashMap<>();
 
         String compareTo = dataset+"_"+type+"_minSize5_"+method+"0.0_TEST_"+".tsv";
@@ -40,12 +40,16 @@ public class QAImport {
         FileReader importFR = new FileReader(compareFile);
         BufferedReader importBR = new BufferedReader(importFR);
 
-        String line = importBR.readLine(); // Skipping header row
-
+        String line = importBR.readLine();
+        // TODO: 10/08/22 use first raw to determine the needed column index.
+        /* By adding a parameter to the function, it would be possible to select the score one wants to analyse.
+         * e.g. real or virtual nodes or link JI, VF or VT cosine similarity.
+         * Doing so will enable to apply a threshold during the QA and to compare the differente methods.
+         */
         while ( (line = importBR.readLine()) != null ) {
             String[] comparison = line.split("\\t");
             String comp = comparison[0]+"~"+comparison[1];
-            String nodesLinksVals = comparison[10]+"~"+comparison[13];
+            String nodesLinksVals = comparison[9]+"~"+comparison[11];
             results.computeIfAbsent(comp, k -> nodesLinksVals);
         }
 

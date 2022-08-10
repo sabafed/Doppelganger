@@ -54,13 +54,11 @@ public class qualityAnalysis {
         //importQAComparisons(nLinked,proteinsAll,"Wanted");
         //importResultsTable(proteinsAll,nLinked,"JaccardIndex");
 
-
-
-        //ArrayList<doppelganger> doppelgangers = reader.readfiles(proteinsAll,nLinked);
-
-        //QAExport.jaccardIndexToTable(nLinked,doppelgangers,proteinsAll,"jaccardIndex");
-
-        statistics();
+        /*
+        ArrayList<doppelganger> doppelgangers = reader.readfiles(proteinsAll,oLinked);
+        QAExport.jaccardIndexToTable(oLinked,doppelgangers,proteinsAll,"JaccardIndex");
+        */
+        statistics(proteinsAll, nLinked, "JaccardIndex");
     }
 
     public static void dataOverview(HashMap<String,String[]> overview) throws Exception {
@@ -101,70 +99,68 @@ public class qualityAnalysis {
         }
     }
 
+    public static void statistics(String dataset, String glycanType, String method) throws Exception {
 
+        HashMap<String,String> results = QAImport.importResultsTable(dataset, glycanType, method);
 
-    public static void statistics() throws Exception {
-        String dataset = "proteinsAll";
-        String method = "jaccardIndex";
+        ArrayList<String> positives = QAImport.importQAComparisons(glycanType, dataset, "Wanted");
+        ArrayList<String> negatives = QAImport.importQAComparisons(glycanType, dataset, "Unwanted");
 
-        HashMap<String,String> nResults = QAImport.importResultsTable(dataset, "N-Linked", method);
-        //HashMap<String,String> oResults = QAImport.importResultsTable(dataset, "O-Linked", method);
+        ArrayList<String> truePositives =  new ArrayList<>(); // Positive comparisons found in the results
+        ArrayList<String> falsePositives = new ArrayList<>(); // Negative comparisons found in the results
 
-        ArrayList<String> nCompsWanted = QAImport.importQAComparisons("N-Linked", dataset, "Wanted");
-        ArrayList<String> nCompsUnwanted = QAImport.importQAComparisons("N-Linked", dataset, "Unwanted");
-
-        //ArrayList<String> oCompsWanted = QAImport.importQAComparisons("O-Linked", dataset, "Wanted");
-        //ArrayList<String> oCompsUnwanted = QAImport.importQAComparisons("O-Linked", dataset, "Unwanted");
-
-        int nWantedCount = 0;
-        int nUnwantedCount = 0;
-
-        ArrayList<String> nWantedFound =  new ArrayList<>();
-        ArrayList<String> nUnwantedFound = new ArrayList<>();
-
-        for (String res : nResults.keySet()) {
-            for (String comp : nCompsWanted) {
+        for (String res : results.keySet()) {
+            for (String comp : positives) {
                 if ( comp.equals(res) ) {
-                    if ( !(nWantedFound.contains(comp)) ) nWantedFound.add(comp);
+                    if ( !(truePositives.contains(comp)) ) truePositives.add(comp);
 
-                    nWantedCount++;
-                    System.out.println(nWantedCount +" - wanted comparison: " + comp +
+                    System.out.println(truePositives.size() +" - wanted comparison: " + comp +
                             "\nretrieved with method: " + method +
-                            "\nscores: " + nResults.get(res) + "\n");
+                            "\nscores: " + results.get(res) + "\n");
                 }
             }
         }
 
-        for (String res : nResults.keySet()) {
-            for (String comp : nCompsUnwanted) {
+        for (String res : results.keySet()) {
+            for (String comp : negatives) {
                 if (res.equals(comp)) {
-                    if ( !(nUnwantedFound.contains(comp)) ) nUnwantedFound.add(comp);
+                    if ( !(falsePositives.contains(comp)) ) falsePositives.add(comp);
 
-                    nUnwantedCount++;
-                    System.out.println(nUnwantedCount + " - unwanted comparison: " + comp +
+                    System.out.println(falsePositives.size() + " - unwanted comparison: " + comp +
                             "\nretrieved with method: " + method +
-                            "\nscores: " + nResults.get(res) + "\n");
+                            "\nscores: " + results.get(res) + "\n");
                 }
             }
         }
 
-        ArrayList<String> nWantedMissed = new ArrayList<>(nCompsWanted);
-        nWantedMissed.removeAll(nWantedFound);
+        ArrayList<String> falseNegatives = new ArrayList<>(positives); // Positive comparisons NOT found in the results
+        falseNegatives.removeAll(truePositives);
 
-        ArrayList<String> nUnwantedMissed = new ArrayList<>(nCompsUnwanted);
-        nUnwantedMissed.removeAll(nUnwantedFound);
+        ArrayList<String> trueNegatives = new ArrayList<>(negatives); // Negative comparisons NOT found in the results
+        trueNegatives.removeAll(falsePositives);
 
+        System.out.println("_______________________"+glycanType+"___________________________");
+        System.out.println(
+                  "Total Positive Comparisons: " + positives.size() +
+                "\nTrue  Positive Comparisons: " + truePositives.size() +
+                "\nFalse Positive Comparisons: " + falsePositives.size() +
+                "\n" + falsePositives);
         System.out.println("__________________________________________________");
-        System.out.println("Total wanted comparisons: " + nCompsWanted.size() +
-                "\nComparisons retrieved: " + nWantedCount +
-                "\nComparisons missed: " + (nCompsWanted.size() - nWantedCount) +
-                "\n" + nWantedMissed );
-        System.out.println("__________________________________________________");
-        System.out.println("Total unwanted comparisons: " + nCompsUnwanted.size() +
-                "\nComparisons retrieved: " + nUnwantedCount +
-                "\nComparisons missed: " + (nCompsUnwanted.size() - nUnwantedCount) +
-                "\n" + nUnwantedMissed );
-        System.out.println("__________________________________________________");
+        System.out.println(
+                  "Total Negative Comparisons: " + negatives.size() +
+                "\nTrue  Negative Comparisons: " + trueNegatives.size() +
+                "\nFalse Negative Comparisons: " + falseNegatives +
+                "\n" + falseNegatives);
+        System.out.println("__________________________________________________________");
         //int oWantedFound = 0;
+
+        int TP = truePositives.size();
+        int TN = trueNegatives.size();
+        int FP = falsePositives.size();
+        int FN = falseNegatives.size();
+
+        double MCC = statistics.matthewsCorrelationCoefficient(TP,TN,FP,FN);
+
+        System.out.println("MCC score is: " + MCC);
     }
 }

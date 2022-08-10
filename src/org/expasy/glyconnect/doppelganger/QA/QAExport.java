@@ -125,7 +125,7 @@ public class QAExport {
             case "profileCosSim" ->
                     header += profileCosSim + realNodesLinks + virtualNodesLinks + linkStrings + linkTransitions +
                             linkCountsFreqs;
-            case "jaccardIndex" ->
+            case "JaccardIndex" ->
                     header += realNodesLinks + realJaccardIndex + virtualNodesLinks + virtualJaccardIndex + linkStrings +
                             linkTransitions + linkCountsFreqs;
             case "density" ->
@@ -220,7 +220,7 @@ public class QAExport {
             body += propCosSimVT + "\t" + propCosSimVF + "\t" + realNodesLinks + virtualNodesLinks
                     + linkStrings + linkTransitions + linkCountsFreqs;
         }
-        if ( method.equals("jaccardIndex") || method.equals("all") ) {
+        if ( method.equals("JaccardIndex") || method.equals("all") ) {
             realNodesOverlap = compare.nodeInteresectionSize(
                     network1.getRealNodes(),
                     network2.getRealNodes());
