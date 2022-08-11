@@ -1,0 +1,34 @@
+1 - wanted comparison: 633;P10761~634;P21754
+retrieved with method: JaccardIndex
+score: 0.6842105263157895
+
+2 - wanted comparison: 309;P02668~376;P15941
+retrieved with method: JaccardIndex
+score: 0.5384615384615384
+
+3 - wanted comparison: 92;P05059~101;P00743
+retrieved with method: JaccardIndex
+score: 1.0
+
+__________________________________________________________
+Total Positive Comparisons: 9
+True  Positive Comparisons: 3
+False Positive Comparisons: 0
+[]
+__________________________________________________________
+Total Negative Comparisons: 15
+True  Negative Comparisons: 15
+False Negative Comparisons: 6
+[1519;Q02817~230;P01876, 230;P01876~6;P14780, 140;P01588~634;P21754, 1012;Q9BYF1~309;P02668, 189;P02724~101;P00743, 88;P01215~413;P15941]
+__________________________________________________________
+
+True Positive Rate:          0.3333333333333333
+True Negative Rate:          1.0
+Positive Predictive Value:   1.0
+Negative Predictive Value:   0.7142857142857143
+False Discovery Rate:        0.0
+False Negative Rate:         0.6666666666666666
+False Positive Rate:         0.0
+False Omission Rate:         0.2857142857142857
+Matthews Correlation Coefficient (MCC) with int:    0.4879500364742666
+Matthews Correlation Coefficient (MCC) with double: 0.4879500364742666
