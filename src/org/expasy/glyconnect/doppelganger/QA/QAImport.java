@@ -29,28 +29,34 @@ public class QAImport {
         return comps;
     }
 
-    public static HashMap<String,String> importResultsTable(String dataset, String type, String method) throws Exception {
+    public static HashMap<String,String> importResultsTable(String dataset, String type, String method, String score) throws Exception {
         //{identifierA~identifierB, desiredScore}
         HashMap<String,String> results = new HashMap<>();
 
-        String compareTo = dataset+"_"+type+"_minSize5_"+method+"0.0_TEST_"+".tsv";
+        String compareTo = dataset+"_"+type+"_minSize5_"+method+".tsv";
 
-        File compareFile = new File("/home/federico/Documenti/Thesis/Doppelganger/results/steps/"+compareTo);
+        File compareFile = new File("/home/federico/Documenti/Thesis/Doppelganger/results/evaluation/"+compareTo);
 
         FileReader importFR = new FileReader(compareFile);
         BufferedReader importBR = new BufferedReader(importFR);
 
         String line = importBR.readLine();
-        // TODO: 10/08/22 use first raw to determine the needed column index.
-        /* By adding a parameter to the function, it would be possible to select the score one wants to analyse.
-         * e.g. real or virtual nodes or link JI, VF or VT cosine similarity.
-         * Doing so will enable to apply a threshold during the QA and to compare the differente methods.
-         */
+        String[] header = line.split("\\t");
+        int scoreIndex = -1;
+
+        for (int i = 0; i < header.length; i++) {
+            if ( header[i].equals(score) ) scoreIndex = i;
+        }
+
+        if ( scoreIndex == -1 )
+            System.out.println("QUITTING: Unable to find column '"+score+"' in dataset "+dataset);
+
         while ( (line = importBR.readLine()) != null ) {
             String[] comparison = line.split("\\t");
             String comp = comparison[0]+"~"+comparison[1];
-            String nodesLinksVals = comparison[9]+"~"+comparison[11];
-            results.computeIfAbsent(comp, k -> nodesLinksVals);
+            String scoreValue = comparison[scoreIndex];
+
+            results.computeIfAbsent(comp, k -> scoreValue);
         }
 
         return results;

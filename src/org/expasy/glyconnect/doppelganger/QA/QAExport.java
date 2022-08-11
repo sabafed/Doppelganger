@@ -8,21 +8,104 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * This class produces data on the quality of the results and writes them to a file.
  */
 public class QAExport {
-    public static void jaccardIndexToTable(String glycanType, ArrayList<doppelganger> networks,
-                                           String sourceDirectory, String method) throws FileNotFoundException {
-        int minNetworkSize = 5;
-        double minJIScore = 0.000000;
+    public static void QAExport(String dataset, String glycanType,
+                                String method, String score, double threshold) throws Exception {
 
-        //sourcesAll folder contains subfolders tha could get in the way of file saving
+        String targetDirectory = "results/evaluation/";
+        String fileName = ( "QA_"+dataset+"_"+glycanType+"_"+score.replace(" ","-")+threshold+".txt" );
+        File outFile = new File(targetDirectory+fileName);
+        PrintStream output = new PrintStream(outFile);
+        PrintStream console = System.out;
+
+        System.setOut(output);
+
+        HashMap<String,String> results = QAImport.importResultsTable(dataset, glycanType, method, score);
+
+        ArrayList<String> positives = QAImport.importQAComparisons(glycanType, dataset, "Wanted");
+        ArrayList<String> negatives = QAImport.importQAComparisons(glycanType, dataset, "Unwanted");
+
+        ArrayList<String> truePositives =  new ArrayList<>(); // Positive comparisons found in the results
+        ArrayList<String> falsePositives = new ArrayList<>(); // Negative comparisons found in the results
+
+        for (String res : results.keySet()) {
+            for (String comp : positives) {
+                if ( comp.equals(res) ) {
+                    double val = Double.parseDouble(results.get(res));
+
+                    if ( val >= threshold && !(truePositives.contains(comp)) ) {
+                        truePositives.add(comp);
+
+                        System.out.println(truePositives.size() + " - wanted comparison: " + comp +
+                                "\nretrieved with method: " + method +
+                                "\nscore: " + results.get(res) + "\n");
+                    }
+                }
+            }
+        }
+
+        for (String res : results.keySet()) {
+            for (String comp : negatives) {
+                if (res.equals(comp)) {
+                    double val = Double.parseDouble(results.get(res));
+
+                    if ( val >= threshold && !(falsePositives.contains(comp)) ) {
+                        falsePositives.add(comp);
+
+                        System.out.println(falsePositives.size() + " - unwanted comparison: " + comp +
+                                "\nretrieved with method: " + method +
+                                "\nscore: " + val + "\n");
+                    }
+                }
+            }
+        }
+
+        ArrayList<String> falseNegatives = new ArrayList<>(positives); // Positive comparisons NOT found in the results
+        falseNegatives.removeAll(truePositives);
+
+        ArrayList<String> trueNegatives = new ArrayList<>(negatives); // Negative comparisons NOT found in the results
+        trueNegatives.removeAll(falsePositives);
+
+        System.out.println("__________________________________________________________");
+        System.out.println(
+                          "Total Positive Comparisons: " + positives.size() +
+                        "\nTrue  Positive Comparisons: " + truePositives.size() +
+                        "\nFalse Positive Comparisons: " + falsePositives.size() +
+                        "\n" + falsePositives);
+        System.out.println("__________________________________________________________");
+        System.out.println(
+                          "Total Negative Comparisons: " + negatives.size() +
+                        "\nTrue  Negative Comparisons: " + trueNegatives.size() +
+                        "\nFalse Negative Comparisons: " + falseNegatives.size() +
+                        "\n" + falseNegatives);
+        System.out.println("__________________________________________________________");
+
+        int TP = truePositives.size();
+        int TN = trueNegatives.size();
+        int FP = falsePositives.size();
+        int FN = falseNegatives.size();
+
+        statistics.statistics(TP,TN,FP,FN);
+
+        System.setOut(console);
+        System.out.println("File '" + fileName + "' has been created in directory '" + targetDirectory + "'");
+    }
+
+    public static void methodToTable(String glycanType, ArrayList<doppelganger> networks,
+                                     String sourceDirectory, String method) throws FileNotFoundException {
+        int minNetworkSize = 5;
+
+        //sourcesAll folder contains subfolders that could get in the way of file saving
         sourceDirectory = sourceDirectory.replace("/", "_");
-        String targetDirectory = "results/steps/";
-        String fileName = sourceDirectory + "_" + glycanType + "_minSize" + minNetworkSize + "_"+method+minJIScore;
-        File outFile = new File(targetDirectory + fileName + "_TEST_" + ".tsv");
+        String targetDirectory = "results/evaluation/";
+        String fileName = sourceDirectory + "_" + glycanType + "_minSize" + minNetworkSize + "_" +
+                method + ".tsv";
+        File outFile = new File(targetDirectory + fileName );
         PrintStream output = new PrintStream(outFile);
         PrintStream console = System.out;
         System.setOut(output);
@@ -76,9 +159,8 @@ public class QAExport {
             }
         }
         System.setOut(console);
-        System.out.println("File '" + fileName + "' has been created in directory '" + targetDirectory + "'");
+        System.out.println("\nFile '" + fileName + "' has been created in directory '" + targetDirectory + "'");
     }
-
     public static String makeHeader(String method) {
         String identifiers = "Network A" + "\t" + "Network B" + "\t"+
                 "Taxonomy A" + "\t" + "Taxonomy B" + "\t";
