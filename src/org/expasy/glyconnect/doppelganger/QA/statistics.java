@@ -4,12 +4,6 @@ package org.expasy.glyconnect.doppelganger.QA;
  * Statistics class contains functions necessary to perform a quality analysis.
  */
 public class statistics {
-    /*
-    public static void main(String[] args) {
-        test();
-    }
-    */
-
     public static boolean admitValues(int val1, int val2) {
         if ( val1 == 0 && val2 == 0 ) return false;
         if ( val1 < 0 || val2 < 0 ) {
@@ -21,12 +15,7 @@ public class statistics {
         return true;
     }
 
-    public static void test() {
-        int TP = 5;
-        int FN = 0;
-        int TN = 5;
-        int FP = 0;
-
+    public static void statistics(int TP, int TN, int FP, int FN) {
         double TPR = truePositiveRate(TP,FN);
         double TNR = trueNegativeRate(TN,FP);
         double PPV = positivePredictiveValue(TP,FP);
@@ -39,8 +28,7 @@ public class statistics {
         double MCC1 = matthewsCorrelationCoefficient(TP,TN,FP,FN);
         double MCC2 = matthewsCorrelationCoefficient(PPV,TPR,TNR,NPV,FDR,FNR,FPR,FOR);
 
-        System.out.println(
-                "\nTrue Positive Rate:          " + TPR +
+        System.out.println("\nTrue Positive Rate:          " + TPR +
                         "\nTrue Negative Rate:          " + TNR +
                         "\nPositive Predictive Value:   " + PPV +
                         "\nNegative Predictive Value:   " + NPV +
@@ -48,8 +36,8 @@ public class statistics {
                         "\nFalse Negative Rate:         " + FNR +
                         "\nFalse Positive Rate:         " + FPR +
                         "\nFalse Omission Rate:         " + FOR +
-                        "\nMCC with int:                " + MCC1 +
-                        "\nMCC with double:             " + MCC2 );
+                        "\nMatthews Correlation Coefficient (MCC) with int:    " + MCC1 +
+                        "\nMatthews Correlation Coefficient (MCC) with double: " + MCC2 );
     }
 
     // Senitivity:

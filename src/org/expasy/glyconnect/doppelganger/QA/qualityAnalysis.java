@@ -16,49 +16,30 @@ import java.util.Map;
  */
 public class qualityAnalysis {
     public static void main(String[] args) throws Exception {
+        //dataOverview(overviewMap);
+        String proteinsAll = "proteinsAll";
+
         String nLinked = "N-Linked";
         String oLinked = "O-Linked";
+        String[] types = new String[]{nLinked,oLinked};
 
-        String referencesAll = "referencesAll";
-        String proteinsAll = "proteinsAll";
-        String diseasesAll = "diseasesAll";
-        String cellLinesAll = "cellLinesAll";
+        HashMap<String,String[]> methods = methodsMap();
 
-        // SourcesAll:
-        String cellComponent = "sourcesAll/cell_component";
-        String cellType = "sourcesAll/cell_type";
-        String tissue = "sourcesAll/tissue";
-        String tissuePlant = "sourcesAll/tissue_plant";
+        for (String type : types) {
+            //ArrayList<doppelganger> doppelgangers = reader.readfiles(proteinsAll, type);
 
-        String[] glycanType = {nLinked, oLinked};
+            for (String method : methods.keySet()) {
+                //QAExport.methodToTable(type, doppelgangers, proteinsAll, method);
 
-        HashMap<String,String[]> overview = new HashMap<>();
+                for (String score : methods.get(method)) {
+                    double threshold = 0.50;
 
-        overview.put(proteinsAll, glycanType);
-        overview.put(diseasesAll, glycanType);
-        overview.put(cellComponent, glycanType);
-        overview.put(cellType, glycanType);
-        overview.put(tissue, glycanType);
-        overview.put(tissuePlant, glycanType);
-        overview.put(cellLinesAll, glycanType);
-        overview.put(referencesAll, glycanType);
+                    if ( method.equals("density") ) threshold = 1.0;
 
-        /*
-        QAExport.jaccardIndexToTable(
-                nLinked,
-                reader.readfiles(proteinsAll,nLinked),
-                proteinsAll);
-        */
-
-        //dataOverview(overview);
-        //importQAComparisons(nLinked,proteinsAll,"Wanted");
-        //importResultsTable(proteinsAll,nLinked,"JaccardIndex");
-
-        /*
-        ArrayList<doppelganger> doppelgangers = reader.readfiles(proteinsAll,oLinked);
-        QAExport.jaccardIndexToTable(oLinked,doppelgangers,proteinsAll,"JaccardIndex");
-        */
-        statistics(proteinsAll, nLinked, "JaccardIndex");
+                    QAExport.QAExport(proteinsAll, type, method, score, 0.50);
+                }
+            }
+        }
     }
 
     public static void dataOverview(HashMap<String,String[]> overview) throws Exception {
@@ -99,68 +80,60 @@ public class qualityAnalysis {
         }
     }
 
-    public static void statistics(String dataset, String glycanType, String method) throws Exception {
+    public static HashMap<String,String[]> methodsMap() {
+        HashMap<String,String[]> methods = new HashMap<>();
 
-        HashMap<String,String> results = QAImport.importResultsTable(dataset, glycanType, method);
+        String linkCosVT = "Link Cosine Similarity (virtual T)";
+        String linkCosVF = "Link Cosine Similarity (virtual F)";
 
-        ArrayList<String> positives = QAImport.importQAComparisons(glycanType, dataset, "Wanted");
-        ArrayList<String> negatives = QAImport.importQAComparisons(glycanType, dataset, "Unwanted");
+        String profCosVT = "Profile Cosine Similarity (virtual T)";
+        String profCosVF = "Profile Cosine Similarity (virtual F)";
 
-        ArrayList<String> truePositives =  new ArrayList<>(); // Positive comparisons found in the results
-        ArrayList<String> falsePositives = new ArrayList<>(); // Negative comparisons found in the results
+        String realNodesJI = "Real Nodes Jaccard Index";
+        String realLinksJI = "Real Links Jaccard Index";
 
-        for (String res : results.keySet()) {
-            for (String comp : positives) {
-                if ( comp.equals(res) ) {
-                    if ( !(truePositives.contains(comp)) ) truePositives.add(comp);
+        String virtualNodesJI = "Virtual Nodes Jaccard Index";
+        String virtualLinksJI = "Virtual Links Jaccard Index";
 
-                    System.out.println(truePositives.size() +" - wanted comparison: " + comp +
-                            "\nretrieved with method: " + method +
-                            "\nscores: " + results.get(res) + "\n");
-                }
-            }
-        }
+        String densityRatioVT = "Density Ratio (Virtual T)";
+        String densityRatioVF = "Density Ratio (Virtual F)";
 
-        for (String res : results.keySet()) {
-            for (String comp : negatives) {
-                if (res.equals(comp)) {
-                    if ( !(falsePositives.contains(comp)) ) falsePositives.add(comp);
+        methods.put("linkCosSim", new String[]{linkCosVT, linkCosVF});
+        methods.put("profileCosSim", new String[]{profCosVT, profCosVF});
+        //methods.put("density", new String[]{densityRatioVT, densityRatioVF});
+        methods.put("JaccardIndex", new String[]{realNodesJI, realLinksJI, virtualNodesJI, virtualLinksJI});
 
-                    System.out.println(falsePositives.size() + " - unwanted comparison: " + comp +
-                            "\nretrieved with method: " + method +
-                            "\nscores: " + results.get(res) + "\n");
-                }
-            }
-        }
-
-        ArrayList<String> falseNegatives = new ArrayList<>(positives); // Positive comparisons NOT found in the results
-        falseNegatives.removeAll(truePositives);
-
-        ArrayList<String> trueNegatives = new ArrayList<>(negatives); // Negative comparisons NOT found in the results
-        trueNegatives.removeAll(falsePositives);
-
-        System.out.println("_______________________"+glycanType+"___________________________");
-        System.out.println(
-                  "Total Positive Comparisons: " + positives.size() +
-                "\nTrue  Positive Comparisons: " + truePositives.size() +
-                "\nFalse Positive Comparisons: " + falsePositives.size() +
-                "\n" + falsePositives);
-        System.out.println("__________________________________________________");
-        System.out.println(
-                  "Total Negative Comparisons: " + negatives.size() +
-                "\nTrue  Negative Comparisons: " + trueNegatives.size() +
-                "\nFalse Negative Comparisons: " + falseNegatives +
-                "\n" + falseNegatives);
-        System.out.println("__________________________________________________________");
-        //int oWantedFound = 0;
-
-        int TP = truePositives.size();
-        int TN = trueNegatives.size();
-        int FP = falsePositives.size();
-        int FN = falseNegatives.size();
-
-        double MCC = statistics.matthewsCorrelationCoefficient(TP,TN,FP,FN);
-
-        System.out.println("MCC score is: " + MCC);
+        return methods;
     }
+    public static HashMap<String,String[]> overviewMap() {
+        HashMap<String,String[]> overview = new HashMap<>();
+
+        String nLinked = "N-Linked";
+        String oLinked = "O-Linked";
+
+        String referencesAll = "referencesAll";
+        String proteinsAll = "proteinsAll";
+        String diseasesAll = "diseasesAll";
+        String cellLinesAll = "cellLinesAll";
+
+        // SourcesAll:
+        String cellComponent = "sourcesAll/cell_component";
+        String cellType = "sourcesAll/cell_type";
+        String tissue = "sourcesAll/tissue";
+        String tissuePlant = "sourcesAll/tissue_plant";
+
+        String[] glycanType = {nLinked, oLinked};
+
+        overview.put(proteinsAll, glycanType);
+        overview.put(diseasesAll, glycanType);
+        overview.put(cellComponent, glycanType);
+        overview.put(cellType, glycanType);
+        overview.put(tissue, glycanType);
+        overview.put(tissuePlant, glycanType);
+        overview.put(cellLinesAll, glycanType);
+        overview.put(referencesAll, glycanType);
+
+        return overview;
+    }
+
 }
