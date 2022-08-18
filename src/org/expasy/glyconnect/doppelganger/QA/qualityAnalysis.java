@@ -24,6 +24,7 @@ public class qualityAnalysis {
         String[] types = new String[]{nLinked,oLinked};
 
         HashMap<String,String[]> methods = methodsMap();
+        double[] thresholds = thresholds();
 
         for (String type : types) {
             //ArrayList<doppelganger> doppelgangers = reader.readfiles(proteinsAll, type);
@@ -32,11 +33,11 @@ public class qualityAnalysis {
                 //QAExport.methodToTable(type, doppelgangers, proteinsAll, method);
 
                 for (String score : methods.get(method)) {
-                    double threshold = 0.50;
+                    //if ( method.equals("density") ) threshold = 1.0;
 
-                    if ( method.equals("density") ) threshold = 1.0;
-
-                    QAExport.QAExport(proteinsAll, type, method, score, 0.50);
+                    for (double threshold : thresholds) {
+                        QAExport.QAExport(proteinsAll, type, method, score, threshold);
+                    }
                 }
             }
         }
@@ -104,6 +105,10 @@ public class qualityAnalysis {
         methods.put("JaccardIndex", new String[]{realNodesJI, realLinksJI, virtualNodesJI, virtualLinksJI});
 
         return methods;
+    }
+
+    public static double[] thresholds() {
+        return new double[]{0.5, 0.55, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9, 0.95};
     }
     public static HashMap<String,String[]> overviewMap() {
         HashMap<String,String[]> overview = new HashMap<>();

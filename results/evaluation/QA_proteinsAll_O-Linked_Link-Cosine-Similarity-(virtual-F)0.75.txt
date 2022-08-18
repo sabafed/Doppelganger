@@ -1,0 +1,82 @@
+1 - wanted comparison: 633;P10761~634;P21754
+retrieved with method: linkCosSim
+score: 0.9855344050129309
+
+2 - wanted comparison: 1012;Q9BYF1~309;P02668
+retrieved with method: linkCosSim
+score: 0.8582382478225817
+
+3 - wanted comparison: 309;P02668~376;P15941
+retrieved with method: linkCosSim
+score: 0.9718253158075499
+
+4 - wanted comparison: 1519;Q02817~230;P01876
+retrieved with method: linkCosSim
+score: 0.9456912729880024
+
+5 - wanted comparison: 230;P01876~6;P14780
+retrieved with method: linkCosSim
+score: 0.844592049270457
+
+6 - wanted comparison: 92;P05059~101;P00743
+retrieved with method: linkCosSim
+score: 0.9999999999999998
+
+7 - wanted comparison: 88;P01215~413;P15941
+retrieved with method: linkCosSim
+score: 0.8017837257372732
+
+1 - unwanted comparison: 1012;Q9BYF1~633;P10761
+retrieved with method: linkCosSim
+score: 0.8151708833802682
+
+2 - unwanted comparison: 230;P01876~613;P07911
+retrieved with method: linkCosSim
+score: 0.870285269152674
+
+3 - unwanted comparison: 380;Q62635~230;P01876
+retrieved with method: linkCosSim
+score: 0.7834740963121182
+
+4 - unwanted comparison: 381;Q62635~634;P21754
+retrieved with method: linkCosSim
+score: 0.873228053325973
+
+5 - unwanted comparison: 374;P15941~309;P02668
+retrieved with method: linkCosSim
+score: 0.9219544457292885
+
+6 - unwanted comparison: 613;P07911~6;P14780
+retrieved with method: linkCosSim
+score: 0.9669223820363341
+
+7 - unwanted comparison: 641;Q9GZM5~230;P01876
+retrieved with method: linkCosSim
+score: 0.7512081471414194
+
+8 - unwanted comparison: 641;Q9GZM5~613;P07911
+retrieved with method: linkCosSim
+score: 0.7726318180745883
+
+__________________________________________________________
+Total Positive Comparisons: 9
+True  Positive Comparisons: 7
+False Positive Comparisons: 8
+[1012;Q9BYF1~633;P10761, 230;P01876~613;P07911, 380;Q62635~230;P01876, 381;Q62635~634;P21754, 374;P15941~309;P02668, 613;P07911~6;P14780, 641;Q9GZM5~230;P01876, 641;Q9GZM5~613;P07911]
+__________________________________________________________
+Total Negative Comparisons: 15
+True  Negative Comparisons: 7
+False Negative Comparisons: 2
+[140;P01588~634;P21754, 189;P02724~101;P00743]
+__________________________________________________________
+
+True Positive Rate:          0.7777777777777778
+True Negative Rate:          0.4666666666666667
+Positive Predictive Value:   0.4666666666666667
+Negative Predictive Value:   0.7777777777777778
+False Discovery Rate:        0.5333333333333333
+False Negative Rate:         0.2222222222222222
+False Positive Rate:         0.5333333333333333
+False Omission Rate:         0.2222222222222222
+Matthews Correlation Coefficient (MCC) with int:    0.24444444444444444
+Matthews Correlation Coefficient (MCC) with double: 0.24444444444444446

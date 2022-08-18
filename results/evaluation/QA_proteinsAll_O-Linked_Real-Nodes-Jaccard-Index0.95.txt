@@ -1,0 +1,22 @@
+__________________________________________________________
+Total Positive Comparisons: 9
+True  Positive Comparisons: 0
+False Positive Comparisons: 0
+[]
+__________________________________________________________
+Total Negative Comparisons: 15
+True  Negative Comparisons: 15
+False Negative Comparisons: 9
+[1519;Q02817~230;P01876, 230;P01876~6;P14780, 140;P01588~634;P21754, 1012;Q9BYF1~309;P02668, 309;P02668~376;P15941, 92;P05059~101;P00743, 189;P02724~101;P00743, 88;P01215~413;P15941, 633;P10761~634;P21754]
+__________________________________________________________
+
+True Positive Rate:          0.0
+True Negative Rate:          1.0
+Positive Predictive Value:   0.0
+Negative Predictive Value:   0.625
+False Discovery Rate:        0.0
+False Negative Rate:         1.0
+False Positive Rate:         0.0
+False Omission Rate:         0.375
+Matthews Correlation Coefficient (MCC) with int:    0.0
+Matthews Correlation Coefficient (MCC) with double: 0.0

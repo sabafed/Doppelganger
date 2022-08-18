@@ -1,0 +1,118 @@
+1 - wanted comparison: 633;P10761~634;P21754
+retrieved with method: profileCosSim
+score: 0.9284766908852592
+
+2 - wanted comparison: 189;P02724~101;P00743
+retrieved with method: profileCosSim
+score: 1.0000000000000002
+
+3 - wanted comparison: 1012;Q9BYF1~309;P02668
+retrieved with method: profileCosSim
+score: 0.9828010433421412
+
+4 - wanted comparison: 309;P02668~376;P15941
+retrieved with method: profileCosSim
+score: 0.9857205596136369
+
+5 - wanted comparison: 140;P01588~634;P21754
+retrieved with method: profileCosSim
+score: 0.944069429835177
+
+6 - wanted comparison: 1519;Q02817~230;P01876
+retrieved with method: profileCosSim
+score: 0.9608081968477304
+
+7 - wanted comparison: 230;P01876~6;P14780
+retrieved with method: profileCosSim
+score: 0.8803938493977552
+
+8 - wanted comparison: 92;P05059~101;P00743
+retrieved with method: profileCosSim
+score: 1.0000000000000002
+
+9 - wanted comparison: 88;P01215~413;P15941
+retrieved with method: profileCosSim
+score: 0.964763821237732
+
+1 - unwanted comparison: 1012;Q9BYF1~633;P10761
+retrieved with method: profileCosSim
+score: 0.9006863799659568
+
+2 - unwanted comparison: 230;P01876~613;P07911
+retrieved with method: profileCosSim
+score: 0.8881379644892856
+
+3 - unwanted comparison: 140;P01588~613;P07911
+retrieved with method: profileCosSim
+score: 0.6851887098275316
+
+4 - unwanted comparison: 6;P14780~140;P01588
+retrieved with method: profileCosSim
+score: 0.8298651806967271
+
+5 - unwanted comparison: 380;Q62635~230;P01876
+retrieved with method: profileCosSim
+score: 0.8364240026422981
+
+6 - unwanted comparison: 74;P19835~633;P10761
+retrieved with method: profileCosSim
+score: 0.8964214570007953
+
+7 - unwanted comparison: 1519;Q02817~613;P07911
+retrieved with method: profileCosSim
+score: 0.9311312245689307
+
+8 - unwanted comparison: 381;Q62635~140;P01588
+retrieved with method: profileCosSim
+score: 0.6360886896142406
+
+9 - unwanted comparison: 381;Q62635~634;P21754
+retrieved with method: profileCosSim
+score: 0.8196248302033305
+
+10 - unwanted comparison: 374;P15941~309;P02668
+retrieved with method: profileCosSim
+score: 0.7492686492653552
+
+11 - unwanted comparison: 613;P07911~6;P14780
+retrieved with method: profileCosSim
+score: 0.9092785539470228
+
+12 - unwanted comparison: 641;Q9GZM5~230;P01876
+retrieved with method: profileCosSim
+score: 0.8337755381766551
+
+13 - unwanted comparison: 634;P21754~6;P14780
+retrieved with method: profileCosSim
+score: 0.8506412633329495
+
+14 - unwanted comparison: 685;P41222~1519;Q02817
+retrieved with method: profileCosSim
+score: 0.929564787835557
+
+15 - unwanted comparison: 641;Q9GZM5~613;P07911
+retrieved with method: profileCosSim
+score: 0.8613598938017172
+
+__________________________________________________________
+Total Positive Comparisons: 9
+True  Positive Comparisons: 9
+False Positive Comparisons: 15
+[1012;Q9BYF1~633;P10761, 230;P01876~613;P07911, 140;P01588~613;P07911, 6;P14780~140;P01588, 380;Q62635~230;P01876, 74;P19835~633;P10761, 1519;Q02817~613;P07911, 381;Q62635~140;P01588, 381;Q62635~634;P21754, 374;P15941~309;P02668, 613;P07911~6;P14780, 641;Q9GZM5~230;P01876, 634;P21754~6;P14780, 685;P41222~1519;Q02817, 641;Q9GZM5~613;P07911]
+__________________________________________________________
+Total Negative Comparisons: 15
+True  Negative Comparisons: 0
+False Negative Comparisons: 0
+[]
+__________________________________________________________
+
+True Positive Rate:          1.0
+True Negative Rate:          0.0
+Positive Predictive Value:   0.375
+Negative Predictive Value:   0.0
+False Discovery Rate:        0.625
+False Negative Rate:         0.0
+False Positive Rate:         1.0
+False Omission Rate:         0.0
+Matthews Correlation Coefficient (MCC) with int:    0.0
+Matthews Correlation Coefficient (MCC) with double: 0.0

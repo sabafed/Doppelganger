@@ -1,0 +1,66 @@
+1 - wanted comparison: 633;P10761~634;P21754
+retrieved with method: linkCosSim
+score: 0.9387365967777292
+
+2 - wanted comparison: 1012;Q9BYF1~309;P02668
+retrieved with method: linkCosSim
+score: 0.9569321102069623
+
+3 - wanted comparison: 1519;Q02817~230;P01876
+retrieved with method: linkCosSim
+score: 0.9535872796772651
+
+4 - wanted comparison: 230;P01876~6;P14780
+retrieved with method: linkCosSim
+score: 0.9932643905318763
+
+5 - wanted comparison: 92;P05059~101;P00743
+retrieved with method: linkCosSim
+score: 0.9999999999999998
+
+6 - wanted comparison: 88;P01215~413;P15941
+retrieved with method: linkCosSim
+score: 0.9574271077563381
+
+1 - unwanted comparison: 230;P01876~613;P07911
+retrieved with method: linkCosSim
+score: 0.9883875382912074
+
+2 - unwanted comparison: 1519;Q02817~613;P07911
+retrieved with method: linkCosSim
+score: 0.9531224900697456
+
+3 - unwanted comparison: 374;P15941~309;P02668
+retrieved with method: linkCosSim
+score: 0.9000328725094617
+
+4 - unwanted comparison: 613;P07911~6;P14780
+retrieved with method: linkCosSim
+score: 0.9780200831180073
+
+5 - unwanted comparison: 685;P41222~1519;Q02817
+retrieved with method: linkCosSim
+score: 0.9187303212563727
+
+__________________________________________________________
+Total Positive Comparisons: 9
+True  Positive Comparisons: 6
+False Positive Comparisons: 5
+[230;P01876~613;P07911, 1519;Q02817~613;P07911, 374;P15941~309;P02668, 613;P07911~6;P14780, 685;P41222~1519;Q02817]
+__________________________________________________________
+Total Negative Comparisons: 15
+True  Negative Comparisons: 10
+False Negative Comparisons: 3
+[140;P01588~634;P21754, 309;P02668~376;P15941, 189;P02724~101;P00743]
+__________________________________________________________
+
+True Positive Rate:          0.6666666666666666
+True Negative Rate:          0.6666666666666666
+Positive Predictive Value:   0.5454545454545454
+Negative Predictive Value:   0.7692307692307693
+False Discovery Rate:        0.45454545454545453
+False Negative Rate:         0.3333333333333333
+False Positive Rate:         0.3333333333333333
+False Omission Rate:         0.23076923076923078
+Matthews Correlation Coefficient (MCC) with int:    0.32387513781564786
+Matthews Correlation Coefficient (MCC) with double: 0.32387513781564786

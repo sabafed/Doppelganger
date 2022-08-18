@@ -1,0 +1,138 @@
+1 - wanted comparison: 2162;Q9DB72~100;P12263
+retrieved with method: linkCosSim
+score: 0.9881062333064236
+
+2 - wanted comparison: 677;P05090~984;P08195
+retrieved with method: linkCosSim
+score: 0.9809796263633459
+
+3 - wanted comparison: 320;P02788~2840;P0DTC2
+retrieved with method: linkCosSim
+score: 0.9976980881286215
+
+4 - wanted comparison: 757;P02790~759;P10909
+retrieved with method: linkCosSim
+score: 0.9767864015073612
+
+5 - wanted comparison: 550;P01833~320;P02788
+retrieved with method: linkCosSim
+score: 0.9972631218271965
+
+6 - wanted comparison: 319;P24627~2583;O35405
+retrieved with method: linkCosSim
+score: 0.9833174571333023
+
+7 - wanted comparison: 475;P01012~479;P01005
+retrieved with method: linkCosSim
+score: 0.9812391008598379
+
+8 - wanted comparison: 2255;Q9Z218~2537;P11627
+retrieved with method: linkCosSim
+score: 0.9976764717221166
+
+9 - wanted comparison: 759;P10909~355;P11279
+retrieved with method: linkCosSim
+score: 0.986917459229683
+
+10 - wanted comparison: 984;P08195~744;P00738
+retrieved with method: linkCosSim
+score: 0.988427532601549
+
+11 - wanted comparison: 594;P07996~1131;Q99715
+retrieved with method: linkCosSim
+score: 0.9982367030183672
+
+12 - wanted comparison: 2537;P11627~2714;P97797
+retrieved with method: linkCosSim
+score: 0.9925763859656769
+
+13 - wanted comparison: 356;P13473~355;P11279
+retrieved with method: linkCosSim
+score: 0.9995512350079103
+
+14 - wanted comparison: 678;P02749~744;P00738
+retrieved with method: linkCosSim
+score: 0.9962478148596081
+
+15 - wanted comparison: 2166;Q9WTR5~2714;P97797
+retrieved with method: linkCosSim
+score: 0.9727272727272729
+
+16 - wanted comparison: 2714;P97797~2479;Q61735
+retrieved with method: linkCosSim
+score: 0.9831701787302799
+
+17 - wanted comparison: 355;P11279~757;P02790
+retrieved with method: linkCosSim
+score: 0.9951322874201367
+
+18 - wanted comparison: 1131;Q99715~1599;Q15063
+retrieved with method: linkCosSim
+score: 0.9989829725841551
+
+19 - wanted comparison: 744;P00738~677;P05090
+retrieved with method: linkCosSim
+score: 0.9910770540678759
+
+20 - wanted comparison: 722;P08603~678;P02749
+retrieved with method: linkCosSim
+score: 0.9934937266312671
+
+21 - wanted comparison: 2479;Q61735~2461;P02468
+retrieved with method: linkCosSim
+score: 0.9801059807672624
+
+22 - wanted comparison: 666;P07288~790;P07288
+retrieved with method: linkCosSim
+score: 0.9926784370860213
+
+1 - unwanted comparison: 2537;P11627~227;P01877
+retrieved with method: linkCosSim
+score: 0.9591854128857543
+
+2 - unwanted comparison: 2592;Q80UG2~2402;P43406
+retrieved with method: linkCosSim
+score: 0.9525793444156804
+
+3 - unwanted comparison: 677;P05090~20;P01009
+retrieved with method: linkCosSim
+score: 0.9922563482859353
+
+4 - unwanted comparison: 2954;Q712V9~765;P01854
+retrieved with method: linkCosSim
+score: 0.9558679927808947
+
+5 - unwanted comparison: 2961;P0DOX2~750;P05543
+retrieved with method: linkCosSim
+score: 0.9680910015077028
+
+6 - unwanted comparison: 320;P02788~759;P10909
+retrieved with method: linkCosSim
+score: 0.9919550545649093
+
+7 - unwanted comparison: 2966;P01876~2964;P0DOX5
+retrieved with method: linkCosSim
+score: 0.9712050679145556
+
+__________________________________________________________
+Total Positive Comparisons: 25
+True  Positive Comparisons: 22
+False Positive Comparisons: 7
+[2537;P11627~227;P01877, 2592;Q80UG2~2402;P43406, 677;P05090~20;P01009, 2954;Q712V9~765;P01854, 2961;P0DOX2~750;P05543, 320;P02788~759;P10909, 2966;P01876~2964;P0DOX5]
+__________________________________________________________
+Total Negative Comparisons: 20
+True  Negative Comparisons: 13
+False Negative Comparisons: 3
+[1011;P12821~766;P01008, 227;P01877~568;O15389, 60;Q7Z1F8~2784;Q99KF1]
+__________________________________________________________
+
+True Positive Rate:          0.88
+True Negative Rate:          0.65
+Positive Predictive Value:   0.7586206896551724
+Negative Predictive Value:   0.8125
+False Discovery Rate:        0.2413793103448276
+False Negative Rate:         0.12
+False Positive Rate:         0.35
+False Omission Rate:         0.1875
+Matthews Correlation Coefficient (MCC) with int:    0.5501763040310274
+Matthews Correlation Coefficient (MCC) with double: 0.5501763040310272
