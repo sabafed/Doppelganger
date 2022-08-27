@@ -15,7 +15,7 @@ public class statistics {
         return true;
     }
 
-    public static void statistics(int TP, int TN, int FP, int FN) {
+    public static void statistics(int TP, int TN, int FP, int FN, boolean verbose) {
         double TPR = truePositiveRate(TP,FN);
         double TNR = trueNegativeRate(TN,FP);
         double PPV = positivePredictiveValue(TP,FP);
@@ -28,16 +28,30 @@ public class statistics {
         double MCC1 = matthewsCorrelationCoefficient(TP,TN,FP,FN);
         double MCC2 = matthewsCorrelationCoefficient(PPV,TPR,TNR,NPV,FDR,FNR,FPR,FOR);
 
-        System.out.println("\nTrue Positive Rate:          " + TPR +
-                        "\nTrue Negative Rate:          " + TNR +
-                        "\nPositive Predictive Value:   " + PPV +
-                        "\nNegative Predictive Value:   " + NPV +
-                        "\nFalse Discovery Rate:        " + FDR +
-                        "\nFalse Negative Rate:         " + FNR +
-                        "\nFalse Positive Rate:         " + FPR +
-                        "\nFalse Omission Rate:         " + FOR +
-                        "\nMatthews Correlation Coefficient (MCC) with int:    " + MCC1 +
-                        "\nMatthews Correlation Coefficient (MCC) with double: " + MCC2 );
+        if ( verbose ) {
+            System.out.println("\nTrue Positive Rate:          " + TPR +
+                    "\nTrue Negative Rate:          " + TNR +
+                    "\nPositive Predictive Value:   " + PPV +
+                    "\nNegative Predictive Value:   " + NPV +
+                    "\nFalse Discovery Rate:        " + FDR +
+                    "\nFalse Negative Rate:         " + FNR +
+                    "\nFalse Positive Rate:         " + FPR +
+                    "\nFalse Omission Rate:         " + FOR +
+                    "\nMatthews Correlation Coefficient (MCC) with int:    " + MCC1 +
+                    "\nMatthews Correlation Coefficient (MCC) with double: " + MCC2);
+        } else {
+            System.out.println("True Positive Rate" + "\t" + "True Negative Rate" + "\t" +
+                    "Positive Predictive Value" + "\t" + "Negative Predictive Value" +  "\t" +
+                    "False Discovery Rate" + "\t" + "False Negative Rate" + "\t" +
+                    "False Positive Rate" + "\t" + "False Omission Rate" + "\t" +
+                    "Matthews Correlation Coefficient (MCC)");
+
+            System.out.println(TPR + "\t" + TNR + "\t" +
+                    PPV + "\t" + NPV + "\t" +
+                    FDR + "\t" + FNR + "\t" +
+                    FPR + "\t" + FOR + "\t" +
+                    MCC2);
+        }
     }
 
     // Senitivity:

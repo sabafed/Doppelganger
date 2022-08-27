@@ -25,7 +25,7 @@ public class qualityAnalysis {
 
         HashMap<String,String[]> methods = methodsMap();
         double[] thresholds = thresholds();
-
+        boolean[] verbose = new boolean[]{true,false};
         for (String type : types) {
             //ArrayList<doppelganger> doppelgangers = reader.readfiles(proteinsAll, type);
 
@@ -36,7 +36,10 @@ public class qualityAnalysis {
                     //if ( method.equals("density") ) threshold = 1.0;
 
                     for (double threshold : thresholds) {
-                        QAExport.QAExport(proteinsAll, type, method, score, threshold);
+
+                        for (boolean v : verbose) {
+                            QAExport.QAExport(proteinsAll, type, method, score, threshold, v);
+                        }
                     }
                 }
             }

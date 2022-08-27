@@ -15,10 +15,12 @@ import java.util.HashMap;
  */
 public class QAExport {
     public static void QAExport(String dataset, String glycanType,
-                                String method, String score, double threshold) throws Exception {
+                                String method, String score, double threshold, boolean verbose) throws Exception {
+        String extension = ".txt";
+        if ( !verbose ) extension = ".tsv";
 
-        String targetDirectory = "results/evaluation/";
-        String fileName = ( "QA_"+dataset+"_"+glycanType+"_"+score.replace(" ","-")+threshold+".txt" );
+        String targetDirectory = "results/evaluation/"+extension.replace(".","")+"/";
+        String fileName = ( "QA_"+dataset+"_"+glycanType+"_"+score.replace(" ","-")+"_"+threshold+extension );
         File outFile = new File(targetDirectory+fileName);
         PrintStream output = new PrintStream(outFile);
         PrintStream console = System.out;
@@ -41,9 +43,11 @@ public class QAExport {
                     if ( val >= threshold && !(truePositives.contains(comp)) ) {
                         truePositives.add(comp);
 
-                        System.out.println(truePositives.size() + " - wanted comparison: " + comp +
-                                "\nretrieved with method: " + method +
-                                "\nscore: " + results.get(res) + "\n");
+                        if ( verbose ) {
+                            System.out.println(truePositives.size() + " - wanted comparison: " + comp +
+                                    "\nretrieved with method: " + method +
+                                    "\nscore: " + results.get(res) + "\n");
+                        }
                     }
                 }
             }
@@ -57,9 +61,11 @@ public class QAExport {
                     if ( val >= threshold && !(falsePositives.contains(comp)) ) {
                         falsePositives.add(comp);
 
-                        System.out.println(falsePositives.size() + " - unwanted comparison: " + comp +
-                                "\nretrieved with method: " + method +
-                                "\nscore: " + val + "\n");
+                        if ( verbose ) {
+                            System.out.println(falsePositives.size() + " - unwanted comparison: " + comp +
+                                    "\nretrieved with method: " + method +
+                                    "\nscore: " + val + "\n");
+                        }
                     }
                 }
             }
@@ -71,26 +77,38 @@ public class QAExport {
         ArrayList<String> trueNegatives = new ArrayList<>(negatives); // Negative comparisons NOT found in the results
         trueNegatives.removeAll(falsePositives);
 
-        System.out.println("__________________________________________________________");
-        System.out.println(
-                          "Total Positive Comparisons: " + positives.size() +
-                        "\nTrue  Positive Comparisons: " + truePositives.size() +
-                        "\nFalse Positive Comparisons: " + falsePositives.size() +
-                        "\n" + falsePositives);
-        System.out.println("__________________________________________________________");
-        System.out.println(
-                          "Total Negative Comparisons: " + negatives.size() +
-                        "\nTrue  Negative Comparisons: " + trueNegatives.size() +
-                        "\nFalse Negative Comparisons: " + falseNegatives.size() +
-                        "\n" + falseNegatives);
-        System.out.println("__________________________________________________________");
+        if ( verbose ) {
+            System.out.println("__________________________________________________________");
+            System.out.println(
+                    "Total Positive Comparisons: " + positives.size() +
+                            "\nTrue  Positive Comparisons: " + truePositives.size() +
+                            "\nFalse Positive Comparisons: " + falsePositives.size() +
+                            "\nFalse Positives List:\n" + falsePositives);
+            System.out.println("__________________________________________________________");
+            System.out.println(
+                    "Total Negative Comparisons: " + negatives.size() +
+                            "\nTrue  Negative Comparisons: " + trueNegatives.size() +
+                            "\nFalse Negative Comparisons: " + falseNegatives.size() +
+                            "\nFalse Negatives List:\n" + falseNegatives);
+            System.out.println("__________________________________________________________");
+        } else {
+            System.out.println("Total Positive Comparisons" + "\t" + "True  Positive Comparisons" + "\t" +
+                            "False Positive Comparisons" + "\t" + "False Positives List" + "\t" +
+                            "Total Negative Comparisons" + "\t" + "True  Negative Comparisons" + "\t" +
+                            "False Negative Comparisons" + "\t" + "False Negatives List" );
+
+            System.out.println( positives.size() + "\t" + truePositives.size() + "\t" +
+                    falsePositives.size() + "\t" + falsePositives + "\t" +
+                    negatives.size() + "\t" + trueNegatives.size() + "\t" +
+                    falseNegatives.size() + "\t" + falseNegatives );
+        }
 
         int TP = truePositives.size();
         int TN = trueNegatives.size();
         int FP = falsePositives.size();
         int FN = falseNegatives.size();
 
-        statistics.statistics(TP,TN,FP,FN);
+        statistics.statistics(TP,TN,FP,FN, verbose);
 
         System.setOut(console);
         System.out.println("File '" + fileName + "' has been created in directory '" + targetDirectory + "'");
