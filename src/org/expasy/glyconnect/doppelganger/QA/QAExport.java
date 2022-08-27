@@ -40,13 +40,26 @@ public class QAExport {
                 if ( comp.equals(res) ) {
                     double val = Double.parseDouble(results.get(res));
 
-                    if ( val >= threshold && !(truePositives.contains(comp)) ) {
-                        truePositives.add(comp);
+                    double upBound = 1.0 + (1.0 - threshold);
 
-                        if ( verbose ) {
-                            System.out.println(truePositives.size() + " - wanted comparison: " + comp +
-                                    "\nretrieved with method: " + method +
-                                    "\nscore: " + results.get(res) + "\n");
+                    if ( !(truePositives.contains(comp)) ) {
+                        if ( !(method.contains("Density")) && val >= threshold) {
+                            truePositives.add(comp);
+
+                            if ( verbose ) {
+                                System.out.println(truePositives.size() + " - wanted comparison: " + comp +
+                                        "\nretrieved with method: " + method +
+                                        "\nscore: " + results.get(res) + "\n");
+                            }
+                        }
+                        else if ( method.contains("Density") && (val >= threshold && val <= upBound) ) {
+                            truePositives.add(comp);
+
+                            if ( verbose ) {
+                                System.out.println(truePositives.size() + " - wanted comparison: " + comp +
+                                        "\nretrieved with method: " + method +
+                                        "\nscore: >= " + threshold + " <= " + results.get(res) + " <= " + upBound + "\n");
+                            }
                         }
                     }
                 }
@@ -58,13 +71,26 @@ public class QAExport {
                 if (res.equals(comp)) {
                     double val = Double.parseDouble(results.get(res));
 
-                    if ( val >= threshold && !(falsePositives.contains(comp)) ) {
-                        falsePositives.add(comp);
+                    double upBound = 1.0 + (1.0 - threshold);
 
-                        if ( verbose ) {
-                            System.out.println(falsePositives.size() + " - unwanted comparison: " + comp +
-                                    "\nretrieved with method: " + method +
-                                    "\nscore: " + val + "\n");
+                    if ( !(falsePositives.contains(comp)) ) {
+                        if ( !(method.contains("Density")) && val >= threshold ) {
+                            falsePositives.add(comp);
+
+                            if ( verbose ) {
+                                System.out.println(falsePositives.size() + " - unwanted comparison: " + comp +
+                                        "\nretrieved with method: " + method +
+                                        "\nscore: " + val + "\n");
+                            }
+                        }
+                        else if ( method.contains("Density") &&  (val >= threshold && val <= upBound) ) {
+                            falsePositives.add(comp);
+
+                            if ( verbose ) {
+                                System.out.println(falsePositives.size() + " - unwanted comparison: " + comp +
+                                        "\nretrieved with method: " + method +
+                                        "\nscore: >= " + threshold + " <= " + val + " <= " + upBound +"\n");
+                            }
                         }
                     }
                 }

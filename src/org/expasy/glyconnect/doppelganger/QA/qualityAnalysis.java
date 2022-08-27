@@ -25,7 +25,8 @@ public class qualityAnalysis {
 
         HashMap<String,String[]> methods = methodsMap();
         double[] thresholds = thresholds();
-        boolean[] verbose = new boolean[]{true,false};
+        boolean[] verbose = new boolean[]{true,false}; // Allows creation of .txt and .tsv files
+
         for (String type : types) {
             //ArrayList<doppelganger> doppelgangers = reader.readfiles(proteinsAll, type);
 
@@ -33,12 +34,10 @@ public class qualityAnalysis {
                 //QAExport.methodToTable(type, doppelgangers, proteinsAll, method);
 
                 for (String score : methods.get(method)) {
-                    //if ( method.equals("density") ) threshold = 1.0;
-
                     for (double threshold : thresholds) {
 
                         for (boolean v : verbose) {
-                            QAExport.QAExport(proteinsAll, type, method, score, threshold, v);
+                            //QAExport.QAExport(proteinsAll, type, method, score, threshold, v);
                         }
                     }
                 }
@@ -102,10 +101,11 @@ public class qualityAnalysis {
         String densityRatioVT = "Density Ratio (Virtual T)";
         String densityRatioVF = "Density Ratio (Virtual F)";
 
-        methods.put("linkCosSim", new String[]{linkCosVT, linkCosVF});
-        methods.put("profileCosSim", new String[]{profCosVT, profCosVF});
-        //methods.put("density", new String[]{densityRatioVT, densityRatioVF});
-        methods.put("JaccardIndex", new String[]{realNodesJI, realLinksJI, virtualNodesJI, virtualLinksJI});
+        //methods.put("linkCosSim", new String[]{linkCosVT, linkCosVF});
+        //methods.put("profileCosSim", new String[]{profCosVT, profCosVF});
+        methods.put("density", new String[]{densityRatioVT, densityRatioVF});
+        //methods.put("JaccardIndex", new String[]{realNodesJI, realLinksJI, virtualNodesJI, virtualLinksJI});
+        //methods.put("all", new String[]{"all"});
 
         return methods;
     }

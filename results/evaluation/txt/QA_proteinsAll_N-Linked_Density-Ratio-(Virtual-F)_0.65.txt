@@ -1,0 +1,200 @@
+1 - wanted comparison: 2162;Q9DB72~100;P12263
+retrieved with method: density
+score: 0.7238095238095239
+
+2 - wanted comparison: 677;P05090~984;P08195
+retrieved with method: density
+score: 0.9895575468079914
+
+3 - wanted comparison: 320;P02788~2840;P0DTC2
+retrieved with method: density
+score: 0.8663594470046082
+
+4 - wanted comparison: 757;P02790~759;P10909
+retrieved with method: density
+score: 1.1880220745014425
+
+5 - wanted comparison: 550;P01833~320;P02788
+retrieved with method: density
+score: 0.8320175071201208
+
+6 - wanted comparison: 319;P24627~2583;O35405
+retrieved with method: density
+score: 1.3186813186813184
+
+7 - wanted comparison: 2255;Q9Z218~2537;P11627
+retrieved with method: density
+score: 0.9094512977170441
+
+8 - wanted comparison: 1011;P12821~766;P01008
+retrieved with method: density
+score: 0.887104743083004
+
+9 - wanted comparison: 759;P10909~355;P11279
+retrieved with method: density
+score: 0.9915366630662162
+
+10 - wanted comparison: 984;P08195~744;P00738
+retrieved with method: density
+score: 1.021663172606569
+
+11 - wanted comparison: 594;P07996~1131;Q99715
+retrieved with method: density
+score: 0.8958103505585717
+
+12 - wanted comparison: 2537;P11627~2714;P97797
+retrieved with method: density
+score: 0.8355600539811066
+
+13 - wanted comparison: 356;P13473~355;P11279
+retrieved with method: density
+score: 1.0260119293243801
+
+14 - wanted comparison: 678;P02749~744;P00738
+retrieved with method: density
+score: 2.4571428571428573
+
+15 - wanted comparison: 2166;Q9WTR5~2714;P97797
+retrieved with method: density
+score: 1.3228070175438595
+
+16 - wanted comparison: 2714;P97797~2479;Q61735
+retrieved with method: density
+score: 0.845707248416608
+
+17 - wanted comparison: 355;P11279~757;P02790
+retrieved with method: density
+score: 0.8489198963882509
+
+18 - wanted comparison: 227;P01877~568;O15389
+retrieved with method: density
+score: 0.7616487455197132
+
+19 - wanted comparison: 1131;Q99715~1599;Q15063
+retrieved with method: density
+score: 0.9261559696342306
+
+20 - wanted comparison: 744;P00738~677;P05090
+retrieved with method: density
+score: 0.9891250617894215
+
+21 - wanted comparison: 60;Q7Z1F8~2784;Q99KF1
+retrieved with method: density
+score: 1.2222222222222223
+
+22 - wanted comparison: 722;P08603~678;P02749
+retrieved with method: density
+score: 0.9909712482468442
+
+23 - wanted comparison: 2479;Q61735~2461;P02468
+retrieved with method: density
+score: 0.774703557312253
+
+24 - wanted comparison: 666;P07288~790;P07288
+retrieved with method: density
+score: 1.2407513348588863
+
+1 - unwanted comparison: 2537;P11627~227;P01877
+retrieved with method: density
+score: 0.7757948717948718
+
+2 - unwanted comparison: 2786;Q80X71~2714;P97797
+retrieved with method: density
+score: 3.561403508771929
+
+3 - unwanted comparison: 2415;O08532-4~2461;P02468
+retrieved with method: density
+score: 0.8105263157894738
+
+4 - unwanted comparison: 41;P02771~1011;P12821
+retrieved with method: density
+score: 1.8388471177944863
+
+5 - unwanted comparison: 1793;Q9UQP3~176;P07359
+retrieved with method: density
+score: 0.7636363636363637
+
+6 - unwanted comparison: 1011;P12821~227;P01877
+retrieved with method: density
+score: 0.8233992094861661
+
+7 - unwanted comparison: 2592;Q80UG2~2402;P43406
+retrieved with method: density
+score: 1.0636363636363637
+
+8 - unwanted comparison: 568;O15389~1011;P12821
+retrieved with method: density
+score: 1.5945378151260505
+
+9 - unwanted comparison: 427;P10522~601;P01217
+retrieved with method: density
+score: 1.1490683229813663
+
+10 - unwanted comparison: 677;P05090~20;P01009
+retrieved with method: density
+score: 0.8649524817007627
+
+11 - unwanted comparison: 433;Q62765~2714;P97797
+retrieved with method: density
+score: 1.0458089668615984
+
+12 - unwanted comparison: 2954;Q712V9~765;P01854
+retrieved with method: density
+score: 0.8441155743481324
+
+13 - unwanted comparison: 2714;P97797~2415;O08532-4
+retrieved with method: density
+score: 0.8083296014330498
+
+14 - unwanted comparison: 765;P01854~2537;P11627
+retrieved with method: density
+score: 0.7980204144757191
+
+15 - unwanted comparison: 1635;O60568~1538;Q96NY8
+retrieved with method: density
+score: 1.7499999999999998
+
+16 - unwanted comparison: 227;P01877~41;P02771
+retrieved with method: density
+score: 0.6604560622914348
+
+17 - unwanted comparison: 475;P01012~227;P01877
+retrieved with method: density
+score: 0.9805977011494253
+
+18 - unwanted comparison: 2961;P0DOX2~750;P05543
+retrieved with method: density
+score: 0.9133089133089133
+
+19 - unwanted comparison: 320;P02788~759;P10909
+retrieved with method: density
+score: 1.0941798941798941
+
+20 - unwanted comparison: 2966;P01876~2964;P0DOX5
+retrieved with method: density
+score: 0.8799253034547151
+
+__________________________________________________________
+Total Positive Comparisons: 25
+True  Positive Comparisons: 24
+False Positive Comparisons: 20
+False Positives List:
+[2537;P11627~227;P01877, 2786;Q80X71~2714;P97797, 2415;O08532-4~2461;P02468, 41;P02771~1011;P12821, 1793;Q9UQP3~176;P07359, 1011;P12821~227;P01877, 2592;Q80UG2~2402;P43406, 568;O15389~1011;P12821, 427;P10522~601;P01217, 677;P05090~20;P01009, 433;Q62765~2714;P97797, 2954;Q712V9~765;P01854, 2714;P97797~2415;O08532-4, 765;P01854~2537;P11627, 1635;O60568~1538;Q96NY8, 227;P01877~41;P02771, 475;P01012~227;P01877, 2961;P0DOX2~750;P05543, 320;P02788~759;P10909, 2966;P01876~2964;P0DOX5]
+__________________________________________________________
+Total Negative Comparisons: 20
+True  Negative Comparisons: 0
+False Negative Comparisons: 1
+False Negatives List:
+[475;P01012~479;P01005]
+__________________________________________________________
+
+True Positive Rate:          0.96
+True Negative Rate:          0.0
+Positive Predictive Value:   0.5454545454545454
+Negative Predictive Value:   0.0
+False Discovery Rate:        0.45454545454545453
+False Negative Rate:         0.04
+False Positive Rate:         1.0
+False Omission Rate:         1.0
+Matthews Correlation Coefficient (MCC) with int:    -0.13483997249264842
+Matthews Correlation Coefficient (MCC) with double: -0.13483997249264842

@@ -1,0 +1,92 @@
+1 - wanted comparison: 633;P10761~634;P21754
+retrieved with method: density
+score: 1.4034090909090908
+
+2 - wanted comparison: 1012;Q9BYF1~309;P02668
+retrieved with method: density
+score: 1.0153846153846153
+
+3 - wanted comparison: 309;P02668~376;P15941
+retrieved with method: density
+score: 1.0227272727272727
+
+4 - wanted comparison: 1519;Q02817~230;P01876
+retrieved with method: density
+score: 0.9645597369382535
+
+5 - wanted comparison: 92;P05059~101;P00743
+retrieved with method: density
+score: 1.0
+
+6 - wanted comparison: 88;P01215~413;P15941
+retrieved with method: density
+score: 1.3928571428571428
+
+1 - unwanted comparison: 1012;Q9BYF1~633;P10761
+retrieved with method: density
+score: 1.1715976331360947
+
+2 - unwanted comparison: 230;P01876~613;P07911
+retrieved with method: density
+score: 1.0398936170212765
+
+3 - unwanted comparison: 140;P01588~613;P07911
+retrieved with method: density
+score: 1.4703977798334875
+
+4 - unwanted comparison: 380;Q62635~230;P01876
+retrieved with method: density
+score: 0.9959799616550188
+
+5 - unwanted comparison: 74;P19835~633;P10761
+retrieved with method: density
+score: 0.9871794871794873
+
+6 - unwanted comparison: 1519;Q02817~613;P07911
+retrieved with method: density
+score: 1.0030395136778114
+
+7 - unwanted comparison: 381;Q62635~140;P01588
+retrieved with method: density
+score: 1.1596638655462184
+
+8 - unwanted comparison: 381;Q62635~634;P21754
+retrieved with method: density
+score: 1.0178571428571428
+
+9 - unwanted comparison: 374;P15941~309;P02668
+retrieved with method: density
+score: 0.9777777777777777
+
+10 - unwanted comparison: 634;P21754~6;P14780
+retrieved with method: density
+score: 1.3582342954159592
+
+11 - unwanted comparison: 685;P41222~1519;Q02817
+retrieved with method: density
+score: 0.9886153846153847
+
+__________________________________________________________
+Total Positive Comparisons: 9
+True  Positive Comparisons: 6
+False Positive Comparisons: 11
+False Positives List:
+[1012;Q9BYF1~633;P10761, 230;P01876~613;P07911, 140;P01588~613;P07911, 380;Q62635~230;P01876, 74;P19835~633;P10761, 1519;Q02817~613;P07911, 381;Q62635~140;P01588, 381;Q62635~634;P21754, 374;P15941~309;P02668, 634;P21754~6;P14780, 685;P41222~1519;Q02817]
+__________________________________________________________
+Total Negative Comparisons: 15
+True  Negative Comparisons: 4
+False Negative Comparisons: 3
+False Negatives List:
+[230;P01876~6;P14780, 140;P01588~634;P21754, 189;P02724~101;P00743]
+__________________________________________________________
+
+True Positive Rate:          0.6666666666666666
+True Negative Rate:          0.26666666666666666
+Positive Predictive Value:   0.35294117647058826
+Negative Predictive Value:   0.5714285714285714
+False Discovery Rate:        0.6470588235294118
+False Negative Rate:         0.3333333333333333
+False Positive Rate:         0.7333333333333333
+False Omission Rate:         0.42857142857142855
+Matthews Correlation Coefficient (MCC) with int:    -0.07100716024967263
+Matthews Correlation Coefficient (MCC) with double: -0.0710071602496726
