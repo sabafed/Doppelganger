@@ -335,11 +335,11 @@ public class virtualsImpact {
             header += "\t" + "Cited in paper(s)";
             existingDOIs = virtualsMap(realNodesAll, virtualsExisting); // retrieve doi of the paper in which the exisisting virtuals are cited}
             for (String node : existingMap.keySet()){
-                body += node + "\t" + existingMap.get(node).size() + "\t" + existingMap.get(node) + "\t" + existingDOIs.get(node);
+                body += node + "\t" + existingMap.get(node).size() + "\t" + existingMap.get(node) + "\t" + existingDOIs.get(node) + "\n";
             }
         } else {
             for (String node : createdMap.keySet()){
-                body += node + "\t" + createdMap.get(node).size() + "\t" + createdMap.get(node);
+                body += node + "\t" + createdMap.get(node).size() + "\t" + createdMap.get(node) + "\n";
             }
         }
 
