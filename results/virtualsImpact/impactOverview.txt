@@ -1,25 +1,25 @@
 -------- Proteins --------
 N-Linked proteinsAll:
-    Real nodes  in referencesAll database: 6522
-    Virtual nodes total           : 385
-    Real nodes labeled as virtuals: 272
-    Virtuals created by Compozitor: 506 
+    Real nodes in referencesAll dataset:         6522
+    Virtual nodes in proteinsAll dataset:        385
+    Virtual nodes proven to exist in literature (virtualsExisting):   272
+    Virtual nodes found EXCLUSIVELY in proteinsAll (virtualsCreated): 113
 
 O-Linked proteinsAll:
-    Real nodes  in referencesAll database: 2259
-    Virtual nodes total           : 80
-    Real nodes labeled as virtuals: 56
-    Virtuals created by Compozitor: 374
+    Real nodes in referencesAll dataset:         2259
+    Virtual nodes in proteinsAll dataset:        80
+    Virtual nodes proven to exist in literature (virtualsExisting):   56
+    Virtual nodes found EXCLUSIVELY in proteinsAll (virtualsCreated): 24
 
 -------- Tissues --------
 N-Linked tissuesAll:
-    Real nodes  in referencesAll database: 6522
-    Virtual nodes total           : 226
-    Real nodes labeled as virtuals: 144
-    Virtuals created by Compozitor: 634
+    Real nodes in referencesAll dataset:         6522
+    Virtual nodes in tissuesAll dataset:         226
+    Virtual nodes proven to exist in literature (virtualsExisting):   144
+    Virtual nodes found EXCLUSIVELY in tissuesAll (virtualsCreated):  82
 
 O-Linked tissuesAll:
-    Real nodes  in referencesAll database: 2259
-    Virtual nodes total           : 98
-    Real nodes labeled as virtuals: 59
-    Virtuals created by Compozitor: 371
+    Real nodes in referencesAll dataset:         2259
+    Virtual nodes in tissuesAll dataset:        98
+    Virtual nodes proven to exist in literature (virtualsExisting):   59
+    Virtual nodes found EXCLUSIVELY in tissuesAll (virtualsCreated):  39

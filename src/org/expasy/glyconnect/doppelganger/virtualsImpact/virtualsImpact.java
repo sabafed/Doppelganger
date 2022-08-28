@@ -7,9 +7,7 @@ import org.expasy.glyconnect.doppelganger.doppelganger.reader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.TreeMap;
+import java.util.*;
 
 /**
  * This class produces data summaries to understand the impact of virtual nodes on the results.
@@ -20,8 +18,8 @@ public class virtualsImpact {
         String sourceDirectory = "proteinsAll";
         //String sourceDirectory = "sourcesAll/tissue";
 
-        //String glycanType = "N-Linked";
-        String glycanType = "O-Linked";
+        String glycanType = "N-Linked";
+        //String glycanType = "O-Linked";
 
         ArrayList<doppelganger> gangers = reader.readfiles(sourceDirectory, glycanType);
 
@@ -217,56 +215,135 @@ public class virtualsImpact {
         */
     }
 
+    /**
+     * In this function, all the networks of referencesAll (i.e. published literature) are parsed and all real nodes are extracted.
+     * From another dataset, be it proteinsAll or sourcesAll/tissue in this case (but can work with every Compozitor dataset),
+     * all the networks are parsed and virtual nodes are extracted.
+     * The list of all the real nodes in Compozitor is then compared to the list of all virtual nodes in a dataset.
+     * Hence, it is possible to determine which are the nodes marked as 'virtual' are actually reported in the literature,
+     * and which are the ones that exist only in Compozitor.
+     *
+     * @param gangers whichever ArrayList<doppelganger>.
+     * @param references ArrayList<doppelganger> representation of referencesAll dataset.
+     * @throws Exception
+     */
     public static void virtualsImpact(ArrayList<doppelganger> gangers, ArrayList<doppelganger> references) throws Exception {
-        HashMap<node,ArrayList<doppelganger>> realNodesAll = new HashMap<>();
-        HashMap<node,ArrayList<doppelganger>> virtualNodesAll = new HashMap<>();
+        // {realNode,[networks containing realNode]}
+        HashMap<node,Set<doppelganger>> realNodesAll = new HashMap<>();
 
-        ArrayList<String> virtualsCreated  = new ArrayList<>();
-        ArrayList<String> virtualsExisting = new ArrayList<>();
+        // {virtualNode,[networks containing virtualNode]}
+        HashMap<node,Set<doppelganger>> virtualNodesAll = new HashMap<>();
 
+        Set<String> virtualsCreated  = new HashSet<>();
+        Set<String> virtualsExisting = new HashSet<>();
+
+        // Populate realNodesAll with all the real nodes in referencesAll dataset
         for (doppelganger ref : references) {
             for (node real : ref.getRealNodes()) {
-                realNodesAll.computeIfAbsent(real, k -> new ArrayList<doppelganger>());
-                if ( !(realNodesAll.get(real).contains(ref)) ) realNodesAll.get(real).add(ref);
-                //System.out.println(realNodesAll.get(real));//DEBUG
+                realNodesAll.computeIfAbsent(real, k -> new HashSet<doppelganger>());
+                // If the paper containing the node is not in the [network containing realNode],
+                // then add it. Check is automated by the HashSet
+                realNodesAll.get(real).add(ref);
             }
         }
 
+        // Populate virtualNodesAll with all virtual nodes in gangers (proteinsAll and sourcesAll/tissue to begin with)
         for (doppelganger doppel : gangers) {
             for (node virtual : doppel.getVirtualNodes()) {
-                virtualNodesAll.computeIfAbsent(virtual, k -> new ArrayList<doppelganger>());
+                virtualNodesAll.computeIfAbsent(virtual, k -> new HashSet<doppelganger>());
 
-                if ( !(virtualNodesAll.get(virtual).contains(doppel)) )
-                    virtualNodesAll.get(virtual).add(doppel);
+                // If the paper containing the node is not in the [network containing virtualNode],
+                // then add it. Check is automated by the HashSet
+                virtualNodesAll.get(virtual).add(doppel);
             }
         }
 
         for (node real : realNodesAll.keySet()){
             for (node virtual : virtualNodesAll.keySet()){
-                if ( virtual.getCondensedFormat().equals(real.getCondensedFormat()) ) {
-                    if ( !(virtualsExisting.contains(real.toString())) )
-                        virtualsExisting.add(real.toString());
+                if ( real.getCondensedFormat().equals(virtual.getCondensedFormat()) ) {
+                    virtualsExisting.add(virtual.getCondensedFormat());
                 }
-                else {
-                    if ( !virtualsCreated.contains(real.toString()) )
-                        virtualsCreated.add(real.toString());
+            }
+        }
+        for (node real : realNodesAll.keySet()) {
+            for (node virtual : virtualNodesAll.keySet()) {
+                if ( !real.getCondensedFormat().equals(virtual.getCondensedFormat()) ) {
+                    if ( !virtualsExisting.contains(virtual.getCondensedFormat()) )
+                        virtualsCreated.add(virtual.getCondensedFormat());
                 }
             }
         }
 
-        virtualsCreated.removeAll(virtualsExisting);
+        System.out.println("Real nodes in referencesAll dataset:         "+realNodesAll.size());
+        System.out.println("Virtual nodes in proteinsAll dataset:        "+virtualNodesAll.size());
 
-        System.out.println("Real nodes  in referencesAll dataset: "+realNodesAll.size());
-        System.out.println("Virtual nodes total: "+virtualNodesAll.size());
+        System.out.println("Virtual nodes proven to exist in literature (virtualsExisting):   " + virtualsExisting.size());
+        System.out.println("Virtual nodes found EXCLUSIVELY in proteinsAll (virtualsCreated): " + virtualsCreated.size());
 
-        System.out.println("Real nodes labeled as virtuals: " + virtualsExisting.size());
-        System.out.println("Virtuals created by Compozitor: " + virtualsCreated.size());
+        virtualsToTable(virtualNodesAll, realNodesAll, virtualsCreated, virtualsExisting, "Existing");
+        virtualsToTable(virtualNodesAll, realNodesAll, virtualsCreated, virtualsExisting, "Created");
+    }
 
-        for (String ex : virtualsExisting) {
-            for (String cr : virtualsCreated) {
-                if ( ex.equals(cr) ) System.out.println(cr + " = "+ ex +"\n");
+    public static HashMap<String,Set<doppelganger>>  virtualsMap(HashMap<node,Set<doppelganger>> nodesAll, Set<String> virtuals) {
+        HashMap<String,Set<doppelganger>> virtualsMap = new HashMap<>();
+
+        for (node realNode : nodesAll.keySet()) {
+            String real = realNode.getCondensedFormat();
+
+            for (String virtual : virtuals) {
+                if ( virtual.equals(real) ) {
+                    virtualsMap.computeIfAbsent(real, k -> new HashSet<doppelganger>());
+                    virtualsMap.get(real).addAll(nodesAll.get(realNode));
+                }
             }
         }
 
+        return virtualsMap;
+    }
+
+    /** Creates a table in order to investigate which virtual nodes are found in literature and trace their papers,
+     *  if the virtuals type is 'existing', or just investigate in which networks the created virtuals are found.
+     *  Table is composed as follows:
+     *                                                                         (if 'existing')
+     *     header: |       node      | occurrences | present in network(s) | cited in paper(s) |
+     *     body:   | condensedFormat |      Y      |     identifier(s)     |       doi(s)      |
+     */
+    public static void virtualsToTable(HashMap<node, Set<doppelganger>> virtualNodesAll,
+                                       HashMap<node, Set<doppelganger>> realNodesAll,
+                                       Set<String> virtualsCreated,
+                                       Set<String> virtualsExisting,
+                                       String virtualsType) throws FileNotFoundException {
+
+        String targetDirectory = "results/virtualsImpact/";
+        String fileName = ( "virtuals"+virtualsType+".tsv");
+        File outFile = new File(targetDirectory+fileName);
+        PrintStream output = new PrintStream(outFile);
+        PrintStream console = System.out;
+
+        System.setOut(output);
+
+        String header = "Node" + "\t" + "Occurrences" + "\t" + "Present in network(s)" ;
+
+        HashMap<String,Set<doppelganger>> createdMap = virtualsMap(virtualNodesAll, virtualsCreated); // retrieve virtuals present as virtuals in networks
+
+        HashMap<String,Set<doppelganger>> existingMap  = virtualsMap(virtualNodesAll, virtualsExisting); // retrieve reals present as virtuals in networks
+        HashMap<String,Set<doppelganger>> existingDOIs = new HashMap<>();
+
+        String body = new String();
+
+        if ( virtualsType.equals("Existing") ) {
+            header += "\t" + "Cited in paper(s)";
+            existingDOIs = virtualsMap(realNodesAll, virtualsExisting); // retrieve doi of the paper in which the exisisting virtuals are cited}
+            for (String node : existingMap.keySet()){
+                body += node + "\t" + existingMap.get(node).size() + "\t" + existingMap.get(node) + "\t" + existingDOIs.get(node);
+            }
+        } else {
+            for (String node : createdMap.keySet()){
+                body += node + "\t" + createdMap.get(node).size() + "\t" + createdMap.get(node);
+            }
+        }
+
+        System.setOut(console);
+        System.out.println("File '" + fileName + "' has been created in directory '" + targetDirectory + "'");
     }
 }
