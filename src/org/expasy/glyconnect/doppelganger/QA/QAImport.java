@@ -41,7 +41,7 @@ public class QAImport {
         BufferedReader importBR = new BufferedReader(importFR);
 
         String line = importBR.readLine();
-        String[] header = line.split("\\t");
+        String[] header = line.split("\\t"); // Using header to retrieve desired method's index
         int scoreIndex = -1;
 
         for (int i = 0; i < header.length; i++) {

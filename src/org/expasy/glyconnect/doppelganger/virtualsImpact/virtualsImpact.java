@@ -26,8 +26,8 @@ public class virtualsImpact {
         ArrayList<doppelganger> gangers = reader.readfiles(sourceDirectory, glycanType);
 
         /*
-          ArrayList references is used to determine which virtual nodes exists in the database as experimentally proven
-          and which are created from Compozitor without appearing in the literature.
+         * ArrayList references is used to determine which virtual nodes exists in the database as experimentally proven
+         * and which are created from Compozitor without appearing in the literature.
          */
         ArrayList<doppelganger> references = reader.readfiles("referencesAll", glycanType);
 
@@ -256,7 +256,7 @@ public class virtualsImpact {
 
         virtualsCreated.removeAll(virtualsExisting);
 
-        System.out.println("Real nodes  in referencesAll database: "+realNodesAll.size());
+        System.out.println("Real nodes  in referencesAll dataset: "+realNodesAll.size());
         System.out.println("Virtual nodes total: "+virtualNodesAll.size());
 
         System.out.println("Real nodes labeled as virtuals: " + virtualsExisting.size());

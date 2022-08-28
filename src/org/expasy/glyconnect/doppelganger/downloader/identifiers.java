@@ -55,7 +55,7 @@ public class identifiers {
         return identifier;
     }
 
-    /**
+    /*
      * Used to set identifiers for queries without "taxonomy=" in the URL
      * such as references and cell_lines
      */
