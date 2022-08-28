@@ -343,6 +343,9 @@ public class virtualsImpact {
             }
         }
 
+        System.out.println(header);
+        System.out.println(body);
+
         System.setOut(console);
         System.out.println("File '" + fileName + "' has been created in directory '" + targetDirectory + "'");
     }
