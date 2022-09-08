@@ -48,8 +48,9 @@ public class QAImport {
             if ( header[i].equals(score) ) scoreIndex = i;
         }
 
-        if ( scoreIndex == -1 )
-            System.out.println("QUITTING: Unable to find column '"+score+"' in dataset "+dataset);
+        if ( scoreIndex == -1 ) {
+            System.out.println("QUITTING: Unable to find column '" + score + "' in dataset " + dataset);
+        }
 
         while ( (line = importBR.readLine()) != null ) {
             String[] comparison = line.split("\\t");

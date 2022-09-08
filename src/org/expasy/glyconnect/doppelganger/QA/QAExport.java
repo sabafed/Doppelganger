@@ -25,9 +25,9 @@ public class QAExport {
         PrintStream output = new PrintStream(outFile);
         PrintStream console = System.out;
 
-        System.setOut(output);
-
         HashMap<String,String> results = QAImport.importResultsTable(dataset, glycanType, method, score);
+
+        System.setOut(output);
 
         ArrayList<String> positives = QAImport.importQAComparisons(glycanType, dataset, "Wanted");
         ArrayList<String> negatives = QAImport.importQAComparisons(glycanType, dataset, "Unwanted");
@@ -330,9 +330,6 @@ public class QAExport {
             linkCosSimVF = compare.cosineSimilarity(
                     helper.frequenciesAsDouble(network1.getLinkFreqVF()),
                     helper.frequenciesAsDouble(network2.getLinkFreqVF()));
-
-            body += linkCosSimVT + "\t" + linkCosSimVF + "\t" + realNodesLinks + virtualNodesLinks
-                    + linkStrings + linkTransitions + linkCountsFreqs;
         }
         if ( method.equals("profileCosSim") || method.equals("all") ) {
             propCosSimVT = compare.cosineSimilarity(
@@ -342,9 +339,6 @@ public class QAExport {
             propCosSimVF = compare.cosineSimilarity(
                     helper.frequenciesAsDouble(helper.freqsStringToChar(network1.getPropertiesFreqVF())),
                     helper.frequenciesAsDouble(helper.freqsStringToChar(network2.getPropertiesFreqVF())));
-
-            body += propCosSimVT + "\t" + propCosSimVF + "\t" + realNodesLinks + virtualNodesLinks
-                    + linkStrings + linkTransitions + linkCountsFreqs;
         }
         if ( method.equals("JaccardIndex") || method.equals("all") ) {
             realNodesOverlap = compare.nodeInteresectionSize(
@@ -368,12 +362,6 @@ public class QAExport {
             virtualLinksOverlap = compare.linkInteresectionSize(network1.getVirtualLinks(), network2.getVirtualLinks());
             virtualLinksUnion = compare.linkUnionSize(network1.getVirtualLinks(), network2.getVirtualLinks());
             virtualLinksJaccardIndex = compare.jaccardIndex(virtualLinksOverlap, virtualLinksUnion);
-
-            body += realNodesLinks + realNodesOverlap + "\t" + realNodesJaccardIndex + "\t" +
-                    realLinksOverlap + "\t" + realLinksJaccardIndex + "\t" +
-                    virtualNodesLinks + virtualNodesOverlap + "\t" + virtualNodesJaccardIndex + "\t" +
-                    virtualLinksOverlap + "\t" + virtualLinksJaccardIndex + "\t" +
-                    linkStrings + linkTransitions + linkCountsFreqs;
         }
         if ( method.equals("density") || method.equals("all") ){
             densityDiffVT = compare.densityDifference(network1.getNetworkDensityVT(), network2.getNetworkDensityVT());
@@ -381,7 +369,27 @@ public class QAExport {
 
             densityRatioVF = compare.densityRatio(network1.getNetworkDensityVF(), network2.getNetworkDensityVF());
             densityDiffVF = compare.densityDifference(network1.getNetworkDensityVF(), network2.getNetworkDensityVF());
+        }
 
+        if ( method.equals("linkCosSim") ) {
+            body += linkCosSimVT + "\t" + linkCosSimVF + "\t" + realNodesLinks + virtualNodesLinks
+                    + linkStrings + linkTransitions + linkCountsFreqs;
+        }
+
+        if ( method.equals("profileCosSim") ) {
+            body += propCosSimVT + "\t" + propCosSimVF + "\t" + realNodesLinks + virtualNodesLinks
+                    + linkStrings + linkTransitions + linkCountsFreqs;
+        }
+
+        if ( method.equals("JaccardIndex") ) {
+            body += realNodesLinks + realNodesOverlap + "\t" + realNodesJaccardIndex + "\t" +
+                    realLinksOverlap + "\t" + realLinksJaccardIndex + "\t" +
+                    virtualNodesLinks + virtualNodesOverlap + "\t" + virtualNodesJaccardIndex + "\t" +
+                    virtualLinksOverlap + "\t" + virtualLinksJaccardIndex + "\t" +
+                    linkStrings + linkTransitions + linkCountsFreqs;
+        }
+
+        if ( method.equals("density") ) {
             body += realNodesLinks + virtualNodesLinks +
                     densityVT + densityDiffVT + "\t" + densityRatioVT + "\t" +
                     densityVF + densityDiffVF + "\t" + densityRatioVF + "\t" +

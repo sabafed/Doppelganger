@@ -37,7 +37,7 @@ public class qualityAnalysis {
                     for (double threshold : thresholds) {
 
                         for (boolean v : verbose) {
-                            //QAExport.QAExport(proteinsAll, type, method, score, threshold, v);
+                            QAExport.QAExport(proteinsAll, type, method, score, threshold, v);
                         }
                     }
                 }
@@ -103,15 +103,15 @@ public class qualityAnalysis {
 
         //methods.put("linkCosSim", new String[]{linkCosVT, linkCosVF});
         //methods.put("profileCosSim", new String[]{profCosVT, profCosVF});
-        methods.put("density", new String[]{densityRatioVT, densityRatioVF});
+        //methods.put("density", new String[]{densityRatioVT, densityRatioVF});
         //methods.put("JaccardIndex", new String[]{realNodesJI, realLinksJI, virtualNodesJI, virtualLinksJI});
-        //methods.put("all", new String[]{"all"});
+        methods.put("all", new String[]{"all"});
 
         return methods;
     }
 
     public static double[] thresholds() {
-        return new double[]{0.5, 0.55, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9, 0.95};
+        return new double[]{0.5, 0.55, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9, 0.95, 0.98, 0.99};
     }
     public static HashMap<String,String[]> overviewMap() {
         HashMap<String,String[]> overview = new HashMap<>();
