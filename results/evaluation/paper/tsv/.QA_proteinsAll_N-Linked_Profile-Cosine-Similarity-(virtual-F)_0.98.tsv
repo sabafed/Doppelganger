@@ -1,0 +1,4 @@
+Total Positive Comparisons	True  Positive Comparisons	False Positive Comparisons	False Positives List	Total Negative Comparisons	True  Negative Comparisons	False Negative Comparisons	False Negatives List
+21	20	3	[733;P19022~1974;Q6UXD5, 1060;P27797~2490;P70699, 1228;Q16610~1956;P22897]	19	16	1	[16;Q3SZR3~15;F6Y713]
+True Positive Rate	True Negative Rate	Positive Predictive Value	Negative Predictive Value	False Discovery Rate	False Negative Rate	False Positive Rate	False Omission Rate	Matthews Correlation Coefficient (MCC)
+0.9523809523809523	0.8421052631578947	0.8695652173913043	0.9411764705882353	0.13043478260869565	0.047619047619047616	0.15789473684210525	0.058823529411764705	0.8025727976093142

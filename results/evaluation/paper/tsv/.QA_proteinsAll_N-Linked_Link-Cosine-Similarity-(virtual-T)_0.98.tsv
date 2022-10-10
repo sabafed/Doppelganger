@@ -1,0 +1,4 @@
+Total Positive Comparisons	True  Positive Comparisons	False Positive Comparisons	False Positives List	Total Negative Comparisons	True  Negative Comparisons	False Negative Comparisons	False Negatives List
+21	10	1	[1228;Q16610~1956;P22897]	19	18	11	[16;Q3SZR3~15;F6Y713, 1524;Q9H8L6~1925;P04040, 1966;O95497~1951;P35527, 2490;P70699~1060;P27797, 1961;Q8IVL1~1959;Q7Z7M0, 1958;O43451~1407;P08648, 682;P13598~1601;P80108, 2306;P43006~2273;O55026, 1840;P43308~1597;Q96AY3, 2332;Q99JP7~2281;P21995, 1287;Q86SQ4~1121;P00748]
+True Positive Rate	True Negative Rate	Positive Predictive Value	Negative Predictive Value	False Discovery Rate	False Negative Rate	False Positive Rate	False Omission Rate	Matthews Correlation Coefficient (MCC)
+0.47619047619047616	0.9473684210526315	0.9090909090909091	0.6206896551724138	0.09090909090909091	0.5238095238095238	0.05263157894736842	0.3793103448275862	0.47370166938718344

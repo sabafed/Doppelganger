@@ -19,7 +19,7 @@ public class QAExport {
         String extension = ".txt";
         if ( !verbose ) extension = ".tsv";
 
-        String targetDirectory = "results/evaluation/"+extension.replace(".","")+"/";
+        String targetDirectory = "results/evaluation/paper/"+extension.replace(".","")+"/";
         String fileName = ( "QA_"+dataset+"_"+glycanType+"_"+score.replace(" ","-")+"_"+threshold+extension );
         File outFile = new File(targetDirectory+fileName);
         PrintStream output = new PrintStream(outFile);
